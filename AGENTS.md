@@ -271,6 +271,61 @@
 
 ---
 
+## 🌿 협업 / Git 규칙 (항상 지킬 것)
+
+> 이 규칙은 **코드를 커밋·푸시할 때마다 항상 적용**됩니다. 기능 종류와 상관없이 예외 없이 따릅니다.
+
+### 브랜치 전략
+- **`main`**: 배포·최종 완성본 브랜치. **직접 커밋/푸시 절대 금지.**
+- **`feature/...`**: 기능 개발용 독립 브랜치. 모든 작업은 여기서 하고, PR을 거쳐 `main`에 합칩니다.
+- 새 작업 시작 전 항상 최신 `main`을 받은 상태에서 브랜치를 팝니다.
+  ```bash
+  git checkout main
+  git pull origin main
+  git checkout -b feature/fe-login   # 새 브랜치 만들고 이동
+  ```
+
+### 브랜치 이름 규칙
+형식: `접두어/파트-작업내용` (소문자, 단어 구분은 하이픈 `-`)
+
+| 용도 | 형식 | 예시 |
+|---|---|---|
+| 프론트 기능 | `feature/fe-기능명` | `feature/fe-login`, `feature/fe-main-page` |
+| 백엔드 기능 | `feature/be-기능명` | `feature/be-matching-api`, `feature/be-db-setup` |
+| 버그 수정 | `fix/fe-버그명` / `fix/be-버그명` | `fix/be-match-format` |
+
+### 커밋 컨벤션
+형식: `Type: 요약` (요약은 한글 가능). 제목만 보고 무슨 변화인지 알 수 있게 씁니다.
+
+| 타입 | 설명 |
+|---|---|
+| `feat` | 새로운 기능 추가 |
+| `fix` | 버그 수정 |
+| `docs` | 문서 수정 (README, 가이드 등) |
+| `style` | 포맷팅·세미콜론 등 (로직 변경 없음) |
+| `refactor` | 기능 변화 없는 구조 개선 |
+| `chore` | 빌드·패키지 설정·`.gitignore` 등 |
+
+예: `feat: 유기동물 상세 페이지 UI 구현` / `fix: 백엔드 매칭 API 데이터 포맷 에러 수정`
+
+### 커밋 & 푸시 & PR 흐름
+```bash
+git status              # 변경 파일 확인
+git add .
+git commit -m "feat: 유기동물 상세 페이지 UI 구현"
+git push origin feature/fe-login   # 내 브랜치로 푸시 (main 아님!)
+```
+그다음 GitHub에서 `Compare & pull request` → 리뷰어에 **`haneebunny`** 지정 → 작업 내용 요약 작성 → `Create pull request` → **조장(신하니)에게 알립니다.**
+
+### ⚠️ 필수 주의사항
+- 🚫 **`main`에 직접 푸시 절대 금지.** 반드시 `feature/` 브랜치 → PR → merge 경로만 사용합니다.
+- 📦 **의존성 추가 시 lock 파일을 반드시 커밋에 포함합니다.**
+  - 프론트(npm): `package.json` + `package-lock.json`
+  - 백엔드(Poetry): `pyproject.toml` + `poetry.lock`
+  - (아나콘다 사용자는 pull 받은 뒤 추가된 패키지를 수동 설치해야 합니다.)
+
+---
+
 ## 🗣 에이전트가 답변/작업할 때 꼭 지켜야 할 것
 
 1. **전문 용어 = 쉬운 설명 동반**
