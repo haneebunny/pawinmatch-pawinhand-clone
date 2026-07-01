@@ -20,15 +20,20 @@
 project-root/
 ├── frontend/
 │   └── src/              # 페이지 외관 HTML들 (화면 8개)
+├── data/                 # ✅ RAG jsonl + 매칭용 동물 데이터 (루트에 위치)
+│   ├── pet_adoption_rules.jsonl
+│   ├── pre_adoption_screening.jsonl
+│   ├── post_adoption_guide.jsonl
+│   └── animals.json          # 매칭 후보(개발자 A 제공, B가 읽음)
 ├── backend/
-│   ├── data/             # RAG용 jsonl (입양 판단 기준·질문 참고자료)
-│   │   ├── pet_adoption_rules.jsonl
-│   │   └── pre_adoption_screening.jsonl
-│   └── ...               # FastAPI 코드 (엔드포인트·체인 등)
+│   ├── app/              # ✅ FastAPI 앱 — [B] config·schemas_B·rag_B·services·routers(diagnose_B·match_B)
+│   └── main.py           # 앱 생성·CORS·에러핸들러·라우터 등록
 ├── AGENTS.md             # 프로젝트 정의 + 협업/Git 규칙 (상시 규칙)
-├── SKILL.md              # 코드 작성 지침 (구현 규칙)
+├── backend/.agent/SKILL.md   # 코드 작성 지침 — 3-4에 백엔드 구조 확정본(파일명 _A/_B)
 └── ROADMAP.md            # 이 문서 (일정·작업 순서)
 ```
+
+> ✅ **(Day 3 갱신)** 데이터 폴더는 **루트 `data/`** 로 확정(초안의 `backend/data/`에서 정정). 백엔드는 `backend/app/` 패키지로 확정하고 **파일명 접미사로 담당 표시(A=`_A`, B=`_B`)**. 현재 **개발자 B 파트(진단·매칭)만** 구현됨. 자세한 구조·엔드포인트는 SKILL.md 3-4 참고.
 
 > **`frontend/src`** = 페이지 외관 HTML이 담기는 곳. 화면별 파일을 여기에 둡니다.
 > **`backend/data`** = RAG 참고자료 jsonl이 담기는 곳. 진단/매칭 AI가 프롬프트에 붙여 쓸 근거 데이터입니다.
@@ -66,8 +71,8 @@ project-root/
 **목표: 입력하면 진단 결과와 매칭 결과가 실제로 나온다. (Must의 심장)**
 
 - (BE) 동물·보호소 고정 데이터 수동 수집 → JSON 저장
-- (BE) LangChain 진단 체인 + `POST /api/diagnose` (RAG: `pet_adoption_rules.jsonl` 삽입)
-- (BE) LangChain 매칭 체인 + `POST /api/match` (응답은 `animal_id`+점수+이유만)
+- ✅ (BE) LangChain 진단 체인 + `POST /api/diagnose` (RAG: `pet_adoption_rules.jsonl` 삽입) **완료** — [개발자 B]
+- ✅ (BE) LangChain 매칭 체인 + `POST /api/match` (응답은 `animal_id`+점수+이유만) **완료** — [개발자 B] / LLM 실패·키 없음 시 로컬 폴백
 - (FE) 진단 입력 폼(2단계: 생활환경 6개 + 성향 3항목) → 진단결과 화면 연결
 - ✅ **확인**: 폼을 채우면 3단계 등급이 뜨고, "매칭 보기"를 누르면 3~5마리가 나온다
 
@@ -75,7 +80,7 @@ project-root/
 **목표: 카드 클릭 → 상세 → 질문지까지 흐름이 끊김 없이 이어진다.**
 
 - (FE) 목록(#2) ↔ 상세(#3) 연결, 매칭 카드 → 매칭상세(#7, 추천 이유 블록 추가)
-- (BE) `POST /api/questions` (공통 템플릿 고정, `pre_adoption_screening.jsonl` 활용)
+- (BE) `POST /api/questions` (공통 템플릿 고정) + `GET /api/animals`·`/api/shelters` 조회 API, `shelters.json` 적재 — [개발자 A] 담당(예정, `_A` 접미사)
 - (FE) 질문지 화면(#8): 카테고리 탭 + 질문 리스트 + 체크리스트 + 보호소 연락처
 - (FE) 문구를 사용자 언어로 다듬기(척도 숫자 → 자연어, "부적합"류 제거)
 - ✅ **확인**: 홈 → 진단 → 매칭 → 상세 → 질문지까지 한 번에 클릭으로 이어진다
