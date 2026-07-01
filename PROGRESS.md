@@ -39,16 +39,34 @@ project-root/
 │   ├── app/              # Next.js App 라우터 구조 (layout.js, page.js 등)
 │   ├── src/              # 퍼블리싱된 9개의 화면 HTML 파일들 (Day 1 프로토타입)
 │   └── package.json
+├── data/                 # ✅ RAG 참고자료 + 매칭용 동물 데이터 (저장소 루트)
+│   ├── pet_adoption_rules.jsonl      # RAG: 입양 판단 기준(진단 프롬프트에 삽입)
+│   ├── pre_adoption_screening.jsonl  # RAG: 자가점검(A)+매칭축(B)
+│   ├── post_adoption_guide.jsonl     # RAG: 입양 후 가이드
+│   └── animals.json                  # 매칭 후보 동물(개발자 A 제공, B가 읽음)
 ├── backend/
 │   ├── .agent/           # AI 에이전트용 개발 지침 (SKILL.md)
-│   ├── data/             # RAG용 참고 자료 (rules, screening jsonl)
-│   ├── main.py           # FastAPI 서버 코드
+│   ├── app/              # ✅ FastAPI 앱 패키지 — 현재 [개발자 B] 진단·매칭만 존재
+│   │   ├── config.py     # [공통] 환경변수·경로·모델명(gpt-5.4-mini) 단일 관리
+│   │   ├── schemas_B.py  # [B] SurveyInput·DiagnoseResponse·MatchResponse
+│   │   ├── rag_B.py      # [B] pet_adoption_rules 로더 + animals 로더
+│   │   ├── services/
+│   │   │   ├── ai_diagnose_B.py   # [B] 진단 체인 + 안전 폴백
+│   │   │   └── ai_matching_B.py   # [B] 매칭 체인 + 로컬 점수 폴백
+│   │   └── routers/
+│   │       ├── diagnose_B.py  # [B] POST /api/diagnose
+│   │       └── match_B.py     # [B] POST /api/match
+│   ├── main.py           # [공통] FastAPI 인스턴스·CORS·에러핸들러·라우터 등록
 │   ├── pyproject.toml    # Poetry 설정
 │   └── poetry.lock
 ├── AGENTS.md             # AI 에이전트 온보딩 및 협업/Git 규칙
 ├── ROADMAP.md            # 4일 일정 로드맵
 └── PROGRESS.md           # 이 문서 (개발 진행 상황 기록)
 ```
+
+> ⚠️ **데이터 폴더 위치 정정**: 초기 문서(dev_plan·ROADMAP)에는 `backend/data/`로 적혀 있었으나, 실제 저장소는 **루트 `data/`** 에 jsonl·animals.json이 존재합니다. `backend/app/config.py`의 `DATA_DIR`이 이 경로를 가리킵니다. (환경변수 `DATA_DIR`로 변경 가능)
+>
+> ℹ️ **개발자 파트 구분**: 파일명 접미사로 담당을 표시합니다 — 개발자 A 파일은 `_A`, 개발자 B 파일은 `_B`. 현재 백엔드에는 **개발자 B 파트(진단·매칭)만** 구현되어 있고, 개발자 A 파트(조회·질문지 `_A`)는 담당자가 이어서 추가합니다.
 
 ---
 
@@ -80,6 +98,18 @@ project-root/
   - React State와 Autoplay(4초 간격)를 탑재한 캐러셀 슬라이더를 수동 조작 화살표 및 인디케이터와 함께 구현.
   - 나중에 실제 이미지를 쉽게 넣을 수 있도록 깔끔한 아이콘과 배경 그라데이션이 적용된 3종 디자인 템플릿 형태로 퍼블리싱.
 
+### 🏁 Day 3 — 백엔드 [개발자 B] AI 진단·매칭 API (완료)
+> `feature/be_ai_matching` 브랜치. 개발자 B 담당(진단·매칭 체인)을 구현. 파일명은 `_B` 접미사로 담당 표시.
+> (앞서 실험적으로 만들었던 개발자 A 코드는 제거하고 B 파트만 남김. 조회·질문지 `_A`는 담당자가 이어서 추가.)
+
+- **FastAPI 앱 구조화**: `main.py`에 CORS(config 기반), **공통 에러 핸들러**(422 입력 검증 / 500 안전 응답), 진단·매칭 라우터 등록. 헬스체크에 `llm_enabled` 노출.
+- **OpenAI/LangChain 설정(`config.py`)**: 모델명(`gpt-5.4-mini`)·API 키·데이터 경로·CORS를 **한 곳에서만** 관리. 모델 교체는 이 한 줄만 바꾸면 됨.
+- **RAG 로더(`rag_B.py`)**: `pet_adoption_rules.jsonl`을 `title+설명` 텍스트로 이어붙여 진단 프롬프트에 삽입(벡터DB 없음). 매칭용 `animals.json`도 여기서 로드(캐시).
+- **진단 체인(`ai_diagnose_B.py` → `POST /api/diagnose`)**: `SurveyInput`(9필드)을 받아 **Structured Outputs로 JSON 강제**해 `grade`(3단계)·`good_points`·`check_points`·`monthly_cost` 반환. 등급은 "입양 가능/조건부 가능/신중히 재고"로 제한, "부적합/불가" 금지.
+- **매칭 체인(`ai_matching_B.py` → `POST /api/match`)**: 사용자 입력 + 동물의 활동성·사회성·태그를 비교해 3~5마리를 `animal_id·match_score(1~10)·recommend_reason`으로 반환. 응답은 가볍게(표시정보는 프론트가 animals.json에서 조회).
+- **예외 처리(Fallback)**: LLM 호출/파싱 실패 시 **1회 재시도**, 그래도 실패하거나 **API 키가 없으면 로컬 규칙 결과**로 폴백. → 키가 없어도 데모가 항상 3~5마리·3단계 등급을 낸다.
+- **검증**: 오프라인이라 실제 LLM 호출 대신 **폴백 경로**를 검증. 원룸·바쁨·초보 케이스→"신중히 재고"+차분한 소형 위주 추천, 단독·여유·경험 케이스→"입양 가능"+활발한 강아지 위주 추천으로 합리적 동작 확인. 신규 의존성 없음(langchain·openai는 기존 pyproject에 이미 포함) → `poetry.lock` 변경 없음.
+
 ---
 
 ## 📋 화면(페이지) 현황 및 연결 경로
@@ -102,6 +132,8 @@ project-root/
 ---
 
 ## 🎯 다음 작업 계획 (Next Step)
-1. **Day 2 (AI 기능 연동)**: 백엔드에 OpenAI `gpt-5.4-mini`를 탑재한 LangChain 기반 적합도 진단 및 매칭 추천 API 엔드포인트 구현.
-2. **Day 3 (상세 연동)**: JSON 데이터 수집 적재 및 프론트엔드와 API 통신 연결.
-3. **Day 4 (배포)**: Railway에 FastAPI + Next.js 빌드 및 배포.
+1. **[개발자 B] 실 LLM 확인**: 로컬 `.env`에 `OPENAI_API_KEY`를 넣고 `uvicorn main:app --reload`로 띄워 `/api/diagnose`·`/api/match`가 실제 `gpt-5.4-mini` 응답을 내는지 확인(현재는 키 없어 폴백으로 검증됨).
+2. **[개발자 A] 조회·질문지 추가**: `app/routers/animals_A.py`·`questions_A.py`, `app/database_A.py`, 필요 데이터(`shelters.json`·질문지 템플릿)를 만들고 `main.py`의 주석 처리된 `_A` 라우터 등록부를 활성화.
+3. **프론트 연동**: `/api/diagnose`→진단결과(#5), `/api/match`→매칭목록(#6, `animal_id`로 animals.json 조회해 카드 구성) 연결.
+4. **실데이터 교체**: 크롤링팀 수집분이 오면 `data/animals.json`을 실제 데이터로 교체(스키마 동일).
+5. **Day 4 (배포)**: Railway에 빌드·배포, 환경변수(OpenAI 키·`CORS_ORIGINS`·`DATA_DIR`) 등록.
