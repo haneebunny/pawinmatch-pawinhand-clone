@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>PawMatch - 입양 적합도 진단</title>
+    <!-- Google Fonts: Plus Jakarta Sans for Headers, Be Vietnam Pro for Body -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap"
+        rel="stylesheet">
+    <!-- Material Symbols Outlined -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#95d4b3",
+                        "inverse-on-surface": "#ebf1ff",
+                        "on-tertiary-container": "#4c3400",
+                        "on-secondary-fixed": "#002114",
+                        "primary-fixed": "#ffdbd0",
+                        "primary": "#a73a15",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#a73a15",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#dfc0b7",
+                        "primary-fixed-dim": "#ffb59f",
+                        "tertiary-fixed": "#ffdea8",
+                        "on-surface": "#151c27",
+                        "on-secondary-fixed-variant": "#0e5138",
+                        "secondary-container": "#aeeecb",
+                        "surface-container": "#e7eefe",
+                        "surface-container-low": "#f0f3ff",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-surface-variant": "#58423b",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#3a0a00",
+                        "surface-bright": "#f9f9ff",
+                        "surface-dim": "#d3daea",
+                        "outline": "#8b716a",
+                        "on-error": "#ffffff",
+                        "background": "#f9f9ff",
+                        "tertiary-container": "#d39700",
+                        "inverse-primary": "#ffb59f",
+                        "surface": "#f9f9ff",
+                        "on-primary-container": "#6b1b00",
+                        "surface-container-highest": "#dce2f3",
+                        "secondary": "#2c694e",
+                        "on-background": "#151c27",
+                        "inverse-surface": "#2a313d",
+                        "on-tertiary-fixed": "#271900",
+                        "secondary-fixed": "#b1f0ce",
+                        "surface-variant": "#dce2f3",
+                        "on-primary-fixed-variant": "#852400",
+                        "tertiary-fixed-dim": "#febb2d",
+                        "on-secondary-container": "#316e52",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#7c5800",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "primary-container": "#ff7a50",
+                        "surface-container-high": "#e2e8f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "12px",
+                        "2xl": "16px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "container-max": "768px",
+                        "section-gap": "32px",
+                        "xxl": "32px",
+                        "md": "12px",
+                        "giant": "48px",
+                        "xl": "24px",
+                        "lg": "16px"
+                    },
+                    "fontFamily": {
+                        "h3": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "button-lg": ["Be Vietnam Pro"],
+                        "caption": ["Be Vietnam Pro"],
+                        "h2": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "h3": ["18px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "600" }],
+                        "body": ["16px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "h1": ["28px", { "lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "button-lg": ["16px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "caption": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "400" }],
+                        "h2": ["22px", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #151c27;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom scrollbar behavior if needed */
+    </style>
+</head>
+
+<body class="font-body">
+    <!-- Header: Unified Layout -->
+    <header
+        class="fixed top-0 left-0 w-full z-50 bg-white h-[72px] flex items-center px-lg md:px-xl border-b border-surface-variant/30">
+        <div class="max-w-[1024px] w-full mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="9.html" class="text-[20px] font-bold text-primary-container tracking-tight">PAWINHAND</a>
+            </div>
+            <nav class="hidden md:flex items-center gap-xxl">
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                    href="9.html">홈</a>
+                <a class="text-black font-bold py-xs transition-colors font-body text-body" href="6.html">AI진단</a>
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                    href="list.html">보호동물 보기</a>
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs" href="#">입양 후
+                    케어</a>
+            </nav>
+        </div>
+    </header>
+    <main class="pt-[72px] pb-xxl">
+        <div class="max-w-[1024px] mx-auto px-lg md:px-xl py-xxl">
+            <!-- Title Section -->
+            <div class="mb-section-gap">
+                <h1 class="font-h1 text-h1 text-on-surface mb-2">입양 적합도 진단</h1>
+                <p class="font-caption text-caption text-on-surface-variant">나와 잘 맞는 아이를 찾기 위해 생활환경을 알려주세요.</p>
+            </div>
+            <!-- Stepper: 1 / 2 with primary indicator -->
+            <div class="flex items-center gap-sm mb-giant">
+                <div class="text-[#FF7A50] font-bold text-body">1 / 2</div>
+                <div class="flex-1 h-[4px] bg-[#F5F0EB] rounded-full overflow-hidden">
+                    <div class="w-1/2 h-full bg-[#FF7A50]"></div>
+                </div>
+            </div>
+            <!-- Guidance Info Box -->
+            <div class="bg-[#F5F0EB] rounded-xl p-lg mb-giant text-center">
+                <p class="font-body text-body text-on-surface">정답은 없어요. 솔직하게 알려주세요.</p>
+            </div>
+            <!-- Survey Items -->
+            <div class="flex flex-col gap-xl mb-giant">
+                <!-- Item 1: 주거형태 -->
+                <div class="flex flex-col gap-md">
+                    <h3 class="font-h3 text-h3 text-on-surface">주거형태</h3>
+                    <div class="flex flex-wrap gap-sm"><button
+                            class="h-[36px] px-lg rounded-full bg-[#FF7A50] text-white font-medium text-caption transition-colors">아파트</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">빌라/연립</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">단독주택</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">원룸</button>
+                    </div>
+                </div>
+                <!-- Item 2: 하루 외출 시간 -->
+                <div class="flex flex-col gap-md">
+                    <h3 class="font-h3 text-h3 text-on-surface">하루 외출 시간</h3>
+                    <div class="flex flex-wrap gap-sm">
+                        <button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">4시간
+                            미만</button>
+                        <button
+                            class="h-[36px] px-lg rounded-full bg-[#FF7A50] text-white font-medium text-caption transition-colors">4~8시간</button>
+                        <button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">8시간
+                            이상</button>
+                    </div>
+                </div>
+                <!-- Item 3: 산책 가능 시간 -->
+                <div class="flex flex-col gap-md">
+                    <h3 class="font-h3 text-h3 text-on-surface">산책 가능 시간</h3>
+                    <div class="flex flex-wrap gap-sm">
+                        <button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">30분
+                            미만</button>
+                        <button
+                            class="h-[36px] px-lg rounded-full bg-[#FF7A50] text-white font-medium text-caption transition-colors">30분~1시간</button>
+                        <button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">1시간
+                            이상</button>
+                    </div>
+                </div>
+                <!-- Item 4: 반려동물 경험 -->
+                <div class="flex flex-col gap-md">
+                    <h3 class="font-h3 text-h3 text-on-surface">반려동물 경험</h3>
+                    <div class="flex flex-wrap gap-sm"><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">없음</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">있음-현재
+                            없음</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">있음-현재
+                            있음</button></div>
+                </div>
+                <!-- Item 5: 월 예산 -->
+                <div class="flex flex-col gap-md">
+                    <h3 class="font-h3 text-h3 text-on-surface">월 예산</h3>
+                    <div class="flex flex-wrap gap-sm"><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">10만원
+                            미만</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">10~20만원</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">20~30만원</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">30만원
+                            이상</button></div>
+                </div>
+                <!-- Item 6: 자녀 계획 여부 -->
+                <div class="flex flex-col gap-md">
+                    <h3 class="font-h3 text-h3 text-on-surface">자녀 계획 여부</h3>
+                    <div class="flex flex-wrap gap-sm"><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">있음</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">없음</button><button
+                            class="h-[36px] px-lg rounded-full bg-[#F5F0EB] text-on-surface-variant font-medium text-caption hover:bg-gray-200 transition-colors">미정</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Action Button -->
+            <div class="flex flex-col items-center gap-lg">
+                <p class="font-caption text-caption text-[#6B7280]">모든 항목을 선택해야 결과를 확인할 수 있습니다.</p>
+                <button
+                    class="w-full h-[52px] bg-[#FF7A50] text-white rounded-xl font-button-lg shadow-md hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer"
+                    onclick="location.href='5.html'">
+                    선호도 입력하기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#F8F9FA] border-t border-surface-variant/20 pt-giant pb-xxl px-lg md:px-xl">
+        <div class="max-w-[1024px] mx-auto">
+            <div class="flex flex-col lg:flex-row justify-between gap-xxl mb-xxl">
+                <div class="lg:w-1/3">
+                    <a href="9.html" class="text-[24px] font-bold text-primary-container mb-lg block">PAWINHAND</a>
+                    <p class="font-caption text-caption text-on-surface-variant mb-xl leading-relaxed">
+                        유기동물 입양의 새로운 기준을 만듭니다.<br>
+                        포인핸드는 보호소 아이들의 가족을 찾아주는 국내 1위 유기동물 입양 플랫폼입니다.
+                    </p>
+                    <div class="flex items-center gap-md flex-wrap">
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">public</span></a>
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a>
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">smart_display</span></a>
+                        <div class="w-px h-4 bg-surface-variant/40 mx-xs"></div>
+                        <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+                            href="#">Google Play</a>
+                        <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+                            href="#">App Store</a>
+                    </div>
+                </div>
+                <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-xl">
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">회사</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">소개</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">공지사항</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">후원</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">서비스</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="9.html">홈</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="6.html">AI진단</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="list.html">보호동물 보기</a>
+                            </li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">입양 후 케어</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">유기동물 통계</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">혜택</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">문의</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">자주하는 질문</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">보호소 관리 시스템 문의</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">협업 문의</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">후원 문의</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">협력</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">협력 지자체</a></li>
+                            <li class=""></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Simple selection toggle logic
+        document.querySelectorAll('.flex-wrap').forEach(group => {
+            const buttons = group.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => {
+                        b.classList.remove('bg-[#FF7A50]', 'text-white');
+                        b.classList.add('bg-[#F5F0EB]', 'text-on-surface-variant');
+                    });
+                    btn.classList.remove('bg-[#F5F0EB]', 'text-on-surface-variant');
+                    btn.classList.add('bg-[#FF7A50]', 'text-white');
+                });
+            });
+        });
+    </script>
+
+
+
+
+</body>
+
+</html>

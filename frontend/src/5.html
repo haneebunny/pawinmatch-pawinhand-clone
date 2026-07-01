@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>PawMatch - Matching Preference Input</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700&amp;family=Be+Vietnam+Pro:wght@400;600&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#a73a15",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#FFFBF7",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#F0E5DD",
+                        "primary": "#a73a15",
+                        "primary-container": "#ff7a50",
+                        "on-tertiary-fixed": "#271900",
+                        "on-surface": "#151c27",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#7c5800",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#6b1b00",
+                        "on-tertiary-container": "#4c3400",
+                        "on-surface-variant": "#58423b",
+                        "primary-fixed": "#ffdbd0",
+                        "tertiary-fixed-dim": "#febb2d",
+                        "tertiary-fixed": "#ffdea8",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#ffb59f",
+                        "surface-bright": "#f9f9ff",
+                        "surface-container-low": "#f0f3ff",
+                        "inverse-on-surface": "#ebf1ff",
+                        "primary-fixed-dim": "#ffb59f",
+                        "surface-variant": "#dce2f3",
+                        "surface-container-highest": "#dce2f3",
+                        "secondary": "#2c694e",
+                        "outline": "#8b716a",
+                        "on-secondary-fixed-variant": "#0e5138",
+                        "secondary-fixed-dim": "#95d4b3",
+                        "surface-container": "#e7eefe",
+                        "on-secondary-fixed": "#002114",
+                        "on-primary-fixed-variant": "#852400",
+                        "on-primary-fixed": "#3a0a00",
+                        "on-background": "#151c27",
+                        "secondary-container": "#aeeecb",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9ff",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "on-secondary-container": "#316e52",
+                        "surface-container-high": "#e2e8f8",
+                        "tertiary-container": "#d39700",
+                        "surface-dim": "#d3daea",
+                        "inverse-surface": "#2a313d",
+                        "secondary-fixed": "#b1f0ce"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "card": "16px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "24px",
+                        "giant": "48px",
+                        "container-max": "768px",
+                        "xs": "4px",
+                        "xxl": "32px",
+                        "sm": "8px",
+                        "section-gap": "32px",
+                        "base": "4px",
+                        "md": "12px",
+                        "lg": "16px",
+                        "card-inner-gap": "12px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "caption": ["Be Vietnam Pro"],
+                        "button-lg": ["Be Vietnam Pro"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "h1": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "h2": ["22px", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body": ["16px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "caption": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "400" }],
+                        "button-lg": ["16px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "h3": ["18px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "600" }],
+                        "h1": ["28px", { "lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .selection-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .selection-card:active {
+            transform: scale(0.98);
+        }
+
+        .chip-active {
+            background-color: #ff7a50 !important;
+            color: white !important;
+            border-color: #ff7a50 !important;
+        }
+
+        .card-active {
+            border-color: #ff7a50 !important;
+            background-color: rgba(255, 122, 80, 0.04) !important;
+            box-shadow: 0 0 0 1px #ff7a50 inset;
+        }
+
+        .content-shadow {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+
+<body class="text-on-surface">
+    <!-- TopAppBar -->
+    <header
+        class="fixed top-0 left-0 w-full z-50 bg-white h-[72px] flex items-center px-lg md:px-xl border-b border-surface-variant/30">
+        <div class="max-w-[1024px] w-full mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="9.html" class="text-[20px] font-bold text-primary-container tracking-tight">PAWINHAND</a>
+            </div>
+            <nav class="hidden md:flex items-center gap-xxl">
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                    href="9.html">홈</a>
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                    href="6.html">AI진단</a>
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                    href="list.html">보호동물 보기</a>
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs" href="#">입양 후
+                    케어</a>
+            </nav>
+        </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="pt-[72px] pb-giant min-h-screen">
+        <div class="max-w-[1024px] mx-auto px-lg md:px-xl py-xxl">
+            <!-- Header Section -->
+            <div class="mb-section-gap">
+                <div class="flex justify-between items-end mb-sm">
+                    <h1 class="font-h1 text-h1 text-on-surface">어떤 아이와 잘 맞을까요?</h1>
+                    <span class="text-primary-container font-bold font-body">2 / 2</span>
+                </div>
+                <div class="w-full h-1 bg-[#F5F0EB] rounded-full overflow-hidden mb-md">
+                    <div class="w-full h-full bg-primary-container"></div>
+                </div>
+                <p class="text-on-surface-variant font-caption text-caption">함께 지내고 싶은 아이의 성향을 가볍게 골라주세요.</p>
+            </div>
+            <!-- Section 1: 활동성 선호 -->
+            <section class="mb-section-gap">
+                <h3 class="font-h3 text-h3 mb-md text-on-surface">활동성 선호</h3>
+                <div class="space-y-md">
+                    <button
+                        class="selection-card w-full p-lg bg-white border border-outline-variant rounded-card text-left flex items-center justify-between content-shadow hover:border-primary-container group transition-all">
+                        <span
+                            class="font-body text-body text-on-surface group-hover:text-primary-container transition-colors">조용하고
+                            차분한 아이</span>
+                        <span
+                            class="material-symbols-outlined text-outline-variant group-hover:text-primary-container transition-colors">radio_button_unchecked</span>
+                    </button>
+                    <button
+                        class="selection-card w-full p-lg bg-white border border-outline-variant rounded-card text-left flex items-center justify-between content-shadow card-active">
+                        <span class="font-body text-body text-on-surface">적당히 활발한 아이</span>
+                        <span class="material-symbols-outlined text-primary-container">check_circle</span>
+                    </button>
+                    <button
+                        class="selection-card w-full p-lg bg-white border border-outline-variant rounded-card text-left flex items-center justify-between content-shadow hover:border-primary-container group transition-all">
+                        <span
+                            class="font-body text-body text-on-surface group-hover:text-primary-container transition-colors">활발하고
+                            에너지 넘치는 아이</span>
+                        <span
+                            class="material-symbols-outlined text-outline-variant group-hover:text-primary-container transition-colors">radio_button_unchecked</span>
+                    </button>
+                </div>
+            </section>
+            <!-- Section 2: 사람 친화도 선호 -->
+            <section class="mb-section-gap">
+                <h3 class="font-h3 text-h3 mb-md text-on-surface">사람 친화도 선호</h3>
+                <div class="space-y-md">
+                    <button
+                        class="selection-card w-full p-lg bg-white border border-outline-variant rounded-card text-left flex items-center justify-between content-shadow hover:border-primary-container group transition-all">
+                        <span
+                            class="font-body text-body text-on-surface group-hover:text-primary-container transition-colors">독립적인
+                            편이 좋아요</span>
+                        <span
+                            class="material-symbols-outlined text-outline-variant group-hover:text-primary-container transition-colors">radio_button_unchecked</span>
+                    </button>
+                    <button
+                        class="selection-card w-full p-lg bg-white border border-outline-variant rounded-card text-left flex items-center justify-between content-shadow card-active">
+                        <span class="font-body text-body text-on-surface">적당히 붙어있는 게 좋아요</span>
+                        <span class="material-symbols-outlined text-primary-container">check_circle</span>
+                    </button>
+                    <button
+                        class="selection-card w-full p-lg bg-white border border-outline-variant rounded-card text-left flex items-center justify-between content-shadow hover:border-primary-container group transition-all">
+                        <span
+                            class="font-body text-body text-on-surface group-hover:text-primary-container transition-colors">항상
+                            곁에 있고 싶어요</span>
+                        <span
+                            class="material-symbols-outlined text-outline-variant group-hover:text-primary-container transition-colors">radio_button_unchecked</span>
+                    </button>
+                </div>
+            </section>
+            <!-- Section 3: 성향 키워드 -->
+            <section class="mb-giant">
+                <h3 class="font-h3 text-h3 mb-md text-on-surface">성향 키워드</h3>
+                <div class="flex flex-wrap gap-sm">
+                    <button
+                        class="chip-active px-lg py-sm rounded-full font-body text-caption border border-transparent transition-all">온순해요</button>
+                    <button
+                        class="px-lg py-sm bg-[#F5F0EB] text-on-surface-variant rounded-full font-body text-caption border border-transparent hover:border-primary-container transition-all">독립적이에요</button>
+                    <button
+                        class="chip-active px-lg py-sm rounded-full font-body text-caption border border-transparent transition-all">사람을
+                        좋아해요</button>
+                    <button
+                        class="chip-active px-lg py-sm rounded-full font-body text-caption border border-transparent transition-all">산책을
+                        좋아해요</button>
+                    <button
+                        class="px-lg py-sm bg-[#F5F0EB] text-on-surface-variant rounded-full font-body text-caption border border-transparent hover:border-primary-container transition-all">다른
+                        동물과 잘 지내요</button>
+                    <button
+                        class="px-lg py-sm bg-[#F5F0EB] text-on-surface-variant rounded-full font-body text-caption border border-transparent hover:border-primary-container transition-all">초보자와
+                        잘 맞아요</button>
+                </div>
+            </section>
+            <!-- Main CTA -->
+            <div class="sticky bottom-xl">
+                <button
+                    class="w-full h-[52px] bg-primary-container text-white font-button-lg text-button-lg rounded-xl shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-sm"
+                    onclick="location.href='4.html'">
+                    진단 결과 확인하기
+                    <span class="material-symbols-outlined">auto_awesome</span>
+                </button>
+                <p class="mt-md text-center text-on-surface-variant font-caption text-caption">
+                    입력하신 정보를 바탕으로 가장 잘 어울리는 아이를 추천해 드려요.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#F8F9FA] border-t border-surface-variant/20 pt-giant pb-xxl px-lg md:px-xl relative z-10">
+        <div class="max-w-[1024px] mx-auto">
+            <div class="flex flex-col lg:flex-row justify-between gap-xxl mb-xxl">
+                <div class="lg:w-1/3">
+                    <a href="9.html" class="text-[24px] font-bold text-primary-container mb-lg block">PAWINHAND</a>
+                    <p class="font-caption text-caption text-on-surface-variant mb-xl leading-relaxed">
+                        유기동물 입양의 새로운 기준을 만듭니다.<br>
+                        포인핸드는 보호소 아이들의 가족을 찾아주는 국내 1위 유기동물 입양 플랫폼입니다.
+                    </p>
+                    <div class="flex items-center gap-md flex-wrap">
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">public</span></a>
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a>
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">smart_display</span></a>
+                        <div class="w-px h-4 bg-surface-variant/40 mx-xs"></div>
+                        <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+                            href="#">Google Play</a>
+                        <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+                            href="#">App Store</a>
+                    </div>
+                </div>
+                <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-xl">
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">회사</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">소개</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">공지사항</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">후원</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">서비스</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="9.html">홈</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="6.html">AI진단</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="list.html">보호동물 보기</a>
+                            </li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">입양 후 케어</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">유기동물 통계</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">혜택</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">문의</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">자주하는 질문</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">보호소 관리 시스템 문의</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">협업 문의</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">후원 문의</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">협력</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">협력 지자체</a></li>
+                            <li class=""></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Visual Polish: Soft Ambient Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+        <div class="absolute top-[10%] right-[-5%] w-64 h-64 rounded-full bg-primary-container/5 blur-3xl"></div>
+        <div class="absolute bottom-[20%] left-[-10%] w-96 h-96 rounded-full bg-tertiary-fixed-dim/10 blur-3xl"></div>
+    </div>
+    <script>
+        // Simple Interaction logic
+        document.querySelectorAll('.selection-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const parent = this.parentElement;
+                parent.querySelectorAll('.selection-card').forEach(c => {
+                    c.classList.remove('card-active');
+                    const icon = c.querySelector('.material-symbols-outlined');
+                    if (icon) {
+                        icon.textContent = 'radio_button_unchecked';
+                        icon.classList.remove('text-primary-container');
+                        icon.classList.add('text-outline-variant');
+                    }
+                });
+                this.classList.add('card-active');
+                const activeIcon = this.querySelector('.material-symbols-outlined');
+                if (activeIcon) {
+                    activeIcon.textContent = 'check_circle';
+                    activeIcon.classList.remove('text-outline-variant');
+                    activeIcon.classList.add('text-primary-container');
+                }
+            });
+        });
+
+        document.querySelectorAll('.flex-wrap button').forEach(chip => {
+            chip.addEventListener('click', function () {
+                this.classList.toggle('chip-active');
+                if (!this.classList.contains('chip-active')) {
+                    this.classList.add('bg-[#F5F0EB]', 'text-on-surface-variant');
+                } else {
+                    this.classList.remove('bg-[#F5F0EB]', 'text-on-surface-variant');
+                }
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

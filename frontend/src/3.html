@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>PawMatch - Matching Recommendations</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "#f9f9ff",
+            "surface-tint": "#a73a15",
+            "surface-container-highest": "#dce2f3",
+            "inverse-surface": "#2a313d",
+            "outline-variant": "#dfc0b7",
+            "secondary-fixed-dim": "#95d4b3",
+            "primary-fixed-dim": "#ffb59f",
+            "surface-dim": "#d3daea",
+            "surface-container": "#e7eefe",
+            "surface-container-low": "#f0f3ff",
+            "surface-bright": "#f9f9ff",
+            "on-error-container": "#93000a",
+            "surface": "#f9f9ff",
+            "primary-container": "#ff7a50",
+            "inverse-on-surface": "#ebf1ff",
+            "on-secondary-fixed": "#002114",
+            "on-secondary-fixed-variant": "#0e5138",
+            "surface-container-high": "#e2e8f8",
+            "outline": "#8b716a",
+            "on-primary-fixed": "#3a0a00",
+            "error": "#ba1a1a",
+            "secondary-container": "#aeeecb",
+            "on-error": "#ffffff",
+            "inverse-primary": "#ffb59f",
+            "on-background": "#151c27",
+            "on-tertiary": "#ffffff",
+            "on-secondary-container": "#316e52",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed-variant": "#5e4200",
+            "tertiary-container": "#d39700",
+            "tertiary-fixed-dim": "#febb2d",
+            "on-primary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#7c5800",
+            "primary-fixed": "#ffdbd0",
+            "primary": "#a73a15",
+            "on-surface": "#151c27",
+            "tertiary-fixed": "#ffdea8",
+            "secondary": "#2c694e",
+            "error-container": "#ffdad6",
+            "surface-variant": "#dce2f3",
+            "secondary-fixed": "#b1f0ce",
+            "on-primary-container": "#6b1b00",
+            "on-surface-variant": "#58423b",
+            "on-tertiary-container": "#4c3400",
+            "on-tertiary-fixed": "#271900",
+            "on-primary-fixed-variant": "#852400",
+            "ivory-bg": "#FFFBF7",
+            "border-line": "#F0E5DD"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "xs": "4px",
+            "card-inner-gap": "12px",
+            "sm": "8px",
+            "base": "4px",
+            "xl": "24px",
+            "giant": "48px",
+            "section-gap": "32px",
+            "lg": "16px",
+            "xxl": "32px",
+            "md": "12px",
+            "container-max": "768px"
+          },
+          "fontFamily": {
+            "h1": ["Plus Jakarta Sans", "sans-serif"],
+            "caption": ["Be Vietnam Pro", "sans-serif"],
+            "h3": ["Plus Jakarta Sans", "sans-serif"],
+            "h2": ["Plus Jakarta Sans", "sans-serif"],
+            "button-lg": ["Be Vietnam Pro", "sans-serif"],
+            "body": ["Be Vietnam Pro", "sans-serif"]
+          },
+          "fontSize": {
+            "h1": ["28px", { "lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "caption": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "h3": ["18px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "600" }],
+            "h2": ["22px", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "button-lg": ["16px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      background-color: #ffffff;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .recommendation-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .recommendation-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+  </style>
+</head>
+
+<body class="text-on-surface">
+  <!-- Fixed TopAppBar -->
+  <header
+    class="fixed top-0 left-0 w-full z-50 bg-white h-[72px] flex items-center px-lg md:px-xl border-b border-surface-variant/30">
+    <div class="max-w-[1024px] w-full mx-auto flex items-center justify-between">
+      <div class="flex items-center">
+        <a href="9.html" class="text-[20px] font-bold text-primary-container tracking-tight">PAWINHAND</a>
+      </div>
+      <nav class="hidden md:flex items-center gap-xxl">
+        <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs" href="9.html">홈</a>
+        <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs" href="6.html">AI진단</a>
+        <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs" href="list.html">보호동물
+          보기</a>
+        <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs" href="#">입양 후 케어</a>
+      </nav>
+    </div>
+  </header>
+  <!-- Main Content Area -->
+  <main class="pt-[72px] pb-xl">
+    <div class="max-w-[1024px] mx-auto px-lg md:px-xl py-xxl bg-ivory-bg min-h-screen">
+      <!-- Section Title -->
+      <header class="mb-section-gap">
+        <h2 class="font-h2 text-h2 text-on-surface">당신과 잘 맞는 아이들이에요</h2>
+        <p class="font-caption text-caption text-on-surface-variant mt-xs">생활환경과 선호도를 바탕으로 추천한 결과예요.</p>
+      </header>
+      <!-- Recommendation Card List -->
+      <div class="flex flex-col gap-lg">
+        <!-- Card 1: Score 9 -->
+        <article
+          class="recommendation-card bg-white border border-border-line rounded-xl p-lg flex gap-lg relative cursor-pointer group">
+          <!-- Matching Score -->
+          <div
+            class="absolute top-lg right-lg flex items-center justify-center w-[48px] h-[48px] bg-primary-fixed rounded-full shadow-sm">
+            <span class="text-primary font-bold text-h3">9점</span>
+          </div>
+          <!-- Image -->
+          <div class="flex-shrink-0">
+            <div
+              class="w-[120px] h-[120px] rounded-lg overflow-hidden bg-surface-container-low border border-border-line">
+              <img class="w-full h-full object-cover"
+                data-alt="A warm and professional portrait of a golden retriever mix puppy"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8W7194zZKoyDrJTK_fzDIwT6Emcsa4wfvQqB3EquexTBcU4natEdqvTjfJvCYFiqvSFOu7-o2327RrTQm3SXqC2G-0oxPKtISJbQUGKjuPha0oWhF6mU6rHOM6EUgZYutssUaUDhx35oG9L2CoEpT88mSc9bk1uDR90QRA-GZYYtxBIwNWnzfaLOe3kTuxjJtm_AJB74u8m2yfKjD9vzxdzr85EQjqFz6uxphzAE9gWjsHN4avs7DWnpkPu-i1wNHJOA6G97ciXk">
+            </div>
+          </div>
+          <!-- Content -->
+          <div class="flex flex-col justify-between flex-grow pr-16">
+            <div>
+              <div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+                <span class="material-symbols-outlined text-[18px]">location_on</span>
+                <span class="font-caption text-caption">서울 강서구</span>
+              </div>
+              <h3 class="font-h3 text-h3 text-on-surface">리트리버 믹스 <span class="text-on-surface-variant font-normal">·
+                  2살</span></h3>
+            </div>
+            <div class="mt-md">
+              <p class="font-caption text-caption text-on-surface-variant leading-relaxed flex items-start gap-xs">
+                <span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px]"
+                  style="font-variation-settings: 'FILL' 1;">recommend</span>
+                하루 30분 산책이면 충분한 차분한 아이예요.
+              </p>
+            </div>
+            <div class="mt-md flex justify-end"><span
+                class="text-primary-container font-medium text-caption flex items-center gap-xs">자세히 보기 <span
+                  class="material-symbols-outlined text-[16px]">arrow_forward</span></span></div>
+          </div>
+        </article>
+        <!-- Card 2: Score 8 -->
+        <article
+          class="recommendation-card bg-white border border-border-line rounded-xl p-lg flex gap-lg relative cursor-pointer group">
+          <div
+            class="absolute top-lg right-lg flex items-center justify-center w-[48px] h-[48px] bg-primary-fixed rounded-full shadow-sm">
+            <span class="text-primary font-bold text-h3">8점</span>
+          </div>
+          <div class="flex-shrink-0">
+            <div
+              class="w-[120px] h-[120px] rounded-lg overflow-hidden bg-surface-container-low border border-border-line">
+              <img class="w-full h-full object-cover" data-alt="A playful small terrier mix dog"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMF2dEyOGEso3_oWx0hF_ppeSHWFpHeVF8BjnZv9DIPbm9sqQU75EK-2Ml32qem714fgjiNNq_ZOgu9DXshRWjwUx_x7y9CLOEttAeoWF3aygaxP0nOS6c117jow4iS9fgs68414CwIpxGiEho3QKev5UzQ92BpVCIDFcQFnnvHVHyAvqjl8Oubb2k6NujziTmESBfux4gYf5wPfOe9TSSTgGa3ccbaLvsevmRggN4UkHd5IG7kRqFQk1hboFAoesdCewCuA0luHs">
+            </div>
+          </div>
+          <div class="flex flex-col justify-between flex-grow pr-16">
+            <div>
+              <div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+                <span class="material-symbols-outlined text-[18px]">location_on</span>
+                <span class="font-caption text-caption">경기도 성남시</span>
+              </div>
+              <h3 class="font-h3 text-h3 text-on-surface">테리어 믹스 <span class="text-on-surface-variant font-normal">·
+                  1살</span></h3>
+            </div>
+            <div class="mt-md">
+              <p class="font-caption text-caption text-on-surface-variant leading-relaxed flex items-start gap-xs">
+                <span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px]"
+                  style="font-variation-settings: 'FILL' 1;">recommend</span>
+                아이들과도 아주 잘 지내는 사교적인 성격이에요.
+              </p>
+            </div>
+            <div class="mt-md flex justify-end"><span
+                class="text-primary-container font-medium text-caption flex items-center gap-xs">자세히 보기 <span
+                  class="material-symbols-outlined text-[16px]">arrow_forward</span></span></div>
+          </div>
+        </article>
+        <!-- Card 3: Score 7 -->
+        <article
+          class="recommendation-card bg-white border border-border-line rounded-xl p-lg flex gap-lg relative cursor-pointer group">
+          <div
+            class="absolute top-lg right-lg flex items-center justify-center w-[48px] h-[48px] bg-primary-fixed rounded-full shadow-sm">
+            <span class="text-primary font-bold text-h3">7점</span>
+          </div>
+          <div class="flex-shrink-0">
+            <div
+              class="w-[120px] h-[120px] rounded-lg overflow-hidden bg-surface-container-low border border-border-line">
+              <img class="w-full h-full object-cover" data-alt="A serene white cat"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI873B43GcD1hmnYFPXq2dsyy5g43BEsqvwLalMuwfhd3zzOta1JirV-zweSz6v0kc0KYEgxYe50HMd9myYNyp_4UQSkpo0I3ROTdPCMuUReY3BeU6z4UqjkOzuxot5rHUGNlNLvnXHhP7YTuhM_LpvkzU84Fbplr4IG8qRc9QCQ4GdX0LZkSL7Yeul2UPqxGlKIgfukjmZeNpxbeR5Gy9a6ZzdkCNaXNSvE2j2Iw9Xoo-Er9kKNyU4Yo1jWro59W_69k18OFWCMM">
+            </div>
+          </div>
+          <div class="flex flex-col justify-between flex-grow pr-16">
+            <div>
+              <div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+                <span class="material-symbols-outlined text-[18px]">location_on</span>
+                <span class="font-caption text-caption">부산 해운대구</span>
+              </div>
+              <h3 class="font-h3 text-h3 text-on-surface">코리안 숏헤어 <span class="text-on-surface-variant font-normal">·
+                  3살</span></h3>
+            </div>
+            <div class="mt-md">
+              <p class="font-caption text-caption text-on-surface-variant leading-relaxed flex items-start gap-xs">
+                <span class="material-symbols-outlined text-[16px] text-primary-container mt-[2px]"
+                  style="font-variation-settings: 'FILL' 1;">recommend</span>
+                조용한 환경에서 사랑받기 좋아하는 내성적인 아이예요.
+              </p>
+            </div>
+            <div class="mt-md flex justify-end"><span
+                class="text-primary-container font-medium text-caption flex items-center gap-xs">자세히 보기 <span
+                  class="material-symbols-outlined text-[16px]">arrow_forward</span></span></div>
+          </div>
+        </article>
+      </div>
+      <!-- Action Buttons -->
+      <div class="mt-xxl flex flex-col items-center gap-md">
+        <button
+          class="w-full h-[52px] bg-primary-container text-white rounded-xl font-button-lg text-button-lg shadow-sm active:scale-95 transition-transform"
+          onclick="location.href='6.html'">
+          추천 기준 보기
+        </button>
+        <button
+          class="w-full h-[44px] border border-primary-container text-primary-container rounded-lg font-button-lg text-button-lg bg-transparent hover:bg-primary-container/5 active:scale-95 transition-all"
+          onclick="location.href='6.html'">
+          다시 분석하기
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#F8F9FA] border-t border-surface-variant/20 pt-giant pb-xxl px-lg md:px-xl">
+    <div class="max-w-[1024px] mx-auto">
+      <div class="flex flex-col lg:flex-row justify-between gap-xxl mb-xxl">
+        <div class="lg:w-1/3">
+          <a href="9.html" class="text-[24px] font-bold text-primary-container mb-lg block">PAWINHAND</a>
+          <p class="font-caption text-caption text-on-surface-variant mb-xl leading-relaxed">
+            유기동물 입양의 새로운 기준을 만듭니다.<br>
+            포인핸드는 보호소 아이들의 가족을 찾아주는 국내 1위 유기동물 입양 플랫폼입니다.
+          </p>
+          <div class="flex items-center gap-md flex-wrap">
+            <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+              href="#"><span class="material-symbols-outlined text-[20px]">public</span></a>
+            <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+              href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a>
+            <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+              href="#"><span class="material-symbols-outlined text-[20px]">smart_display</span></a>
+            <div class="w-px h-4 bg-surface-variant/40 mx-xs"></div>
+            <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+              href="#">Google Play</a>
+            <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+              href="#">App Store</a>
+          </div>
+        </div>
+        <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-xl">
+          <div>
+            <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">회사</h4>
+            <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+              <li class=""><a class="hover:text-primary transition-colors" href="#">소개</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="#">공지사항</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="#">후원</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">서비스</h4>
+            <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+              <li class=""><a class="hover:text-primary transition-colors" href="9.html">홈</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="6.html">AI진단</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="list.html">보호동물 보기</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="#">입양 후 케어</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="#">유기동물 통계</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="#">혜택</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">문의</h4>
+            <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+              <li class=""><a class="hover:text-primary transition-colors" href="#">자주하는 질문</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="#">보호소 관리 시스템 문의</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="#">협업 문의</a></li>
+              <li class=""><a class="hover:text-primary transition-colors" href="#">후원 문의</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">협력</h4>
+            <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+              <li class=""><a class="hover:text-primary transition-colors" href="#">협력 지자체</a></li>
+              <li class=""></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Simple micro-interaction for cards
+    document.querySelectorAll('.recommendation-card').forEach(card => {
+      card.addEventListener('click', () => {
+        location.href = '1.html?recommend=true';
+      });
+    });
+  </script>
+</body>
+
+</html>

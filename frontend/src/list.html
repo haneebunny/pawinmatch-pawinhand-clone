@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+
+<head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <title>PAWINHAND - 유기동물 전체 목록</title>
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap"
+                rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+                rel="stylesheet">
+        <script id="tailwind-config">
+                tailwind.config = {
+                        darkMode: "class",
+                        theme: {
+                                extend: {
+                                        "colors": {
+                                                "outline-variant": "#dfc0b7",
+                                                "on-tertiary-fixed-variant": "#5e4200",
+                                                "on-secondary-fixed-variant": "#0e5138",
+                                                "secondary-fixed-dim": "#95d4b3",
+                                                "on-tertiary-container": "#4c3400",
+                                                "surface-bright": "#f9f9ff",
+                                                "secondary-container": "#aeeecb",
+                                                "secondary": "#2c694e",
+                                                "error": "#ba1a1a",
+                                                "inverse-on-surface": "#ebf1ff",
+                                                "tertiary-fixed": "#ffdea8",
+                                                "surface-container-low": "#f0f3ff",
+                                                "surface-container-highest": "#dce2f3",
+                                                "primary": "#a73a15",
+                                                "on-secondary-fixed": "#002114",
+                                                "surface-container": "#e7eefe",
+                                                "primary-container": "#ff7a50",
+                                                "on-surface-variant": "#58423b",
+                                                "tertiary-fixed-dim": "#febb2d",
+                                                "surface-variant": "#dce2f3",
+                                                "tertiary": "#7c5800",
+                                                "surface-container-high": "#e2e8f8",
+                                                "on-primary-fixed": "#3a0a00",
+                                                "error-container": "#ffdad6",
+                                                "on-tertiary-fixed": "#271900",
+                                                "on-tertiary": "#ffffff",
+                                                "on-secondary-container": "#316e52",
+                                                "background": "#f9f9ff",
+                                                "primary-fixed-dim": "#ffb59f",
+                                                "on-error": "#ffffff",
+                                                "on-surface": "#151c27",
+                                                "on-primary-fixed-variant": "#852400",
+                                                "surface-dim": "#d3daea",
+                                                "on-secondary": "#ffffff",
+                                                "outline": "#8b716a",
+                                                "on-primary-container": "#6b1b00",
+                                                "surface": "#f9f9ff",
+                                                "primary-fixed": "#ffdbd0",
+                                                "inverse-primary": "#ffb59f",
+                                                "surface-tint": "#a73a15",
+                                                "inverse-surface": "#2a313d",
+                                                "surface-container-lowest": "#ffffff",
+                                                "on-background": "#151c27",
+                                                "secondary-fixed": "#b1f0ce",
+                                                "tertiary-container": "#d39700",
+                                                "on-primary": "#ffffff",
+                                                "on-error-container": "#93000a"
+                                        },
+                                        "borderRadius": {
+                                                "DEFAULT": "0.25rem",
+                                                "lg": "0.5rem",
+                                                "xl": "0.75rem",
+                                                "full": "9999px"
+                                        },
+                                        "spacing": {
+                                                "sm": "8px",
+                                                "xxl": "32px",
+                                                "xs": "4px",
+                                                "xl": "24px",
+                                                "section-gap": "32px",
+                                                "md": "12px",
+                                                "lg": "16px",
+                                                "base": "4px",
+                                                "container-max": "768px",
+                                                "giant": "48px",
+                                                "card-inner-gap": "12px"
+                                        },
+                                        "fontFamily": {
+                                                "caption": ["Be Vietnam Pro"],
+                                                "body": ["Be Vietnam Pro"],
+                                                "h3": ["Plus Jakarta Sans"],
+                                                "button-lg": ["Be Vietnam Pro"],
+                                                "h2": ["Plus Jakarta Sans"],
+                                                "h1": ["Plus Jakarta Sans"]
+                                        },
+                                        "fontSize": {
+                                                "caption": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "400" }],
+                                                "body": ["16px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                                                "h3": ["18px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "600" }],
+                                                "button-lg": ["16px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                                                "h2": ["22px", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                                                "h1": ["28px", { "lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                                        }
+                                },
+                        },
+                }
+        </script>
+        <style>
+                body {
+                        background-color: #ffffff;
+                }
+
+                .material-symbols-outlined {
+                        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+                }
+        </style>
+</head>
+
+<body class="font-body text-on-surface">
+        <!-- TopAppBar -->
+        <header
+                class="fixed top-0 left-0 w-full z-50 bg-white h-[72px] flex items-center px-lg md:px-xl border-b border-surface-variant/30">
+                <div class="max-w-[1024px] w-full mx-auto flex items-center justify-between">
+                        <div class="flex items-center">
+                                <a href="9.html"
+                                        class="text-[20px] font-bold text-primary-container tracking-tight">PAWINHAND</a>
+                        </div>
+                        <nav class="hidden md:flex items-center gap-xxl">
+                                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                                        href="9.html">홈</a>
+                                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                                        href="6.html">AI진단</a>
+                                <a class="text-black font-bold py-xs transition-colors font-body text-body"
+                                        href="list.html">보호동물 보기</a>
+                                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                                        href="#">입양 후 케어</a>
+                        </nav>
+                </div>
+        </header>
+
+        <main class="pt-[72px] pb-xxl">
+                <!-- Page Title and Filters -->
+                <section class="max-w-[1024px] mx-auto px-lg md:px-xl mt-xxl">
+                        <div class="mb-xl">
+                                <h1 class="font-h1 text-h1 text-on-surface">유기동물 보호 목록</h1>
+                                <p class="font-caption text-caption text-on-surface-variant mt-xs">가족을 기다리는 귀여운 아이들을
+                                        만나보세요.</p>
+                        </div>
+
+                        <!-- Mock Filter UI -->
+                        <div class="flex flex-wrap gap-sm mb-xxl border-b border-surface-variant/20 pb-md">
+                                <button
+                                        class="flex items-center gap-xs bg-white border border-surface-variant/50 px-lg py-2 rounded-full font-body text-[14px] text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                                        지역: 전국 <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                                </button>
+                                <button
+                                        class="flex items-center gap-xs bg-white border border-surface-variant/50 px-lg py-2 rounded-full font-body text-[14px] text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                                        축종: 전체 <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                                </button>
+                                <button
+                                        class="flex items-center gap-xs bg-white border border-surface-variant/50 px-lg py-2 rounded-full font-body text-[14px] text-on-surface-variant hover:bg-surface-container-low transition-colors">
+                                        공고 상태: 전체 <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                                </button>
+                        </div>
+
+                        <!-- 4x3 Grid (12 cards) -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-md lg:gap-lg">
+                                <!-- Card 1 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">49</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">믹스견</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♂️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">2살 •
+                                                        서울 마포구</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                마포보호소</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.15~24.12.25</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 2 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">37</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">코리안 숏헤어</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♀️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">1살 •
+                                                        경기 수원시</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                수원보호센터</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.18~24.12.28</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 3 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">45</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">포메라니안</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♀️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">4살 •
+                                                        인천 연수구</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                연수구보호소</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.10~24.12.20</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 4 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">13</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">러시안 블루</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♂️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">2살 •
+                                                        서울 강남구</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                동물구조협회</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.12~24.12.22</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 5 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">52</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">믹스견</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♂️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">3살 •
+                                                        부산 해운대구</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                부산유기동물센터</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.14~24.12.24</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 6 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">17</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">비숑 프리제</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♀️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">1살 •
+                                                        대구 달서구</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                대구보호소</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.16~24.12.26</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 7 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">50</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">진돗개</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♀️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">2살 •
+                                                        경남 창원시</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                창원유기동물보호소</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.11~24.12.21</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 8 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">43</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">샴</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♂️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">5살 •
+                                                        광주 북구</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                광주동물보호센터</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.13~24.12.23</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 9 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">21</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">웰시코기</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♂️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">1살 •
+                                                        충남 천안시</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                천안유기동물보호소</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.10~24.12.20</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 10 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">19</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">페르시안</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♀️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">3살 •
+                                                        전북 전주시</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                전주유기동물센터</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.11~24.12.21</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 11 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">28</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">진돗개 믹스</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♀️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">3살 •
+                                                        경북 구미시</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                구미보호소</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.14~24.12.24</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <!-- Card 12 -->
+                                <div class="bg-white rounded-xl border border-surface-variant/30 overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-all duration-300 animal-card"
+                                        onclick="location.href='1.html'">
+                                        <div class="relative aspect-square overflow-hidden bg-surface-container">
+                                                <div
+                                                        class="w-full h-full bg-surface-container flex items-center justify-center">
+                                                        <span
+                                                                class="material-symbols-outlined text-on-surface-variant/30 text-[48px]">image</span>
+                                                </div>
+                                                <div
+                                                        class="absolute top-sm right-sm bg-black/20 backdrop-blur-md px-sm py-1 rounded-full flex items-center gap-xs">
+                                                        <span class="material-symbols-outlined text-[14px] text-white"
+                                                                style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                                        <span
+                                                                class="font-caption text-caption font-bold text-white">35</span>
+                                                </div>
+                                        </div>
+                                        <div class="p-md">
+                                                <div class="flex items-center justify-between mb-xs">
+                                                        <span class="text-on-surface font-h3 text-h3">러시안 블루 믹스</span>
+                                                        <span
+                                                                class="text-on-surface-variant font-caption text-caption">♂️</span>
+                                                </div>
+                                                <p class="text-on-surface-variant font-caption text-caption mb-md">1살 •
+                                                        강원 춘천시</p>
+                                                <div class="pt-sm border-t border-surface-variant/20">
+                                                        <p
+                                                                class="font-caption text-[11px] text-on-surface-variant truncate">
+                                                                춘천동물보호센터</p>
+                                                        <p
+                                                                class="font-caption text-[11px] text-primary-container font-bold">
+                                                                24.12.16~24.12.26</p>
+                                                </div>
+                                        </div>
+                                </div>
+
+                        </div>
+                </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-[#F8F9FA] border-t border-surface-variant/20 pt-giant pb-xxl px-lg md:px-xl">
+                <div class="max-w-[1024px] mx-auto">
+                        <div class="flex flex-col lg:flex-row justify-between gap-xxl mb-xxl">
+                                <div class="lg:w-1/3">
+                                        <a href="9.html"
+                                                class="text-[24px] font-bold text-primary-container mb-lg block">PAWINHAND</a>
+                                        <p
+                                                class="font-caption text-caption text-on-surface-variant mb-xl leading-relaxed">
+                                                유기동물 입양의 새로운 기준을 만듭니다.<br>
+                                                포인핸드는 보호소 아이들의 가족을 찾아주는 국내 1위 유기동물 입양 플랫폼입니다.
+                                        </p>
+                                        <div class="flex items-center gap-md flex-wrap">
+                                                <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                                                        href="#"><span
+                                                                class="material-symbols-outlined text-[20px]">public</span></a>
+                                                <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                                                        href="#"><span
+                                                                class="material-symbols-outlined text-[20px]">photo_camera</span></a>
+                                                <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                                                        href="#"><span
+                                                                class="material-symbols-outlined text-[20px]">smart_display</span></a>
+                                                <div class="w-px h-4 bg-surface-variant/40 mx-xs"></div>
+                                                <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+                                                        href="#">Google Play</a>
+                                                <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+                                                        href="#">App Store</a>
+                                        </div>
+                                </div>
+                                <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-xl">
+                                        <div>
+                                                <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">회사</h4>
+                                                <ul
+                                                        class="space-y-sm font-caption text-caption text-on-surface-variant">
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">소개</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">공지사항</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">후원</a></li>
+                                                </ul>
+                                        </div>
+                                        <div>
+                                                <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">서비스</h4>
+                                                <ul
+                                                        class="space-y-sm font-caption text-caption text-on-surface-variant">
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="9.html">홈</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="6.html">AI진단</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="list.html">보호동물 보기</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">입양 후 케어</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">유기동물 통계</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">혜택</a></li>
+                                                </ul>
+                                        </div>
+                                        <div>
+                                                <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">문의</h4>
+                                                <ul
+                                                        class="space-y-sm font-caption text-caption text-on-surface-variant">
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">자주하는 질문</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">보호소 관리 시스템 문의</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">협업 문의</a></li>
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">후원 문의</a></li>
+                                                </ul>
+                                        </div>
+                                        <div>
+                                                <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">협력</h4>
+                                                <ul
+                                                        class="space-y-sm font-caption text-caption text-on-surface-variant">
+                                                        <li class=""><a class="hover:text-primary transition-colors"
+                                                                        href="#">협력 지자체</a></li>
+                                                        <li class=""></li>
+                                                </ul>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </footer>
+</body>
+
+</html>

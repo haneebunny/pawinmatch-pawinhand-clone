@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head></head>
+
+<body class="min-h-screen pb-[180px]">
+
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;600&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8b716a",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#ffb59f",
+                        "surface-container-highest": "#dce2f3",
+                        "primary": "#a73a15",
+                        "on-tertiary-fixed": "#271900",
+                        "on-secondary-fixed": "#002114",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#febb2d",
+                        "surface-container-high": "#e2e8f8",
+                        "surface-variant": "#dce2f3",
+                        "inverse-on-surface": "#ebf1ff",
+                        "on-surface": "#151c27",
+                        "surface-tint": "#a73a15",
+                        "primary-fixed": "#ffdbd0",
+                        "on-secondary-fixed-variant": "#0e5138",
+                        "error": "#ba1a1a",
+                        "surface": "#f9f9ff",
+                        "tertiary-container": "#d39700",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#6b1b00",
+                        "on-background": "#151c27",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#95d4b3",
+                        "tertiary-fixed": "#ffdea8",
+                        "tertiary": "#7c5800",
+                        "surface-bright": "#f9f9ff",
+                        "on-secondary-container": "#316e52",
+                        "inverse-surface": "#2a313d",
+                        "background": "#f9f9ff",
+                        "on-tertiary-fixed-variant": "#5e4200",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary-fixed": "#3a0a00",
+                        "primary-container": "#ff7a50",
+                        "on-surface-variant": "#58423b",
+                        "primary-fixed-dim": "#ffb59f",
+                        "surface-container": "#e7eefe",
+                        "secondary-container": "#aeeecb",
+                        "secondary": "#2c694e",
+                        "secondary-fixed": "#b1f0ce",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#852400",
+                        "outline-variant": "#dfc0b7",
+                        "surface-dim": "#d3daea",
+                        "on-tertiary-container": "#4c3400",
+                        "on-tertiary": "#ffffff",
+                        "brand-ivory": "#FFFBF7",
+                        "brand-border": "#F0E5DD",
+                        "brand-primary": "#FF7A50",
+                        "brand-primary-light": "#FFF1EC"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "16px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "12px",
+                        "xl": "24px",
+                        "card-inner-gap": "12px",
+                        "base": "4px",
+                        "lg": "16px",
+                        "xxl": "32px",
+                        "section-gap": "32px",
+                        "container-max": "768px",
+                        "giant": "48px",
+                        "xs": "4px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "h1": ["Plus Jakarta Sans"],
+                        "caption": ["Be Vietnam Pro"],
+                        "button-lg": ["Be Vietnam Pro"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "h3": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "h1": ["28px", { "lineHeight": "1.4", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "caption": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "400" }],
+                        "button-lg": ["16px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "h2": ["22px", { "lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body": ["16px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "h3": ["18px", { "lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            color: #151C27;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .nav-shadow {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .cta-shadow {
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <!-- TopAppBar -->
+    <header
+        class="fixed top-0 left-0 w-full z-50 bg-white h-[72px] flex items-center px-lg md:px-xl border-b border-surface-variant/30">
+        <div class="max-w-[1024px] w-full mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="9.html" class="text-[20px] font-bold text-primary-container tracking-tight">PAWINHAND</a>
+            </div>
+            <nav class="hidden md:flex items-center gap-xxl">
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                    href="9.html">홈</a>
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                    href="6.html">AI진단</a>
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs"
+                    href="list.html">보호동물 보기</a>
+                <a class="text-gray-400 hover:text-black transition-colors font-body text-body py-xs" href="#">입양 후
+                    케어</a>
+            </nav>
+        </div>
+    </header>
+    <main class="pt-[72px]">
+        <div class="max-w-[1024px] mx-auto px-lg md:px-xl py-xxl flex flex-col gap-section-gap">
+            <!-- 1. 16:9 Hero Photo + Name -->
+            <section class="flex flex-col gap-lg">
+                <div
+                    class="aspect-video w-full rounded-2xl overflow-hidden nav-shadow border border-brand-border relative">
+                    <img class="w-full h-full object-cover"
+                        data-alt="A heart-warming portrait of a Golden Retriever mix"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAjISFv7Ny-xPgkTvgc373gP8XVOu4XFUaBwh4MbOuogyd3m-Ms1Nb_Xz8ToaNz0nAd2wNQEc9c4N0fVXSpYf0DHgkXH8xc52xMOSyXQQFplkv4ZT3pFzbCXP9fTf0BaWPThwMaZ3NTCqKY3Z_d5F8rNgpKL0aqZ1h_WB3wYIbFJtopOyDO2bfoTZtjRtOPaQ_0Q85zP5kcurpjdZqc4VGfVmWEIMWL4sp1xr9c-4qvWSXQqInIYA8bJGBWHmbPlpD0Gryiw-yRmY">
+                </div>
+                <div class="flex flex-col gap-xs mt-sm">
+                    <h1 class="text-h1 font-h1 text-on-surface">복실이</h1>
+                    <p class="text-h3 font-h3 text-on-surface-variant">리트리버 믹스</p>
+                </div>
+            </section>
+            <!-- 2. Core Info Grid -->
+            <section class="grid grid-cols-2 md:grid-cols-3 gap-sm">
+                <div class="bg-white border border-brand-border p-md rounded-xl flex flex-col gap-xs nav-shadow">
+                    <span class="text-caption font-caption text-on-surface-variant">품종</span>
+                    <span class="text-body font-body font-semibold">리트리버 믹스</span>
+                </div>
+                <div class="bg-white border border-brand-border p-md rounded-xl flex flex-col gap-xs nav-shadow">
+                    <span class="text-caption font-caption text-on-surface-variant">나이</span>
+                    <span class="text-body font-body font-semibold">2살</span>
+                </div>
+                <div class="bg-white border border-brand-border p-md rounded-xl flex flex-col gap-xs nav-shadow">
+                    <span class="text-caption font-caption text-on-surface-variant">성별</span>
+                    <span class="text-body font-body font-semibold">남아</span>
+                </div>
+                <div class="bg-white border border-brand-border p-md rounded-xl flex flex-col gap-xs nav-shadow">
+                    <span class="text-caption font-caption text-on-surface-variant">체중</span>
+                    <span class="text-body font-body font-semibold">15kg</span>
+                </div>
+                <div class="bg-white border border-brand-border p-md rounded-xl flex flex-col gap-xs nav-shadow">
+                    <span class="text-caption font-caption text-on-surface-variant">중성화 여부</span>
+                    <span class="text-body font-body font-semibold">완료</span>
+                </div>
+                <div class="bg-white border border-brand-border p-md rounded-xl flex flex-col gap-xs nav-shadow">
+                    <span class="text-caption font-caption text-on-surface-variant">공고기한</span>
+                    <span class="text-body font-body font-semibold text-primary">2024.03.01 ~ 상시</span>
+                </div>
+            </section>
+            <!-- 3. AI Recommendation Box -->
+            <section id="ai-recommendation-box"
+                class="bg-brand-primary-light p-lg rounded-2xl border border-[#FFE2D6] flex gap-md items-start">
+                <span class="material-symbols-outlined text-brand-primary mt-1"
+                    style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                <div>
+                    <h4 class="text-body font-bold text-on-primary-container mb-1">왜 이 아이를 추천했나요?</h4>
+                    <p class="text-body font-body text-on-primary-container leading-relaxed">
+                        복실이는 활동량이 적당하고 차분한 성향으로, 산책을 즐기면서도 실내에서는 조용히 휴식하는 당신의 라이프스타일에 가장 잘 어울리는 아이예요.
+                    </p>
+                </div>
+            </section>
+            <!-- 4. Adoption Decision Sections -->
+            <section class="flex flex-col gap-md">
+                <div class="bg-white border border-brand-border p-xl rounded-2xl nav-shadow">
+                    <div class="flex items-center gap-sm mb-sm text-primary">
+                        <span class="material-symbols-outlined text-[20px]">medical_services</span>
+                        <h3 class="font-h3 text-h3 text-on-surface">건강 정보</h3>
+                    </div>
+                    <p class="text-body font-body text-on-surface-variant">예방접종 3차 완료. 현재 매우 건강하며 활발한 상태입니다. 알러지 반응 없음.
+                    </p>
+                </div>
+                <div class="bg-white border border-brand-border p-xl rounded-2xl nav-shadow">
+                    <div class="flex items-center gap-sm mb-sm text-primary">
+                        <span class="material-symbols-outlined text-[20px]">sentiment_satisfied</span>
+                        <h3 class="font-h3 text-h3 text-on-surface">성향 정보</h3>
+                    </div>
+                    <p class="text-body font-body text-on-surface-variant">사람을 무척 좋아하고 다른 강아지들과도 원만하게 잘 지내요. 짖음이 적고 실내에서
+                        차분한 편입니다.</p>
+                </div>
+                <div class="bg-white border border-brand-border p-xl rounded-2xl nav-shadow">
+                    <div class="flex items-center gap-sm mb-sm text-primary">
+                        <span class="material-symbols-outlined text-[20px]">info</span>
+                        <h3 class="font-h3 text-h3 text-on-surface">특이사항</h3>
+                    </div>
+                    <p class="text-body font-body text-on-surface-variant">산책 시 리드줄 적응 훈련 중이며, 간식에 대한 반응이 매우 좋아 교육하기
+                        수월합니다.</p>
+                </div>
+            </section>
+            <!-- 5. Notice & Shelter Info -->
+            <section class="bg-white border border-brand-border p-xl rounded-2xl nav-shadow flex flex-col gap-lg">
+                <h3 class="font-h3 text-h3 text-on-surface border-b border-brand-border pb-md">공고 및 보호 정보</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                    <div>
+                        <span class="text-caption font-caption text-on-surface-variant">공고번호</span>
+                        <p class="text-body font-body">서울-강서-2024-00123</p>
+                    </div>
+                    <div>
+                        <span class="text-caption font-caption text-on-surface-variant">발견장소</span>
+                        <p class="text-body font-body">강서구 화곡동 인근</p>
+                    </div>
+                    <div>
+                        <span class="text-caption font-caption text-on-surface-variant">보호센터</span>
+                        <p class="text-body font-body font-semibold">강서구 유기동물 보호센터</p>
+                    </div>
+                    <div>
+                        <span class="text-caption font-caption text-on-surface-variant">관할기관</span>
+                        <p class="text-body font-body">서울특별시 강서구청</p>
+                    </div>
+                </div>
+            </section>
+            <!-- 6. Adoption Process & Support -->
+            <section class="bg-white border border-brand-border p-xl rounded-2xl nav-shadow">
+                <div class="flex justify-between items-center mb-lg">
+                    <h3 class="font-h3 text-h3 text-on-surface">입양 절차 및 지원</h3>
+                    <span
+                        class="px-sm py-1 bg-secondary-container text-on-secondary-container text-caption rounded-full font-semibold">의료비
+                        지원 대상</span>
+                </div>
+                <div class="flex flex-col gap-lg">
+                    <div class="relative flex flex-col gap-md">
+                        <div class="flex items-start gap-md">
+                            <div
+                                class="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-sm shrink-0">
+                                1</div>
+                            <div>
+                                <p class="font-semibold text-body">보호소 문의</p>
+                                <p class="text-caption text-on-surface-variant">온라인 질문지를 제출하고 상담을 요청하세요.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-md">
+                            <div
+                                class="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-sm shrink-0">
+                                2</div>
+                            <div>
+                                <p class="font-semibold text-body">담당자 상담</p>
+                                <p class="text-caption text-on-surface-variant">보호소 방문 날짜를 잡고 대면 인터뷰를 진행합니다.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-md">
+                            <div
+                                class="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold text-sm shrink-0">
+                                3</div>
+                            <div>
+                                <p class="font-semibold text-body">입양 확정</p>
+                                <p class="text-caption text-on-surface-variant">최종 입양 서류를 작성하고 아이와 가족이 됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-sm p-md bg-brand-ivory border border-brand-border rounded-xl">
+                        <p class="text-body font-body text-on-surface">🎁 <span class="font-semibold">지원 정보:</span> 기초
+                            건강검진 및 내장형 인식칩 삽입 비용 전액 지원</p>
+                    </div>
+                </div>
+            </section>
+            <!-- 7. Comments/Feedback Section -->
+            <section class="bg-white border border-brand-border p-xl rounded-2xl nav-shadow">
+                <h3 class="font-h3 text-h3 text-on-surface mb-lg">댓글 및 문의</h3>
+                <div class="flex flex-col items-center justify-center py-giant gap-md text-on-surface-variant">
+                    <span class="material-symbols-outlined text-outline-variant text-[48px]">chat_bubble_outline</span>
+                    <p class="text-body font-body">아직 등록된 댓글이 없어요.</p>
+                </div>
+            </section>
+            <!-- 8. Pre-Adoption Checklist -->
+            <section class="bg-white border border-brand-border p-xl rounded-2xl nav-shadow">
+                <h3 class="font-h3 text-h3 text-on-surface mb-lg">입양 전 확인 사항</h3>
+                <ul class="flex flex-col gap-md">
+                    <li class="flex items-start gap-md">
+                        <div class="mt-1 flex items-center justify-center w-6 h-6 rounded-full bg-secondary-container">
+                            <span class="material-symbols-outlined text-[16px] text-secondary font-bold">check</span>
+                        </div>
+                        <span class="text-body font-body text-on-surface-variant">가족 구성원 모두의 동의가 있었나요?</span>
+                    </li>
+                    <li class="flex items-start gap-md">
+                        <div class="mt-1 flex items-center justify-center w-6 h-6 rounded-full bg-secondary-container">
+                            <span class="material-symbols-outlined text-[16px] text-secondary font-bold">check</span>
+                        </div>
+                        <span class="text-body font-body text-on-surface-variant">반려동물을 위한 경제적 여건이 준비되었나요?</span>
+                    </li>
+                    <li class="flex items-start gap-md">
+                        <div class="mt-1 flex items-center justify-center w-6 h-6 rounded-full bg-secondary-container">
+                            <span class="material-symbols-outlined text-[16px] text-secondary font-bold">check</span>
+                        </div>
+                        <span class="text-body font-body text-on-surface-variant">매일 산책과 교감을 위한 충분한 시간이 있나요?</span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#F8F9FA] border-t border-surface-variant/20 pt-giant pb-xxl px-lg md:px-xl mb-[88px]">
+        <div class="max-w-[1024px] mx-auto">
+            <div class="flex flex-col lg:flex-row justify-between gap-xxl mb-xxl">
+                <div class="lg:w-1/3">
+                    <a href="9.html" class="text-[24px] font-bold text-primary-container mb-lg block">PAWINHAND</a>
+                    <p class="font-caption text-caption text-on-surface-variant mb-xl leading-relaxed">
+                        유기동물 입양의 새로운 기준을 만듭니다.<br>
+                        포인핸드는 보호소 아이들의 가족을 찾아주는 국내 1위 유기동물 입양 플랫폼입니다.
+                    </p>
+                    <div class="flex items-center gap-md flex-wrap">
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">public</span></a>
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a>
+                        <a class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-surface-variant/20"
+                            href="#"><span class="material-symbols-outlined text-[20px]">smart_display</span></a>
+                        <div class="w-px h-4 bg-surface-variant/40 mx-xs"></div>
+                        <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+                            href="#">Google Play</a>
+                        <a class="px-md py-1 bg-white rounded-full border border-surface-variant/20 font-caption text-[11px] hover:bg-surface-container transition-colors"
+                            href="#">App Store</a>
+                    </div>
+                </div>
+                <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-xl">
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">회사</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">소개</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">공지사항</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">후원</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">서비스</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="9.html">홈</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="6.html">AI진단</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="list.html">보호동물 보기</a>
+                            </li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">입양 후 케어</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">유기동물 통계</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">혜택</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">문의</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">자주하는 질문</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">보호소 관리 시스템 문의</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">협업 문의</a></li>
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">후원 문의</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-h3 text-[15px] mb-lg text-on-surface font-bold">협력</h4>
+                        <ul class="space-y-sm font-caption text-caption text-on-surface-variant">
+                            <li class=""><a class="hover:text-primary transition-colors" href="#">협력 지자체</a></li>
+                            <li class=""></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 9. Bottom Fixed CTA -->
+    <footer class="fixed bottom-0 left-0 w-full bg-white border-t border-brand-border z-50 cta-shadow">
+        <div class="max-w-[768px] mx-auto px-xl py-lg flex gap-md">
+            <button
+                class="flex-1 h-[52px] border-2 border-brand-primary text-brand-primary rounded-xl font-button-lg hover:bg-brand-primary-light transition-colors active:scale-[0.98]"
+                onclick="location.href='2.html'">
+                보호소 질문지 보기
+            </button>
+            <button
+                class="flex-1 h-[52px] bg-brand-primary text-white rounded-xl font-button-lg shadow-lg hover:opacity-90 transition-opacity active:scale-[0.98]"
+                onclick="location.href='2.html'">
+                입양 문의 준비하기
+            </button>
+        </div>
+    </footer>
+    <script>
+        // Button interactions
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+
+        // Show/hide AI recommendation box based on query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const showRecommend = urlParams.get('recommend') === 'true';
+        const aiBox = document.getElementById('ai-recommendation-box');
+        if (aiBox) {
+            if (showRecommend) {
+                aiBox.style.display = 'flex';
+            } else {
+                aiBox.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
