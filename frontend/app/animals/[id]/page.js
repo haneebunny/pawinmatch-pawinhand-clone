@@ -164,28 +164,30 @@ function AnimalDetail() {
   const shelter = shelters.find((s) => s.shelter_id === animal.shelter_id) || shelters[0];
 
   // Retrieve matching details if available
-  let matchScore = null;
   const isNameless = !animal.name || animal.name.trim() === "" || animal.name.includes("이름 짓는 중") || animal.name.includes("지어주세요") || animal.name.includes("없음");
   
-  let recommendReason = isNameless
-    ? "==온화하고 영리한 성격==을 지니고 있어 새로운 보호자님의 환경에 빠르게 적응할 가능성이 매우 큽니다. 보호자님의 생활 스케줄 및 주거 성향과 아주 조화로운 균형을 이루며, ==작은 관심과 따뜻한 손길==을 베풀어 주신다면 금세 마음의 문을 열고 평생의 잊지 못할 가장 든든하고 사랑스러운 가족이자 동반자가 되어줄 것입니다."
-    : "==활동성과 차분함의 균형==이 아주 잘 잡혀 있어 보호자님의 주거 환경에 어색함 없이 스며들 수 있습니다. 특히 ==사람과의 교감을 무척 좋아하는 성향==이라, 서로 마주하는 시간 속에서 깊은 유대감을 선사하며 평생의 길을 동행하는 둘도 없는 다정하고 든든한 짝꿍이 되어줄 아이입니다.";
+  const [matchScore, setMatchScore] = useState(null);
+  const [recommendReason, setRecommendReason] = useState(
+    isNameless
+      ? "==온화하고 영리한 성격==을 지니고 있어 새로운 보호자님의 환경에 빠르게 적응할 가능성이 매우 큽니다. 보호자님의 생활 스케줄 및 주거 성향과 아주 조화로운 균형을 이루며, ==작은 관심과 따뜻한 손길==을 베풀어 주신다면 금세 마음의 문을 열고 평생의 잊지 못할 가장 든든하고 사랑스러운 가족이자 동반자가 되어줄 것입니다."
+      : "==활동성과 차분함의 균형==이 아주 잘 잡혀 있어 보호자님의 주거 환경에 어색함 없이 스며들 수 있습니다. 특히 ==사람과의 교감을 무척 좋아하는 성향==이라, 서로 마주하는 시간 속에서 깊은 유대감을 선사하며 평생의 길을 동행하는 둘도 없는 다정하고 든든한 짝꿍이 되어줄 아이입니다."
+  );
 
-  if (typeof window !== "undefined") {
+  useEffect(() => {
     try {
       const savedMatches = localStorage.getItem("pawinhand_match_results");
       if (savedMatches) {
         const matches = JSON.parse(savedMatches);
         const matchDetail = matches.find((m) => m.animal_id === id || m.id === id);
         if (matchDetail) {
-          matchScore = matchDetail.match_score;
-          recommendReason = matchDetail.recommend_reason;
+          setMatchScore(matchDetail.match_score);
+          setRecommendReason(matchDetail.recommend_reason);
         }
       }
     } catch (e) {
       console.warn("Failed to load match results from localStorage", e);
     }
-  }
+  }, [id]);
 
   // Handle image list (fallback to single photo if photos array is empty or undefined)
   const photos = animal.photos && animal.photos.length > 0 ? animal.photos : [animal.photo || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=400"];
