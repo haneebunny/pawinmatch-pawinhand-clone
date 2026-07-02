@@ -402,7 +402,7 @@ function AnimalDetail() {
               <div className="bg-white border border-brand-border p-3.5 rounded-xl flex flex-col gap-0.5 shadow-sm">
                 <span className="text-caption font-caption text-zinc-400 text-[11px] font-semibold">공고기한</span>
                 <span className="text-body font-body font-bold text-primary text-[13px] truncate">
-                  {animal.notice_start} ~ {animal.notice_end.includes("상시") ? "상시" : animal.notice_end}
+                  {(animal.notice_start || "").replace(/-/g, ".")} ~ {animal.notice_end && animal.notice_end.includes("상시") ? "상시" : (animal.notice_end || "").replace(/-/g, ".")}
                 </span>
               </div>
             </div>

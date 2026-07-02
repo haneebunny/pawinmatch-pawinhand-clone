@@ -80,6 +80,19 @@ def format_to_friendly_question(text: str) -> str:
     if "방묘창" in text and "방묘문" in text:
         return "고양이의 안전을 위한 방묘창 및 방묘문(150cm 이상) 설치 계획이 있으신가요?"
     
+    # 괄호 등이 뒤에 붙어 있어 endswith 매칭이 깨지는 현상을 방어하기 위해 단어 일괄 치환 기법 적용
+    text = text.replace("가능한가", "가능한가요")
+    text = text.replace("있는가", "있나요")
+    text = text.replace("되는가", "되나요")
+    text = text.replace("되었는가", "되었나요")
+    text = text.replace("동의했는가", "동의하셨나요")
+    text = text.replace("않는가", "않나요")
+    text = text.replace("구분되는가", "구분되나요")
+    text = text.replace("고려했는가", "고려하셨나요")
+    text = text.replace("이해했는가", "이해하셨나요")
+    text = text.replace("지키는가", "지키나요")
+    
+    # 기본 폴백 어미 변환 (괄호가 없는 깔끔한 문장용)
     if text.endswith("는가"):
         text = text[:-2] + "나요?"
     elif text.endswith("인가"):
@@ -89,8 +102,11 @@ def format_to_friendly_question(text: str) -> str:
     elif text.endswith("다"):
         text = text[:-1] + "나요?"
     
-    if not text.endswith("?"):
-        text += "?"
+    if not text.endswith("?") and not text.endswith("?"):
+        # 물음표가 문장 끝이나 괄호 끝에 전혀 없다면 붙여줌
+        if not text.endswith("?"):
+            text += "?"
+            
     return text
 
 @router.post("/questions")
