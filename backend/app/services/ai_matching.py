@@ -146,17 +146,22 @@ def _fallback_match(survey: SurveyInput) -> MatchResponse:
 
         score = max(1, min(10, round(score)))
 
-        # 추천 이유(가장 큰 강점 하나를 자연어로)
+        # 동물 지칭어 결정
+        raw_name = a.get("name", "").strip()
+        is_nameless_animal = not raw_name or "지어주세요" in raw_name or "이름 짓는 중" in raw_name or "없음" in raw_name
+        ref_word = "이 아이는" if is_nameless_animal else f"'{raw_name}' 친구는"
+
+        # 추천 이유(더 매력적이고 길게)
         if overlap:
-            reason = f"'{list(overlap)[0]}' 성향이라 원하시는 느낌과 잘 맞아요"
+            reason = f"{ref_word} '{list(overlap)[0]}' 성격이 뚜렷하여 원하셨던 반려 생활 상에 아주 잘 맞고 깊은 애정 어린 교감을 이뤄내실 수 있어요."
         elif abs(act - t_act) <= 1:
-            reason = "활동량이 원하시는 생활 리듬과 잘 맞아요"
+            reason = f"{ref_word} 평소 차분하고 조화로운 활동량을 지녀 보호자님의 일상 생활 주기 및 산책 리듬과 어색함 없이 훌륭히 매칭됩니다."
         elif abs(soc - t_soc) <= 1:
-            reason = "사람과의 거리감이 바라시는 정도와 비슷해요"
+            reason = f"{ref_word} 사람과의 교감 선호도가 보호자님께서 원하셨던 바와 매우 유사하여 서로 마주할 때 최고의 심리적 위안을 줄 수 있습니다."
         elif survey.housing in _SMALL_HOUSING and a.get("size") == "소형":
-            reason = "소형이라 지금 주거 공간에서도 편하게 지낼 수 있어요"
+            reason = f"{ref_word} 아담한 체구의 소형견이라 현재 보호자님의 주거 공간 내에서도 답답함 없이 아늑하고 편안하게 지낼 수 있어 추천해 드립니다."
         else:
-            reason = "전반적으로 무난하게 잘 맞는 편이에요"
+            reason = f"{ref_word} 전반적인 성격과 성향이 무난하고 모나지 않아 보호자님 가정에 새로운 활력과 따뜻한 행복을 선사해 줄 것입니다."
 
         scored.append((score, a.get("id"), reason))
 
