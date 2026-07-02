@@ -38,6 +38,7 @@ function formatNameWithSubjectJosa(name) {
     }
     return hasBatchim ? `${name}이는` : `${name}는`;
   }
+  return `${name}는`;
 }
 
 const HighlightText = ({ text }) => {
@@ -62,8 +63,6 @@ const HighlightText = ({ text }) => {
     </span>
   );
 };
-  return `${name}는`;
-}
 
 function AnimalDetail() {
   const params = useParams();
