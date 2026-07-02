@@ -39,16 +39,34 @@ project-root/
 │   ├── app/              # Next.js App 라우터 구조 (layout.js, page.js 등)
 │   ├── src/              # 퍼블리싱된 9개의 화면 HTML 파일들 (Day 1 프로토타입)
 │   └── package.json
+├── data/                 # ✅ RAG 참고자료 + 매칭용 동물 데이터 (저장소 루트)
+│   ├── pet_adoption_rules.jsonl      # RAG: 입양 판단 기준(진단 프롬프트에 삽입)
+│   ├── pre_adoption_screening.jsonl  # RAG: 자가점검(A)+매칭축(B)
+│   ├── post_adoption_guide.jsonl     # RAG: 입양 후 가이드
+│   └── animals.json                  # 매칭 후보 동물(개발자 A 제공, B가 읽음)
 ├── backend/
 │   ├── .agent/           # AI 에이전트용 개발 지침 (SKILL.md)
-│   ├── data/             # RAG용 참고 자료 (rules, screening jsonl)
-│   ├── main.py           # FastAPI 서버 코드
+│   ├── app/              # ✅ FastAPI 앱 패키지 — 현재 [개발자 B] 진단·매칭만 존재
+│   │   ├── config.py     # [공통] 환경변수·경로·모델명(gpt-5.4-mini) 단일 관리
+│   │   ├── schemas_B.py  # [B] SurveyInput·DiagnoseResponse·MatchResponse
+│   │   ├── rag_B.py      # [B] pet_adoption_rules 로더 + animals 로더
+│   │   ├── services/
+│   │   │   ├── ai_diagnose_B.py   # [B] 진단 체인 + 안전 폴백
+│   │   │   └── ai_matching_B.py   # [B] 매칭 체인 + 로컬 점수 폴백
+│   │   └── routers/
+│   │       ├── diagnose_B.py  # [B] POST /api/diagnose
+│   │       └── match_B.py     # [B] POST /api/match
+│   ├── main.py           # [공통] FastAPI 인스턴스·CORS·에러핸들러·라우터 등록
 │   ├── pyproject.toml    # Poetry 설정
 │   └── poetry.lock
 ├── AGENTS.md             # AI 에이전트 온보딩 및 협업/Git 규칙
 ├── ROADMAP.md            # 4일 일정 로드맵
 └── PROGRESS.md           # 이 문서 (개발 진행 상황 기록)
 ```
+
+> ⚠️ **데이터 폴더 위치 정정**: 초기 문서(dev_plan·ROADMAP)에는 `backend/data/`로 적혀 있었으나, 실제 저장소는 **루트 `data/`** 에 jsonl·animals.json이 존재합니다. `backend/app/config.py`의 `DATA_DIR`이 이 경로를 가리킵니다. (환경변수 `DATA_DIR`로 변경 가능)
+>
+> ℹ️ **개발자 파트 구분**: 파일명 접미사로 담당을 표시합니다 — 개발자 A 파일은 `_A`, 개발자 B 파일은 `_B`. 현재 백엔드에는 **개발자 B 파트(진단·매칭)만** 구현되어 있고, 개발자 A 파트(조회·질문지 `_A`)는 담당자가 이어서 추가합니다.
 
 ---
 
@@ -85,6 +103,18 @@ project-root/
   - 지도 핀 및 클러스터링을 위한 보호소 위도/경도(`lat`/`lng`) 정보를 OSM Nominatim API와 중복 방지 지역별 오프셋(jitter)을 가미한 폴백 알고리즘을 사용해 성공적으로 생성 완료.
   - 결과 파일 [animals.json](file:///Users/hani/Desktop/sasac_pjt/pawinhand-clone/backend/data/animals.json) 및 [shelters.json](file:///Users/hani/Desktop/sasac_pjt/pawinhand-clone/backend/data/shelters.json)을 생성하여 `backend/data/` 폴더에 저장 완료.
 
+### 🏁 Day 3 — 백엔드 [개발자 B] AI 진단·매칭 API (완료)
+> `feature/be_ai_matching` 브랜치. 개발자 B 담당(진단·매칭 체인)을 구현. 파일명은 `_B` 접미사로 담당 표시.
+> (앞서 실험적으로 만들었던 개발자 A 코드는 제거하고 B 파트만 남김. 조회·질문지 `_A`는 담당자가 이어서 추가.)
+
+- **FastAPI 앱 구조화**: `main.py`에 CORS(config 기반), **공통 에러 핸들러**(422 입력 검증 / 500 안전 응답), 진단·매칭 라우터 등록. 헬스체크에 `llm_enabled` 노출.
+- **OpenAI/LangChain 설정(`config.py`)**: 모델명(`gpt-5.4-mini`)·API 키·데이터 경로·CORS를 **한 곳에서만** 관리. 모델 교체는 이 한 줄만 바꾸면 됨.
+- **RAG 로더(`rag_B.py`)**: `pet_adoption_rules.jsonl`을 `title+설명` 텍스트로 이어붙여 진단 프롬프트에 삽입(벡터DB 없음). 매칭용 `animals.json`도 여기서 로드(캐시).
+- **진단 체인(`ai_diagnose_B.py` → `POST /api/diagnose`)**: `SurveyInput`(9필드)을 받아 **Structured Outputs로 JSON 강제**해 `grade`(3단계)·`good_points`·`check_points`·`monthly_cost` 반환. 등급은 "입양 가능/조건부 가능/신중히 재고"로 제한, "부적합/불가" 금지.
+- **매칭 체인(`ai_matching_B.py` → `POST /api/match`)**: 사용자 입력 + 동물의 활동성·사회성·태그를 비교해 3~5마리를 `animal_id·match_score(1~10)·recommend_reason`으로 반환. 응답은 가볍게(표시정보는 프론트가 animals.json에서 조회).
+- **예외 처리(Fallback)**: LLM 호출/파싱 실패 시 **1회 재시도**, 그래도 실패하거나 **API 키가 없으면 로컬 규칙 결과**로 폴백. → 키가 없어도 데모가 항상 3~5마리·3단계 등급을 낸다.
+- **검증**: 오프라인이라 실제 LLM 호출 대신 **폴백 경로**를 검증. 원룸·바쁨·초보 케이스→"신중히 재고"+차분한 소형 위주 추천, 단독·여유·경험 케이스→"입양 가능"+활발한 강아지 위주 추천으로 합리적 동작 확인. 신규 의존성 없음(langchain·openai는 기존 pyproject에 이미 포함) → `poetry.lock` 변경 없음.
+
 ---
 
 ## 📋 화면(페이지) 현황 및 연결 경로
@@ -105,8 +135,3 @@ project-root/
 | `8.html` | **지도 보기** | 보호소 위치 시각화 (Could 단계, 홈 화면 지도로 보기 연결) | - |
 
 ---
-
-## 🎯 Next Step (오늘의 개발 마무리 계획)
-1. **백엔드 AI API 연동**: FastAPI에 `gpt-5.4-mini` 및 LangChain 기반의 `/api/diagnose`, `/api/match`, `/api/questions` 개발 완료.
-2. **프론트엔드 API 호출 결합**: 로컬 시뮬레이션 기반에서 실제 백엔드 API 연동으로 전환하고 데이터 구조 정합성 검증.
-3. **Railway 배포 및 통합 테스트**: 클라우드에 두 서비스를 배포하고 전체 흐름이 자연스럽게 연동되는지 최종 검증.

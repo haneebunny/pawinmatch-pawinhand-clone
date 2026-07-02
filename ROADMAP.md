@@ -20,15 +20,20 @@
 project-root/
 ├── frontend/
 │   └── src/              # 페이지 외관 HTML들 (화면 8개)
+├── data/                 # ✅ RAG jsonl + 매칭용 동물 데이터 (루트에 위치)
+│   ├── pet_adoption_rules.jsonl
+│   ├── pre_adoption_screening.jsonl
+│   ├── post_adoption_guide.jsonl
+│   └── animals.json          # 매칭 후보(개발자 A 제공, B가 읽음)
 ├── backend/
-│   ├── data/             # RAG용 jsonl (입양 판단 기준·질문 참고자료)
-│   │   ├── pet_adoption_rules.jsonl
-│   │   └── pre_adoption_screening.jsonl
-│   └── ...               # FastAPI 코드 (엔드포인트·체인 등)
+│   ├── app/              # ✅ FastAPI 앱 — [B] config·schemas_B·rag_B·services·routers(diagnose_B·match_B)
+│   └── main.py           # 앱 생성·CORS·에러핸들러·라우터 등록
 ├── AGENTS.md             # 프로젝트 정의 + 협업/Git 규칙 (상시 규칙)
-├── SKILL.md              # 코드 작성 지침 (구현 규칙)
+├── backend/.agent/SKILL.md   # 코드 작성 지침 — 3-4에 백엔드 구조 확정본(파일명 _A/_B)
 └── ROADMAP.md            # 이 문서 (일정·작업 순서)
 ```
+
+> ✅ **(Day 3 갱신)** 데이터 폴더는 **루트 `data/`** 로 확정(초안의 `backend/data/`에서 정정). 백엔드는 `backend/app/` 패키지로 확정하고 **파일명 접미사로 담당 표시(A=`_A`, B=`_B`)**. 현재 **개발자 B 파트(진단·매칭)만** 구현됨. 자세한 구조·엔드포인트는 SKILL.md 3-4 참고.
 
 > **`frontend/src`** = 페이지 외관 HTML이 담기는 곳. 화면별 파일을 여기에 둡니다.
 > **`backend/data`** = RAG 참고자료 jsonl이 담기는 곳. 진단/매칭 AI가 프롬프트에 붙여 쓸 근거 데이터입니다.
@@ -98,6 +103,46 @@ project-root/
 - [ ] **통합 테스트**:
   - 배포된 라이브 서버에서 홈 ➡️ 진단 ➡️ 결과 ➡️ 매칭 ➡️ 상세 ➡️ 질문지로 이어지는 1차 흐름 전체 검증.
   - "신중히 재고" 등의 엣지 케이스에서 UI 문구가 '사용자 언어(부드러운 톤)'로 자연스럽게 표시되는지 팀 전원 교차 검증.
+## 🗓 4일 일정 (Day별)
+
+각 Day 끝에는 **"직접 눌러서 되는지" 확인**을 넣습니다. 안 되는 걸 쌓아두지 않는 게 4일 MVP의 핵심입니다.
+
+### Day 1 — 기반 세팅 + 화면 뼈대
+**목표: 빈 껍데기라도 8개 화면이 열리고, 서버가 응답한다.**
+
+- (공통) 저장소 세팅: `main` 보호, `feature/` 브랜치 규칙 공유(→ AGENTS.md)
+- (FE) Next.js 프로젝트 생성, `frontend/src`에 화면 8개 HTML 뼈대 배치
+  - 홈 / 목록 / 상세 / 지도(후순위) / 진단결과 / 매칭목록 / 매칭상세 / 질문지
+- (BE) FastAPI 프로젝트 생성(Poetry), `backend/data`에 jsonl 배치, 헬스체크 엔드포인트
+- (기획/디자인) Stitch로 화면 시안 확정, 문구 톤(사용자 언어) 정리
+- ✅ **확인**: 8개 화면이 각각 열린다 / 서버가 켜지고 응답한다
+
+### Day 2 — 핵심 AI 2개 (진단 + 매칭)
+**목표: 입력하면 진단 결과와 매칭 결과가 실제로 나온다. (Must의 심장)**
+
+- (BE) 동물·보호소 고정 데이터 수동 수집 → JSON 저장
+- ✅ (BE) LangChain 진단 체인 + `POST /api/diagnose` (RAG: `pet_adoption_rules.jsonl` 삽입) **완료** — [개발자 B]
+- ✅ (BE) LangChain 매칭 체인 + `POST /api/match` (응답은 `animal_id`+점수+이유만) **완료** — [개발자 B] / LLM 실패·키 없음 시 로컬 폴백
+- (FE) 진단 입력 폼(2단계: 생활환경 6개 + 성향 3항목) → 진단결과 화면 연결
+- ✅ **확인**: 폼을 채우면 3단계 등급이 뜨고, "매칭 보기"를 누르면 3~5마리가 나온다
+
+### Day 3 — 상세 · 목록 · 질문지 연결
+**목표: 카드 클릭 → 상세 → 질문지까지 흐름이 끊김 없이 이어진다.**
+
+- (FE) 목록(#2) ↔ 상세(#3) 연결, 매칭 카드 → 매칭상세(#7, 추천 이유 블록 추가)
+- (BE) `POST /api/questions` (공통 템플릿 고정) + `GET /api/animals`·`/api/shelters` 조회 API, `shelters.json` 적재 — [개발자 A] 담당(예정, `_A` 접미사)
+- (FE) 질문지 화면(#8): 카테고리 탭 + 질문 리스트 + 체크리스트 + 보호소 연락처
+- (FE) 문구를 사용자 언어로 다듬기(척도 숫자 → 자연어, "부적합"류 제거)
+- ✅ **확인**: 홈 → 진단 → 매칭 → 상세 → 질문지까지 한 번에 클릭으로 이어진다
+
+### Day 4 — 배포 · 다듬기 · 후순위
+**목표: Railway에 올라가고, 팀 전체가 실제로 눌러본다.**
+
+- (BE/FE) Railway 배포, 환경변수(OpenAI 키·API 주소) 등록, CORS 정리
+- (전체) 버그 픽스, 엣지 케이스 확인(특히 "신중히 재고" 등급)
+- (여유 시) Should: 체크리스트·입양 문의 안내·AI 커스텀 질문
+- (여유 시) Could: 검색/필터, **지도(#4) + 클러스터링**
+- ✅ **확인**: 배포된 주소에서 팀 4명이 각자 흐름을 끝까지 눌러본다
 
 ---
 
