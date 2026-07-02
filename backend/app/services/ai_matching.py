@@ -48,13 +48,22 @@ def _candidate_brief(animals: List[dict]) -> str:
             f"- id={a.get('id')} | {a.get('name')} | {a.get('species')}/{a.get('breeds')} "
             f"| 크기 {a.get('size')} | 활동성 {a.get('activity')} | 사회성 {a.get('sociability')} "
             f"| 공격성 {a.get('aggression')} | 건강 {a.get('health_state')} "
-            f"| 태그 {', '.join(a.get('tags', []))}"
+            f"| 지역 {a.get('city')} | 태그 {', '.join(a.get('tags', []))}"
         )
     return "\n".join(lines)
 
 
 def _llm_match(survey: SurveyInput) -> MatchResponse:
     animals = rag.load_animals()
+    preferred_cities = survey.preferred_cities or []
+    
+    # 1차 필터링: 선호 지역 해당 동물
+    filtered_animals = [a for a in animals if a.get("city") in preferred_cities]
+    
+    # 선호 지역 매칭 동물이 4마리 이상 넉넉하면 후보군을 해당 지역 동물로만 축소 전달,
+    # 부족하면 전체 동물을 대상으로 하되 프롬프트에 선호지역 가중 지시
+    candidates_to_send = filtered_animals if len(filtered_animals) >= 4 else animals
+
     llm = ChatOpenAI(model=config.OPENAI_MODEL, api_key=config.OPENAI_API_KEY, temperature=0.3)
     structured = llm.with_structured_output(MatchResponse)
     prompt = ChatPromptTemplate.from_messages(
@@ -64,9 +73,9 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
                 "human",
                 "[사용자 입력]\n주거 {housing} / 외출 {out_hours} / 산책 {walk_time} / 경험 {pet_experience} "
                 "/ 예산 {budget} / 자녀 {child_plan}\n"
-                "활동성 선호 {activity_pref} / 친화도 선호 {sociability_pref} / 키워드 {keywords}\n\n"
+                "활동성 선호 {activity_pref} / 친화도 선호 {sociability_pref} / 키워드 {keywords} / 선호 지역 {preferred_cities}\n\n"
                 "[후보 동물]\n{candidates}\n\n"
-                "가장 잘 맞는 3~5마리를 JSON(results[])으로 주세요.",
+                "가장 잘 맞는 3~5마리를 JSON(results[])으로 주세요. 사용자의 선호 지역과 매칭되는 동물을 최우선적으로 골려주세요.",
             ),
         ]
     )
@@ -82,7 +91,8 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
             "activity_pref": survey.activity_pref,
             "sociability_pref": survey.sociability_pref,
             "keywords": ", ".join(survey.keywords) if survey.keywords else "(없음)",
-            "candidates": _candidate_brief(animals),
+            "preferred_cities": ", ".join(preferred_cities) if preferred_cities else "(없음)",
+            "candidates": _candidate_brief(candidates_to_send),
         }
     )
     # 존재하지 않는 id는 제거(환각 방지)
@@ -99,12 +109,24 @@ def _fallback_match(survey: SurveyInput) -> MatchResponse:
     t_act = _ACTIVITY_TARGET.get(survey.activity_pref, 3)
     t_soc = _SOC_TARGET.get(survey.sociability_pref, 3)
     kw = set(survey.keywords or [])
+    preferred_cities = survey.preferred_cities or []
+
+    # 선호 지역 조건 충족 리스트 필터링
+    filtered_animals = [a for a in animals if a.get("city") in preferred_cities]
+    use_strict_filter = len(filtered_animals) >= 4
+    candidates = filtered_animals if use_strict_filter else animals
 
     scored = []
-    for a in animals:
+    for a in candidates:
         score = 10.0
         act = a.get("activity", 3)
         soc = a.get("sociability", 3)
+
+        # 선호 지역 가점 시스템 (필터링 완화 상황에서 선호지역 동물이 우선 랭킹을 먹게 유도)
+        is_preferred_city = a.get("city") in preferred_cities
+        if not use_strict_filter and is_preferred_city:
+            score += 5.0
+
         score -= abs(act - t_act) * 1.2      # 활동성 선호 차이
         score -= abs(soc - t_soc) * 1.2      # 사회성 선호 차이
 

@@ -237,11 +237,24 @@ export default function MatchResultsPage() {
                   <div className="flex items-center gap-1 text-on-surface-variant mb-1">
                     <span className="material-symbols-outlined text-[16px] text-gray-400">location_on</span>
                     <span className="text-[13px] leading-normal text-gray-500">
-                      {animal.found_location.split(" ")[0]} {animal.found_location.split(" ")[1] || ""}
+                      {(() => {
+                        const city = animal.city || "";
+                        const loc = animal.found_location || "";
+                        if (city && !loc.startsWith(city) && !loc.includes("서울") && !loc.includes("경기") && !loc.includes("경남")) {
+                          return `${city} ${loc}`;
+                        }
+                        return loc;
+                      })()}
                     </span>
                   </div>
-                  <h3 className="text-[18px] font-semibold leading-normal text-on-surface font-semibold">
-                    {animal.breeds} <span className="text-on-surface-variant font-normal text-[15px]">• {formatAge(animal.animal_age)}</span>
+                  <h3 className="text-[18px] font-semibold leading-normal text-on-surface font-bold">
+                    {animal.name && animal.name.trim() !== "" ? animal.name : "이름 짓는 중!"}
+                    <span className="text-on-surface-variant font-normal text-[13px] ml-2 text-zinc-500">
+                      [{animal.breeds}]
+                    </span>
+                    <span className="text-on-surface-variant font-normal text-[14px] ml-2 text-zinc-400">
+                      • {formatAge(animal.animal_age)}
+                    </span>
                   </h3>
                 </div>
 

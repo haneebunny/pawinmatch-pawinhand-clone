@@ -61,10 +61,10 @@ function AnimalDetail() {
 
   useEffect(() => {
     if (!animal) return;
-    setDisplayName(animal.name || "지어주세요!");
+    setDisplayName(animal.name || "이름 짓는 중!");
 
     const origName = animal.name || "";
-    const isNameless = !origName.trim() || origName.includes("지어주세요");
+    const isNameless = !origName.trim() || origName.includes("이름 짓는 중") || origName.includes("지어주세요");
 
     if (isNameless) {
       const fetchVotes = async () => {
@@ -284,7 +284,7 @@ function AnimalDetail() {
             </div>
 
             {/* 이름 지어주기 투표소 미니 카드 */}
-            {!votesInfo.confirmed_name && (!animal.name || animal.name.includes("지어주세요")) && (
+            {!votesInfo.confirmed_name && (!animal.name || animal.name.includes("이름 짓는 중") || animal.name.includes("지어주세요")) && (
               <div className="bg-white border border-brand-border p-5 rounded-2xl shadow-sm flex flex-col gap-4">
                 <div className="flex items-center gap-2 text-[#FF7A50]">
                   <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>how_to_vote</span>

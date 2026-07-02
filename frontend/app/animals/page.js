@@ -116,7 +116,7 @@ function AnimalsList() {
               <div className="p-3">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-on-surface text-[18px] font-bold leading-normal truncate max-w-[120px]">
-                    {animal.name && animal.name.trim() !== "" ? animal.name : "이름 없음"}
+                    {animal.name && animal.name.trim() !== "" && !animal.name.includes("없음") && !animal.name.includes("지어주세요") ? animal.name : "이름 짓는 중!"}
                   </span>
                   <span className="text-on-surface-variant text-[13px] leading-normal">
                     {animal.animal_sex === "수컷" ? "♂️" : animal.animal_sex === "암컷" ? "♀️" : "❓"}

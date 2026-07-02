@@ -91,9 +91,9 @@ def get_name_votes(animal_id: str):
             detail="동물 정보를 찾을 수 없습니다."
         )
 
-    # 2. 이미 공식 이름이 지정되어 있는지 확인 (기존 이름이 '지어주세요' 등이 아닌 유의미한 이름인 경우)
+    # 2. 이미 공식 이름이 지정되어 있는지 확인 (기존 이름이 '이름 짓는 중' 등이 아닌 유의미한 이름인 경우)
     orig_name = target_animal.get("name", "").strip()
-    is_nameless = not orig_name or "지어주세요" in orig_name
+    is_nameless = not orig_name or "지어주세요" in orig_name or "이름 짓는 중" in orig_name
     
     if not is_nameless:
         # 공식 이름이 확정된 상태이므로 투표 후보군 없이 확정 이름만 반환
@@ -148,7 +148,7 @@ def submit_name_vote(animal_id: str, payload: VoteInput):
         )
 
     orig_name = target_animal.get("name", "").strip()
-    is_nameless = not orig_name or "지어주세요" in orig_name
+    is_nameless = not orig_name or "지어주세요" in orig_name or "이름 짓는 중" in orig_name
     
     if not is_nameless:
         return VotesResponse(confirmed_name=orig_name, candidates=[])
