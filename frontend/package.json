@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "cp ../data/animals.json ./app/data/animals.json && next dev",
+    "build": "cp ../data/animals.json ./app/data/animals.json && next build",
     "start": "next start",
     "lint": "eslint"
   },
