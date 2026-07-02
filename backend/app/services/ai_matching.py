@@ -58,12 +58,37 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
     animals = rag.load_animals()
     preferred_cities = survey.preferred_cities or []
     
-    # 1차 필터링: 선호 지역 해당 동물
-    filtered_animals = [a for a in animals if a.get("city") in preferred_cities]
+    # [최적화] 107마리를 모두 LLM에 던지면 토큰이 너무 비대해져서 15초 이상 지연됩니다.
+    # 로컬 간단 점수 매김을 통해 가장 어울리는 상위 15마리만 1차로 엄선하여 LLM 심사에 부칩니다. (응답 1.5초대 달성)
+    scored = []
+    t_act = _ACTIVITY_TARGET.get(survey.activity_pref, 3)
+    t_soc = _SOC_TARGET.get(survey.sociability_pref, 3)
+    kw = set(survey.keywords or [])
     
-    # 선호 지역 매칭 동물이 4마리 이상 넉넉하면 후보군을 해당 지역 동물로만 축소 전달,
-    # 부족하면 전체 동물을 대상으로 하되 프롬프트에 선호지역 가중 지시
-    candidates_to_send = filtered_animals if len(filtered_animals) >= 4 else animals
+    for a in animals:
+        score = 10.0
+        act = a.get("activity", 3)
+        soc = a.get("sociability", 3)
+
+        # 선호 지역 가점
+        if a.get("city") in preferred_cities:
+            score += 5.0
+
+        score -= abs(act - t_act) * 1.2
+        score -= abs(soc - t_soc) * 1.2
+        
+        # 키워드 가점
+        overlap = kw & set(a.get("tags", []))
+        score += len(overlap) * 0.8
+        
+        # 좁은 주택 대형견 감점
+        if survey.housing in _SMALL_HOUSING and a.get("size") == "대형":
+            score -= 2.0
+            
+        scored.append((score, a))
+        
+    scored.sort(key=lambda x: -x[0])
+    candidates_to_send = [item[1] for item in scored[:15]]
 
     llm = ChatOpenAI(model=config.OPENAI_MODEL, api_key=config.OPENAI_API_KEY, temperature=0.3)
     structured = llm.with_structured_output(MatchResponse)
