@@ -27,7 +27,17 @@ export default function AnimalCard({ animal }) {
                      animal.name.includes("지어주세요");
 
   const displayName = isNameless ? "이름 짓는 중!" : animal.name;
-  const isUrgent = animal.notice_end && !animal.notice_end.includes("상시");
+  
+  // Calculate if the animal is actually in an urgent notice period (0 to 3 days left from real-time today)
+  const isUrgent = (() => {
+    if (!animal.notice_end || animal.notice_end.includes("상시")) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 시간 단위를 0으로 맞춰 날짜 차이만 정확히 계산
+    const endDate = new Date(animal.notice_end);
+    const diffTime = endDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays >= 0 && diffDays <= 3;
+  })();
 
   return (
     <Link
@@ -50,7 +60,7 @@ export default function AnimalCard({ animal }) {
         {/* Bell/Notification Count Badge (Always visible with absolute count) */}
         <div className="absolute bottom-2.5 right-2.5 bg-black/60 backdrop-blur-[2px] text-white px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
           <span
-            className="material-symbols-outlined text-[12px] text-[#FF9E80]"
+            className="material-symbols-outlined text-[10px] text-white"
             style={{ fontVariationSettings: "'FILL' 1" }}
           >
             notifications

@@ -423,7 +423,7 @@ export default function CarePage() {
                 </div>
 
                 {/* Center col: Financials (Premium, Coverage, Deductible) */}
-                <div className="flex-1 md:px-6 w-full md:w-auto grid grid-cols-2 md:grid-cols-3 gap-4 border-t border-b md:border-t-0 md:border-b-0 border-[#F5ECE5] py-4 md:py-0">
+                <div className="flex-1 md:px-6 w-full md:w-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 border-t border-b md:border-t-0 md:border-b-0 border-[#F5ECE5] py-4 md:py-0">
                   <div className="flex flex-col">
                     <span className="text-[11px] text-zinc-400">월 예상 보험료</span>
                     <strong className="text-[17px] font-extrabold text-[#FF7A50] mt-0.5">
@@ -438,7 +438,7 @@ export default function CarePage() {
                     </span>
                   </div>
 
-                  <div className="col-span-2 md:col-span-1 flex flex-col min-w-0">
+                  <div className="sm:col-span-2 md:col-span-1 flex flex-col min-w-0">
                     <span className="text-[11px] text-zinc-400">보장 요약</span>
                     <p className="text-[12px] text-[#8B716A] leading-tight mt-1 truncate md:whitespace-normal line-clamp-2 font-medium">
                       {insurer.coverage_summary}
