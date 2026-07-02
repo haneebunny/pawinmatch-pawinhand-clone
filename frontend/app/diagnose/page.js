@@ -129,7 +129,7 @@ export default function DiagnosePage() {
     localStorage.setItem("pawinhand_survey_input", JSON.stringify(requestBody));
     localStorage.removeItem("pawinhand_match_results");
 
-    const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://pawinhand-clone-production-9194.up.railway.app";
 
     try {
       // Try hitting FastAPI server
