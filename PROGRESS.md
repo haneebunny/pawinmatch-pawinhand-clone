@@ -106,7 +106,7 @@ project-root/
 
 ---
 
-## 🎯 다음 작업 계획 (Next Step)
-1. **Day 2 (AI 기능 연동)**: 백엔드에 OpenAI `gpt-5.4-mini`를 탑재한 LangChain 기반 적합도 진단 및 매칭 추천 API 엔드포인트 구현 (`POST /api/diagnose`, `POST /api/match`).
-2. **Day 3 (상세 연동)**: 수집된 `animals.json` 및 `shelters.json` 고정 데이터를 FastAPI 및 프론트엔드와 실동작하도록 연결.
-3. **Day 4 (배포)**: Railway에 FastAPI + Next.js 빌드 및 배포.
+## 🎯 Next Step (오늘의 개발 마무리 계획)
+1. **백엔드 AI API 연동**: FastAPI에 `gpt-5.4-mini` 및 LangChain 기반의 `/api/diagnose`, `/api/match`, `/api/questions` 개발 완료.
+2. **프론트엔드 API 호출 결합**: 로컬 시뮬레이션 기반에서 실제 백엔드 API 연동으로 전환하고 데이터 구조 정합성 검증.
+3. **Railway 배포 및 통합 테스트**: 클라우드에 두 서비스를 배포하고 전체 흐름이 자연스럽게 연동되는지 최종 검증.

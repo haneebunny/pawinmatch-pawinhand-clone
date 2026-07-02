@@ -48,46 +48,56 @@ project-root/
 
 ---
 
-## 🗓 4일 일정 (Day별)
+## 🗓 🗓 개발 진행 상황 & 마무리 계획 (Day별)
 
-각 Day 끝에는 **"직접 눌러서 되는지" 확인**을 넣습니다. 안 되는 걸 쌓아두지 않는 게 4일 MVP의 핵심입니다.
+각 단계별 완료 여부를 확인하고, 남은 작업을 프론트/백엔드 역할별로 나누어 마무리합니다.
 
-### Day 1 — 기반 세팅 + 화면 뼈대
-**목표: 빈 껍데기라도 8개 화면이 열리고, 서버가 응답한다.**
+### 🏁 Day 1 — 기반 세팅 + 화면 뼈대 (완료)
+- **FE**: Next.js 프로젝트 생성, 8개 화면 HTML 기반 컴포넌트 구조화 및 전역 레이아웃/스타일 세팅.
+- **BE**: FastAPI 프로젝트 생성, CORS 미들웨어 및 기본 헬스체크 엔드포인트 `/` 추가.
 
-- (공통) 저장소 세팅: `main` 보호, `feature/` 브랜치 규칙 공유(→ AGENTS.md)
-- (FE) Next.js 프로젝트 생성, `frontend/src`에 화면 8개 HTML 뼈대 배치
-  - 홈 / 목록 / 상세 / 지도(후순위) / 진단결과 / 매칭목록 / 매칭상세 / 질문지
-- (BE) FastAPI 프로젝트 생성(Poetry), `backend/data`에 jsonl 배치, 헬스체크 엔드포인트
-- (기획/디자인) Stitch로 화면 시안 확정, 문구 톤(사용자 언어) 정리
-- ✅ **확인**: 8개 화면이 각각 열린다 / 서버가 켜지고 응답한다
+### 🏁 Day 2 — Next.js 라우터 전환 및 데이터 크롤링 (완료)
+- **FE**: Next.js App Router 전환, localStorage 기반 survey wizard (`/diagnose`) 흐름 구현 및 로컬 시뮬레이션 폴백 구축. 배너 캐러셀 슬라이더 구현 완료.
+- **BE**: 포인핸드 API 연동 데이터 수집 스크립트 작성 및 실행 완료 (`animals.json` 107마리 및 보호소 매핑 완료).
 
-### Day 2 — 핵심 AI 2개 (진단 + 매칭)
-**목표: 입력하면 진단 결과와 매칭 결과가 실제로 나온다. (Must의 심장)**
+### 🚀 Day 3 & 4 (오늘) — 핵심 AI 연동 및 개발 마무리 (진행 중)
+**목표: 로컬 시뮬레이션을 실제 백엔드 AI API와 연결하고 배포를 완료하여 MVP를 완성한다.**
 
-- (BE) 동물·보호소 고정 데이터 수동 수집 → JSON 저장
-- (BE) LangChain 진단 체인 + `POST /api/diagnose` (RAG: `pet_adoption_rules.jsonl` 삽입)
-- (BE) LangChain 매칭 체인 + `POST /api/match` (응답은 `animal_id`+점수+이유만)
-- (FE) 진단 입력 폼(2단계: 생활환경 6개 + 성향 3항목) → 진단결과 화면 연결
-- ✅ **확인**: 폼을 채우면 3단계 등급이 뜨고, "매칭 보기"를 누르면 3~5마리가 나온다
+#### 💻 백엔드 (FastAPI) 개발 항목
+- [ ] **LangChain & LLM 설정**: OpenAI `gpt-5.4-mini` 설정 단일화 (`config.py` 또는 `main.py` 상단 상수).
+- [ ] **RAG 규칙 데이터 연동**: 루트 디렉토리 `data/`에 있는 `pet_adoption_rules.jsonl`과 `pre_adoption_screening.jsonl`를 백엔드에서 읽어오도록 경로 설정.
+- [ ] **`POST /api/diagnose` API 구현**:
+  - 사용자 입력값(2단계) 수신.
+  - `pet_adoption_rules.jsonl`을 프롬프트에 RAG 형태로 주입하여 "입양 가능 / 조건부 가능 / 신중히 재고" 판정.
+  - 잘 맞는 점, 보완점, 월 예상 비용 구조화된 JSON(Pydantic Schema)으로 응답.
+- [ ] **`POST /api/match` API 구현**:
+  - 사용자 입력 및 `backend/data/animals.json` 데이터 로드.
+  - OpenAI LLM을 통해 유기동물 매칭 점수(1~10) 및 맞춤 추천 이유 산출.
+  - 가벼운 응답 형태(`results: [{ animal_id, match_score, recommend_reason }]` 3~5개) 반환.
+- [ ] **`POST /api/questions` API 구현**:
+  - `pre_adoption_screening.jsonl` 공통 템플릿 반환.
+  - (여유 시) 동물의 특징을 반영한 맞춤 AI 질문 생성 기능 추가.
 
-### Day 3 — 상세 · 목록 · 질문지 연결
-**목표: 카드 클릭 → 상세 → 질문지까지 흐름이 끊김 없이 이어진다.**
+#### 🎨 프론트엔드 (Next.js) 개발 항목
+- [ ] **AI API 연동**:
+  - `/diagnose` 결과 페이지: 로컬 시뮬레이션 대신 백엔드 `POST /api/diagnose` 호출하도록 fetch 연동.
+  - `/match/results` 결과 페이지: 로컬 시뮬레이션 대신 백엔드 `POST /api/match` 호출하도록 fetch 연동.
+  - `/shelter-questionnaire` 질문지 페이지: 로컬 시뮬레이션 대신 백엔드 `POST /api/questions` 호출하도록 fetch 연동.
+- [ ] **실제 데이터 정합성 맞추기**:
+  - 프론트엔드 `data/animals.js` 대신 백엔드 크롤링 데이터 규격(`animals.json` 포맷 - 예: 이미지 경로 `photos[0]`, 체중 `animal_weight` 등)에 맞추어 카드 및 상세 페이지 컴포넌트 렌더링 수정.
+  - `/animals/[id]` 상세 페이지 및 매칭 상세 페이지(`?recommend=true`) 데이터 바인딩 오류 수정.
+- [ ] **예외 처리 및 폴백**:
+  - 백엔드 서버 오프라인 또는 API 에러 시, 기존에 구현된 로컬 시뮬레이션 폴백 로직이 자연스럽게 작동하도록 `try/catch` 구성.
+  - API Base URL을 환경변수 `NEXT_PUBLIC_API_BASE_URL`로 분리.
 
-- (FE) 목록(#2) ↔ 상세(#3) 연결, 매칭 카드 → 매칭상세(#7, 추천 이유 블록 추가)
-- (BE) `POST /api/questions` (공통 템플릿 고정, `pre_adoption_screening.jsonl` 활용)
-- (FE) 질문지 화면(#8): 카테고리 탭 + 질문 리스트 + 체크리스트 + 보호소 연락처
-- (FE) 문구를 사용자 언어로 다듬기(척도 숫자 → 자연어, "부적합"류 제거)
-- ✅ **확인**: 홈 → 진단 → 매칭 → 상세 → 질문지까지 한 번에 클릭으로 이어진다
-
-### Day 4 — 배포 · 다듬기 · 후순위
-**목표: Railway에 올라가고, 팀 전체가 실제로 눌러본다.**
-
-- (BE/FE) Railway 배포, 환경변수(OpenAI 키·API 주소) 등록, CORS 정리
-- (전체) 버그 픽스, 엣지 케이스 확인(특히 "신중히 재고" 등급)
-- (여유 시) Should: 체크리스트·입양 문의 안내·AI 커스텀 질문
-- (여유 시) Could: 검색/필터, **지도(#4) + 클러스터링**
-- ✅ **확인**: 배포된 주소에서 팀 4명이 각자 흐름을 끝까지 눌러본다
+#### 🌐 배포 및 검증 (최종 마무리)
+- [ ] **Railway 배포**:
+  - FastAPI 백엔드 배포 및 CORS 설정에 프론트엔드 배포 주소 추가.
+  - Next.js 프론트엔드 배포.
+  - Railway 환경변수(`OPENAI_API_KEY`, `NEXT_PUBLIC_API_BASE_URL` 등) 등록.
+- [ ] **통합 테스트**:
+  - 배포된 라이브 서버에서 홈 ➡️ 진단 ➡️ 결과 ➡️ 매칭 ➡️ 상세 ➡️ 질문지로 이어지는 1차 흐름 전체 검증.
+  - "신중히 재고" 등의 엣지 케이스에서 UI 문구가 '사용자 언어(부드러운 톤)'로 자연스럽게 표시되는지 팀 전원 교차 검증.
 
 ---
 
