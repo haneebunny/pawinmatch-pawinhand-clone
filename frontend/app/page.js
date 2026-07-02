@@ -36,6 +36,18 @@ const BANNER_SLIDES = [
   }
 ];
 
+function formatAge(age) {
+  if (typeof age === "number") {
+    if (age >= 12) {
+      const years = Math.floor(age / 12);
+      const months = age % 12;
+      return months > 0 ? `${years}살 ${months}개월` : `${years}살`;
+    }
+    return `${age}개월`;
+  }
+  return age;
+}
+
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -219,13 +231,15 @@ export default function Home() {
               
               <div className="p-3">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-on-surface text-[18px] font-semibold leading-normal">{animal.breeds}</span>
+                  <span className="text-on-surface text-[18px] font-bold leading-normal truncate max-w-[120px]">
+                    {animal.name && animal.name.trim() !== "" ? animal.name : "이름 없음"}
+                  </span>
                   <span className="text-on-surface-variant text-[13px] leading-normal">
-                    {animal.animal_sex === "남아" ? "♂️" : "♀️"}
+                    {animal.animal_sex === "수컷" || animal.animal_sex === "수" || animal.animal_sex === "남아" ? "♂️" : "♀️"}
                   </span>
                 </div>
-                <p className="text-on-surface-variant text-[13px] leading-normal mb-3">
-                  {animal.animal_age} • {animal.found_location.split(" ")[0]} {animal.found_location.split(" ")[1] || ""}
+                <p className="text-on-surface-variant text-[13px] leading-normal mb-3 truncate">
+                  {animal.breeds} • {formatAge(animal.animal_age)}
                 </p>
                 <div className="pt-2 border-t border-surface-variant/20">
                   <p className="font-caption text-[11px] text-on-surface-variant truncate">
