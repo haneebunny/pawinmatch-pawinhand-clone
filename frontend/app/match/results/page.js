@@ -32,6 +32,21 @@ export default function MatchResultsPage() {
     const survey = JSON.parse(savedSurvey);
     setSurveyInput(survey);
 
+    // Check if there is already a cached match result
+    const savedMatches = localStorage.getItem("pawinhand_match_results");
+    if (savedMatches) {
+      try {
+        const parsed = JSON.parse(savedMatches);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMatchedList(parsed);
+          setLoading(false);
+          return;
+        }
+      } catch (e) {
+        console.warn("Failed to parse cached match results", e);
+      }
+    }
+
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
     const fetchMatches = async () => {
