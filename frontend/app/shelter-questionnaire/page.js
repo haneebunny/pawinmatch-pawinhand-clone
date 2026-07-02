@@ -7,7 +7,7 @@ import { animals } from "../data/animals";
 
 const CATEGORIES = ["건강상태", "행동/성격", "산책/활동", "사회성", "입양절차"];
 
-const QUESTIONS = {
+const DEFAULT_QUESTIONS = {
   "건강상태": [
     "예방접종 기록이 최신 상태이며 증빙이 가능한가요?",
     "현재 앓고 있는 질병이나 정기적으로 복용해야 하는 약이 있나요?",
@@ -40,7 +40,7 @@ const QUESTIONS = {
   ]
 };
 
-const CHECKLIST_ITEMS = [
+const DEFAULT_CHECKLIST_ITEMS = [
   "동물을 평생 책임지고 키울 수 있는 경제적 여건이 마련되었나요?",
   "가족 구성원 전원이 입양에 동의했나요?",
   "소음이나 알레르기 등으로 인한 이웃과의 마찰 대비책이 있나요?",
@@ -53,15 +53,26 @@ export default function ShelterQuestionnairePage() {
   const [checklist, setChecklist] = useState({});
   const [currentShelter, setCurrentShelter] = useState(null);
   const [toastMessage, setToastMessage] = useState("");
+  const [dynamicQuestions, setDynamicQuestions] = useState(DEFAULT_QUESTIONS);
+  const [checklistItems, setChecklistItems] = useState(DEFAULT_CHECKLIST_ITEMS);
 
   useEffect(() => {
     // 1. Load active shelter from last viewed animal if available
-    if (typeof window !== "undefined") {
-      // Find the last viewed animal's ID from match results or simply search stored detail
-      const savedMatches = localStorage.getItem("pawinhand_match_results");
-      let targetShelterId = "shelter-1"; // Default to Mapo shelter
+    let targetShelterId = "shelter-1";
+    let surveyInput = null;
 
-      // We can also retrieve if they came from a specific animal page
+    if (typeof window !== "undefined") {
+      const savedMatches = localStorage.getItem("pawinhand_match_results");
+      const savedSurvey = localStorage.getItem("pawinhand_survey_input");
+      if (savedSurvey) {
+        try {
+          surveyInput = JSON.parse(savedSurvey);
+        } catch (e) {
+          console.warn("Failed to parse survey input", e);
+        }
+      }
+
+      // Check referrer to see if we came from a specific animal
       const pathArray = document.referrer ? new URL(document.referrer).pathname.split("/") : [];
       const isFromAnimalDetail = pathArray.includes("animals");
       const lastAnimalId = isFromAnimalDetail ? pathArray[pathArray.length - 1] : null;
@@ -72,15 +83,60 @@ export default function ShelterQuestionnairePage() {
           targetShelterId = animal.shelter_id;
         }
       } else if (savedMatches) {
-        const matches = JSON.parse(savedMatches);
-        if (matches.length > 0) {
-          targetShelterId = matches[0].shelter_id; // Suggest shelter of the best match
+        try {
+          const matches = JSON.parse(savedMatches);
+          if (matches.length > 0) {
+            targetShelterId = matches[0].shelter_id;
+          }
+        } catch (e) {
+          console.warn("Failed to parse match results", e);
         }
       }
 
       const shelter = shelters.find((s) => s.shelter_id === targetShelterId) || shelters[0];
       setCurrentShelter(shelter);
     }
+
+    // 2. Fetch questionnaire from backend (POST /api/questions) with survey input payload
+    const fetchQuestionnaire = async () => {
+      const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+      try {
+        const response = await fetch(`${API_BASE}/api/questions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(surveyInput || {}),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          
+          // Map backend questions list to local category mapping
+          let mappedQuestions = { ...DEFAULT_QUESTIONS };
+          if (data.questions && Array.isArray(data.questions)) {
+            CATEGORIES.forEach((cat) => { mappedQuestions[cat] = []; });
+            data.questions.forEach((q) => {
+              if (mappedQuestions[q.category]) {
+                mappedQuestions[q.category].push(q.text);
+              }
+            });
+            setDynamicQuestions(mappedQuestions);
+          } else if (data.questions && typeof data.questions === "object") {
+            setDynamicQuestions({ ...DEFAULT_QUESTIONS, ...data.questions });
+          }
+
+          if (data.checklist && Array.isArray(data.checklist)) {
+            setChecklistItems(data.checklist);
+          }
+        } else {
+          throw new Error("Questions API response not ok");
+        }
+      } catch (error) {
+        console.warn("FastAPI Server not available for questions. Simulating locally.", error);
+        // Fallback: Default to local constants (dynamicQuestions & checklistItems remain DEFAULT)
+      }
+    };
+
+    fetchQuestionnaire();
   }, []);
 
   const showToast = (msg) => {
@@ -96,7 +152,8 @@ export default function ShelterQuestionnairePage() {
   };
 
   const copyAllQuestions = () => {
-    const allText = QUESTIONS[activeTab].map((q, idx) => `${idx + 1}. ${q}`).join("\n");
+    const list = dynamicQuestions[activeTab] || [];
+    const allText = list.map((q, idx) => `${idx + 1}. ${q}`).join("\n");
     copyToClipboard(allText, `${activeTab} 전체 질문`);
   };
 
@@ -163,7 +220,7 @@ export default function ShelterQuestionnairePage() {
         </div>
 
         <div className="flex flex-col gap-3">
-          {QUESTIONS[activeTab].map((q, idx) => (
+          {(dynamicQuestions[activeTab] || []).map((q, idx) => (
             <div
               key={idx}
               className="flex justify-between items-center p-3 bg-[#FFFBF7] border border-[#F5F0EB] rounded-xl hover:border-primary-container transition-all group"
@@ -193,7 +250,7 @@ export default function ShelterQuestionnairePage() {
           입양 준비 체크리스트
         </h2>
         <div className="flex flex-col gap-2">
-          {CHECKLIST_ITEMS.map((item, idx) => {
+          {checklistItems.map((item, idx) => {
             const isChecked = !!checklist[idx];
             return (
               <label
