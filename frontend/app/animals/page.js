@@ -433,7 +433,7 @@ function AnimalsList() {
                     {(animal.notice_no && animal.notice_no.split("-")[0]) || "보호"}보호소
                   </p>
                   <p className="font-caption text-[11px] text-primary-container font-bold">
-                    {(animal.notice_start || "").slice(2)}~{(animal.notice_end || "").slice(2)}
+                    {(animal.notice_start || "").replace(/-/g, ".")}~{(animal.notice_end || "").replace(/-/g, ".")}
                   </p>
                 </div>
               </div>
