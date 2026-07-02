@@ -16,6 +16,29 @@ function formatAge(age) {
   return age;
 }
 
+const HighlightText = ({ text }) => {
+  if (!text) return null;
+  const parts = text.split("==");
+  return (
+    <span>
+      {parts.map((part, index) => {
+        if (index % 2 === 1) {
+          return (
+            <span
+              key={index}
+              className="px-1.5 py-0.5 rounded-md font-bold"
+              style={{ backgroundColor: "#FFE7D9", color: "#FF7A50" }}
+            >
+              {part}
+            </span>
+          );
+        }
+        return <span key={index}>{part}</span>;
+      })}
+    </span>
+  );
+};
+
 export default function MatchResultsPage() {
   const [matchedList, setMatchedList] = useState([]);
   const [surveyInput, setSurveyInput] = useState(null);
@@ -266,7 +289,7 @@ export default function MatchResultsPage() {
                     >
                       recommend
                     </span>
-                    <span>{animal.recommend_reason}</span>
+                    <span><HighlightText text={animal.recommend_reason} /></span>
                   </p>
                 </div>
                 
