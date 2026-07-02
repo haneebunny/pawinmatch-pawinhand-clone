@@ -33,6 +33,13 @@
 - [x] **API 신설**: `backend/app/routers/animals.py` 파일을 생성하고 `GET /api/animals` 엔드포인트를 구현 완료했습니다.
 - [x] **지역 필터 연동**: `city` 쿼리 파라미터를 받아 부분 일치(`in`) 방식의 지역 필터링 및 예외 발생 시 빈 리스트(`[]`)를 리턴하도록 처리했습니다.
 
+### 🏁 4단계: 보호소 사전 질문지 API (`questions.py`) 구현 완료 (11:36)
+- [x] **API 신설**: `backend/app/routers/questions.py` 파일을 생성하고 `POST /api/questions` 엔드포인트를 구현 완료했습니다.
+- [x] **유효성 및 필터 검증**: 요청 축종이 `dog` 또는 `cat`이 아닐 경우 400 에러를 반환하며, 축종에 매핑되는 질문 데이터만 필터링하도록 RAG 캐싱 함수와 연동 완료했습니다.
+
+### 🏁 5단계: 백엔드 메인 통합 완료 (11:37)
+- [x] **라우터 등록**: [main.py](file:///d:/sesac_pjt/pawinhand-clone/backend/main.py)의 상단 import를 통합하고, `animals` 및 `questions` 라우터를 탑재하여 API 엔드포인트를 전역 활성화 완료했습니다.
+
 ---
 
 ## 📋 현재 개발 타임라인 및 마일스톤 현황
@@ -44,6 +51,6 @@
 | **2단계** | Pydantic 스키마 정의 (개발자 A 스키마 추가) | `backend/app/schemas.py` | **완료 (11:13)** |
 | **추가** | 프론트 선호 지역 체크박스 UI & schemas 연동 | `diagnose/page.js`, `schemas.py` | **완료 (11:31)** |
 | **3단계** | 유기동물 조회 API 구현 (`GET /api/animals`) | `backend/app/routers/animals.py` | **완료 (11:31)** |
-| **4단계** | 질문지 조회 API 구현 (`POST /api/questions`) | `backend/app/routers/questions.py` | 대기 중 |
-| **5단계** | 백엔드 메인 통합 및 로컬 스웨거 검증 | `backend/main.py` | 대기 중 |
+| **4단계** | 질문지 조회 API 구현 (`POST /api/questions`) | `backend/app/routers/questions.py` | **완료 (11:36)** |
+| **5단계** | 백엔드 메인 통합 및 로컬 스웨거 검증 | `backend/main.py` | **완료 (11:37)** |
 | **6단계** | Railway 배포 및 프론트 연동 테스트 | 배포 서버 | 대기 중 |
