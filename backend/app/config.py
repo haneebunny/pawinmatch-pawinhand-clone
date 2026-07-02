@@ -15,8 +15,10 @@ load_dotenv()
 
 # --- 경로 ---
 BASE_DIR = Path(__file__).resolve().parent.parent   # .../backend
-REPO_ROOT = BASE_DIR.parent                          # 저장소 루트
-DATA_DIR = Path(os.getenv("DATA_DIR", str(REPO_ROOT / "data")))
+# 하이브리드 경로 감지: 배포(Root가 /backend) 시에는 BASE_DIR/data를, 그 외에는 REPO_ROOT/data를 감지합니다.
+DEPLOY_DATA_DIR = BASE_DIR / "data"
+DEFAULT_DATA_PATH = DEPLOY_DATA_DIR if DEPLOY_DATA_DIR.exists() else REPO_ROOT / "data"
+DATA_DIR = Path(os.getenv("DATA_DIR", str(DEFAULT_DATA_PATH)))
 
 # 매칭에 쓰는 동물 고정 데이터 (개발자 A가 제공, B는 읽기만)
 ANIMALS_FILE = DATA_DIR / "animals.json"
