@@ -70,7 +70,7 @@ export default function MatchResultsPage() {
       }
     }
 
-    const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://pawinhand-clone-production-9194.up.railway.app";
 
     const fetchMatches = async () => {
       try {
