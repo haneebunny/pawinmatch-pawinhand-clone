@@ -94,9 +94,11 @@ export default function DiagnosePage() {
     // Store user inputs for the matching page
     localStorage.setItem("pawinhand_survey_input", JSON.stringify(requestBody));
 
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+
     try {
       // Try hitting FastAPI server
-      const response = await fetch("http://localhost:8000/api/diagnose", {
+      const response = await fetch(`${API_BASE}/api/diagnose`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
@@ -105,6 +107,7 @@ export default function DiagnosePage() {
       if (response.ok) {
         const data = await response.json();
         setResult(data);
+        setLoading(false);
       } else {
         throw new Error("API call failed, falling back to local simulation");
       }
@@ -165,9 +168,8 @@ export default function DiagnosePage() {
           check_points,
           monthly_cost: { min: minCost, max: maxCost, gov_support: 20 }
         });
+        setLoading(false);
       }, 1000);
-    } finally {
-      setLoading(false);
     }
   };
 
