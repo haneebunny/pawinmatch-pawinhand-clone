@@ -77,3 +77,9 @@ def load_reference_text(bundle: Optional[str] = "A", limit: int = 20) -> str:
 def load_animals() -> List[dict]:
     """animals.json 전체(매칭 후보). 개발자 A가 제공하는 고정 데이터."""
     return _load_json(config.ANIMALS_FILE)
+
+
+@lru_cache(maxsize=1)
+def load_screening_questions() -> List[dict]:
+    """pre_adoption_screening.jsonl 질문지 룰 목록 캐시 로드"""
+    return _load_jsonl(config.SCREENING_FILE)

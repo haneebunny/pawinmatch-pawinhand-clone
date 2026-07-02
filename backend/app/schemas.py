@@ -47,3 +47,64 @@ class MatchResult(BaseModel):
 
 class MatchResponse(BaseModel):
     results: List[MatchResult]
+
+
+# ========== 유기동물 조회용 스펙 (GET /api/animals) ==========
+class CommentSchema(BaseModel):
+    user_id: Optional[str] = Field(None, description="댓글 작성자 ID")
+    content: Optional[str] = Field(None, description="댓글 내용")
+    update_time: Optional[str] = Field(None, description="작성/수정 시간 (YYYY-MM-DD HH:MM:SS)")
+
+
+class AnimalResponse(BaseModel):
+    id: str = Field(..., description="동물 고유 ID")
+    name: str = Field(..., description="이름")
+    photos: List[str] = Field(default_factory=list, description="이미지 URL 리스트")
+    species: str = Field(..., description="축종 (개/고양이 등)")
+    breeds: str = Field(..., description="품종")
+    animal_age: str = Field(..., description="나이 정보")
+    animal_sex: str = Field(..., description="성별 (암컷/수컷 등)")
+    animal_weight: Optional[float] = Field(None, description="몸무게 (Kg)")
+    size: str = Field(..., description="크기 구분 (소형/중형/대형)")
+    neutered: str = Field(..., description="중성화 여부")
+    health_state: int = Field(..., description="건강 상태 점수 (1~5)")
+    activity: int = Field(..., description="활동성 점수 (1~5)")
+    aggression: int = Field(..., description="공격성 점수 (1~5)")
+    sociability: int = Field(..., description="사회성 점수 (1~5)")
+    personality_comment: Optional[str] = Field(None, description="성격 설명 코멘트")
+    tags: List[str] = Field(default_factory=list, description="성향 태그 목록")
+    notice_no: Optional[str] = Field(None, description="공고 번호")
+    notice_start: Optional[str] = Field(None, description="공고 시작일")
+    notice_end: Optional[str] = Field(None, description="공고 종료일")
+    found_location: Optional[str] = Field(None, description="발견 장소")
+    shelter_id: str = Field(..., description="소속 보호소 ID")
+    adoption_support: bool = Field(False, description="입양 지원비 대상 여부")
+    adoption_support_detail: Optional[str] = Field(None, description="입양 지원비 상세 정보")
+    city: Optional[str] = Field(None, description="지역 정보 (시도)")
+    bell_count: Optional[int] = Field(0, description="알림 설정 수")
+    comments: List[CommentSchema] = Field(default_factory=list, description="댓글 목록")
+
+    class Config:
+        from_attributes = True
+
+
+# ========== 질문지 조회용 스펙 (POST /api/questions) ==========
+class QuestionInput(BaseModel):
+    species: str = Field(..., description="대상 축종 ('dog' 또는 'cat')")
+
+
+class QuestionResponse(BaseModel):
+    uid: str = Field(..., description="질문 항목 고유 ID (예: dog-A01)")
+    species: str = Field(..., description="대상 축종 ('dog' 또는 'cat')")
+    bundle: str = Field(..., description="카테고리 번들 (A, B 등)")
+    bundle_name: str = Field(..., description="번들 카테고리명")
+    title: str = Field(..., description="질문 제목")
+    section: Optional[str] = Field(None, description="해당 문서 섹션명")
+    explanation: str = Field(..., description="설명 문구")
+    guide: str = Field(..., description="행동 가이드라인")
+    criteria: List[str] = Field(default_factory=list, description="체크리스트 판단 기준")
+    red_flags: List[str] = Field(default_factory=list, description="위험 신호(Red Flags)")
+    source: Optional[str] = Field(None, description="출처")
+
+    class Config:
+        from_attributes = True
