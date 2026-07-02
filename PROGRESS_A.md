@@ -25,6 +25,14 @@
 - [x] **RAG 로더 추가**: [rag.py](file:///d:/sesac_pjt/pawinhand-clone/backend/app/rag.py)에 질문지 데이터 파싱용 `load_screening_questions` 캐싱 함수 구현 완료.
 - [x] **공통 스키마 업데이트**: [schemas.py](file:///d:/sesac_pjt/pawinhand-clone/backend/app/schemas.py) 기존 스키마를 유지하면서 개발자 A 전담 API용 Pydantic 모델(`CommentSchema`, `AnimalResponse`, `QuestionInput`, `QuestionResponse`) 추가 완료.
 
+### 🏁 신규 마일스톤: 프론트 선호 지역 체크박스 추가 및 백엔드 스키마 연동 완료 (11:31)
+- [x] **백엔드 스키마 확장**: [schemas.py](file:///d:/sesac_pjt/pawinhand-clone/backend/app/schemas.py)의 `SurveyInput` 모델에 `preferred_cities` 필드 정의 추가 완료.
+- [x] **프론트 UI 구성**: [diagnose/page.js](file:///d:/sesac_pjt/pawinhand-clone/frontend/app/diagnose/page.js) 설문 2단계 단에 **"선호 지역 (다중 선택)"** 체크박스 영역 신설 및 API 전송 바디(`preferred_cities`) 연동 완료.
+
+### 🏁 3단계: 유기동물 조회 API (`animals.py`) 구현 완료 (11:31)
+- [x] **API 신설**: `backend/app/routers/animals.py` 파일을 생성하고 `GET /api/animals` 엔드포인트를 구현 완료했습니다.
+- [x] **지역 필터 연동**: `city` 쿼리 파라미터를 받아 부분 일치(`in`) 방식의 지역 필터링 및 예외 발생 시 빈 리스트(`[]`)를 리턴하도록 처리했습니다.
+
 ---
 
 ## 📋 현재 개발 타임라인 및 마일스톤 현황
@@ -34,7 +42,8 @@
 | **준비** | 브랜치 동기화 및 전용 로드맵 생성 | `ROADMAP_A.md`, `PROGRESS_A.md` | **완료 (10:40)** |
 | **1단계** | RAG 로더 사전 질문지 캐싱 함수 추가 | `backend/app/rag.py` | **완료 (11:13)** |
 | **2단계** | Pydantic 스키마 정의 (개발자 A 스키마 추가) | `backend/app/schemas.py` | **완료 (11:13)** |
-| **3단계** | 유기동물 조회 API 구현 | `backend/app/routers/animals.py` | 대기 중 |
-| **4단계** | 질문지 조회 API 구현 | `backend/app/routers/questions.py` | 대기 중 |
+| **추가** | 프론트 선호 지역 체크박스 UI & schemas 연동 | `diagnose/page.js`, `schemas.py` | **완료 (11:31)** |
+| **3단계** | 유기동물 조회 API 구현 (`GET /api/animals`) | `backend/app/routers/animals.py` | **완료 (11:31)** |
+| **4단계** | 질문지 조회 API 구현 (`POST /api/questions`) | `backend/app/routers/questions.py` | 대기 중 |
 | **5단계** | 백엔드 메인 통합 및 로컬 스웨거 검증 | `backend/main.py` | 대기 중 |
 | **6단계** | Railway 배포 및 프론트 연동 테스트 | 배포 서버 | 대기 중 |

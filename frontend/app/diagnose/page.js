@@ -12,6 +12,8 @@ const PET_EXP_OPTIONS = ["없음", "있음(현재는 없음)", "있음(현재도
 const BUDGET_OPTIONS = ["10만원 미만", "10~20만원", "20~30만원", "30만원 이상"];
 const CHILD_PLAN_OPTIONS = ["자녀 없음·계획 없음", "자녀 있음", "계획 있음"];
 
+const CITY_OPTIONS = ["서울특별시", "경기도", "인천광역시", "강원도", "충청도", "전라도", "경상도", "제주도", "기타"];
+
 const ACTIVITY_PREFS = [
   "조용하고 차분한 아이",
   "적당히 활발한 아이",
@@ -49,6 +51,7 @@ export default function DiagnosePage() {
   const [activityPref, setActivityPref] = useState("");
   const [sociabilityPref, setSociabilityPref] = useState("");
   const [keywords, setKeywords] = useState([]);
+  const [preferredCities, setPreferredCities] = useState([]);
 
   // Step 3 Result State
   const [loading, setLoading] = useState(false);
@@ -62,8 +65,16 @@ export default function DiagnosePage() {
     }
   };
 
+  const toggleCity = (city) => {
+    if (preferredCities.includes(city)) {
+      setPreferredCities(preferredCities.filter((c) => c !== city));
+    } else {
+      setPreferredCities([...preferredCities, city]);
+    }
+  };
+
   const isStep1Complete = housing && outHours && walkTime && petExperience && budget && childPlan;
-  const isStep2Complete = activityPref && sociabilityPref && keywords.length > 0;
+  const isStep2Complete = activityPref && sociabilityPref && keywords.length > 0 && preferredCities.length > 0;
 
   const handleStep1Submit = () => {
     if (isStep1Complete) {
@@ -88,7 +99,8 @@ export default function DiagnosePage() {
       child_plan: childPlan,
       activity_pref: activityPref,
       sociability_pref: sociabilityPref,
-      keywords
+      keywords,
+      preferred_cities: preferredCities
     };
 
     // Store user inputs for the matching page
@@ -403,7 +415,7 @@ export default function DiagnosePage() {
           </section>
 
           {/* 성향 키워드 다중선택 */}
-          <section className="mb-12">
+          <section className="mb-8">
             <h3 className="text-[18px] font-semibold leading-normal mb-3 text-on-surface">성향 키워드 (다중 선택)</h3>
             <div className="flex flex-wrap gap-2">
               {KEYWORD_OPTIONS.map((kw) => {
@@ -425,10 +437,33 @@ export default function DiagnosePage() {
             </div>
           </section>
 
+          {/* 선호 지역 다중선택 */}
+          <section className="mb-12">
+            <h3 className="text-[18px] font-semibold leading-normal mb-3 text-on-surface">선호 지역 (다중 선택)</h3>
+            <div className="flex flex-wrap gap-2">
+              {CITY_OPTIONS.map((city) => {
+                const isActive = preferredCities.includes(city);
+                return (
+                  <button
+                    key={city}
+                    onClick={() => toggleCity(city)}
+                    className={`px-4 py-2 rounded-full font-body text-caption border transition-all cursor-pointer ${
+                      isActive
+                        ? "bg-primary-container text-white border-transparent font-medium"
+                        : "bg-[#F5F0EB] text-on-surface-variant border-transparent hover:border-primary-container"
+                    }`}
+                  >
+                    {city}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
           {/* Action Buttons */}
           <div className="flex flex-col items-center gap-4">
             <p className="text-[13px] leading-normal text-[#6B7280]">
-              {!isStep2Complete && "모든 항목을 선택하고 키워드를 최소 1개 골라야 진단을 시작할 수 있습니다."}
+              {!isStep2Complete && "모든 항목을 선택하고 키워드 및 지역을 최소 1개씩 골라야 진단을 시작할 수 있습니다."}
               {isStep2Complete && "준비 완료! 아래 버튼을 눌러 AI 진단 결과를 생성하세요."}
             </p>
             <div className="flex w-full gap-3">
