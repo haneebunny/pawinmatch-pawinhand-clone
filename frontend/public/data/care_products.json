@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "section": "care_tab_block_A",
+    "title": "입양 준비물 체크리스트",
+    "subtitle": "○○이와의 새 생활, 이것만 준비하면 돼요",
+    "verified_date": "2026-07-02",
+    "cta_label": "준비하러 가기",
+    "cta_warning": "'구매하기'·'특가' 문구 사용 금지 — 체크리스트(준비 목록) 형태로 렌더링해야 광고감이 없음 (수요조사 v2 화면 8 메모)",
+    "link_note": "coupang_url은 쿠팡 검색 URL. 쿠팡 파트너스 가입 후 추적링크로 교체하면 수익 발생. 검색 URL은 시간이 지나도 안 깨져 목업용으로 안전.",
+    "footer_disclosure": "이 페이지의 상품 링크는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받을 수 있습니다."
+  },
+  "items": [
+    {
+      "id": 1,
+      "name": "이동장(켄넬)",
+      "why": "입양 당일 안전 이동 + 병원 갈 때 필수. 첫 이동 스트레스를 줄여줘요.",
+      "coupang_query": "강아지 이동장",
+      "coupang_url": "https://www.coupang.com/np/search?q=강아지+이동장"
+    },
+    {
+      "id": 2,
+      "name": "사료",
+      "why": "첫 2주는 보호소에서 먹던 것과 같게/섞어 급여해 적응 스트레스를 줄여요.",
+      "coupang_query": "강아지 사료",
+      "coupang_url": "https://www.coupang.com/np/search?q=강아지+사료"
+    },
+    {
+      "id": 3,
+      "name": "식기 세트(밥그릇)",
+      "why": "미끄럼·엎지름 방지. 위생적으로 정량 급여할 수 있어요.",
+      "coupang_query": "강아지 식기",
+      "coupang_url": "https://www.coupang.com/np/search?q=강아지+식기"
+    },
+    {
+      "id": 4,
+      "name": "자동 급수기",
+      "why": "물을 항상 신선하게 → 음수량이 늘고 비뇨기 건강에 좋아요(특히 고양이).",
+      "coupang_query": "반려동물 자동급수기",
+      "coupang_url": "https://www.coupang.com/np/search?q=반려동물+자동급수기"
+    },
+    {
+      "id": 5,
+      "name": "배변패드(+배변판)",
+      "why": "실내 배변 훈련 초기 필수 소모품이에요.",
+      "coupang_query": "강아지 배변패드",
+      "coupang_url": "https://www.coupang.com/np/search?q=강아지+배변패드"
+    },
+    {
+      "id": 6,
+      "name": "리드줄·하네스",
+      "why": "매일 산책·안전 통제에 필수. 하네스는 목줄보다 기관 부담이 적어요.",
+      "coupang_query": "강아지 하네스",
+      "coupang_url": "https://www.coupang.com/np/search?q=강아지+하네스"
+    },
+    {
+      "id": 7,
+      "name": "자동 급식기",
+      "why": "집을 오래 비워도 정해진 시간에 밥을 챙겨줄 수 있어요.",
+      "coupang_query": "강아지 자동급식기",
+      "coupang_url": "https://www.coupang.com/np/search?q=강아지+자동급식기"
+    },
+    {
+      "id": 8,
+      "name": "펫캠(홈캠)",
+      "why": "혼자 두는 시간을 모니터링해 분리불안·이상행동을 조기에 발견해요.",
+      "coupang_query": "펫캠",
+      "coupang_url": "https://www.coupang.com/np/search?q=펫캠"
+    },
+    {
+      "id": 9,
+      "name": "장난감(노즈워크·터그)",
+      "why": "에너지 발산·분리불안 완화. 활동성 높은 아이일수록 필수예요.",
+      "coupang_query": "강아지 노즈워크 장난감",
+      "coupang_url": "https://www.coupang.com/np/search?q=강아지+노즈워크+장난감"
+    },
+    {
+      "id": 10,
+      "name": "방석·하우스(안전 공간)",
+      "why": "입양 첫 주 숨어 쉴 '자기 공간'이 있어야 새 환경에 잘 적응해요.",
+      "coupang_query": "강아지 방석 하우스",
+      "coupang_url": "https://www.coupang.com/np/search?q=강아지+방석+하우스"
+    }
+  ],
+  "personalization_rules": [
+    {
+      "rule_id": "long_absence",
+      "condition": { "field": "out_hours", "operator": ">=", "value": "8h" },
+      "item_ids": [7, 8],
+      "badge": "추천",
+      "badge_reason": "집을 비우는 시간이 길다면 꼭 필요해요"
+    },
+    {
+      "rule_id": "high_activity",
+      "condition": { "field": "activity_pref", "operator": "==", "value": "활발" },
+      "item_ids": [9],
+      "badge": "추천",
+      "badge_reason": "활동적인 아이와 잘 맞아요"
+    },
+    {
+      "rule_id": "long_walk",
+      "condition": { "field": "walk_time", "operator": ">=", "value": "1h" },
+      "item_ids": [6],
+      "badge": "추천",
+      "badge_reason": "산책 시간이 길다면 하네스가 편해요"
+    },
+    {
+      "rule_id": "first_adoption",
+      "condition": { "field": "experience", "operator": "==", "value": "없음" },
+      "item_ids": [1, 2, 5, 6],
+      "badge": "첫 입양 필수",
+      "badge_reason": "처음 입양한다면 이것부터 준비하세요"
+    }
+  ]
+}

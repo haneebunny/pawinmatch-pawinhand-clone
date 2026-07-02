@@ -69,8 +69,14 @@ export default function Home() {
     setCurrentSlide((prev) => (prev + 1) % BANNER_SLIDES.length);
   };
 
-  // Display only first 8 animals for recommendation on Home screen
-  const recommendedAnimals = animals.slice(0, 8);
+  // Display only first 8 animals sorted by closest notice_end (urgent closure first)
+  const recommendedAnimals = [...animals]
+    .sort((a, b) => {
+      const dateA = a.notice_end ? new Date(a.notice_end) : new Date("9999-12-31");
+      const dateB = b.notice_end ? new Date(b.notice_end) : new Date("9999-12-31");
+      return dateA - dateB;
+    })
+    .slice(0, 8);
 
   return (
     <main className="pb-8">
@@ -83,9 +89,8 @@ export default function Home() {
             return (
               <div
                 key={slide.id}
-                className={`absolute inset-0 w-full h-full flex items-center justify-between px-4 md:px-6 transition-all duration-700 ease-in-out bg-gradient-to-r ${slide.bgClass} ${
-                  isActive ? "opacity-100 translate-x-0 z-10" : "opacity-0 translate-x-8 -z-10"
-                }`}
+                className={`absolute inset-0 w-full h-full flex items-center justify-between px-4 md:px-6 transition-all duration-700 ease-in-out bg-gradient-to-r ${slide.bgClass} ${isActive ? "opacity-100 translate-x-0 z-10" : "opacity-0 translate-x-8 -z-10"
+                  }`}
               >
                 {/* Left text block */}
                 <div className="max-w-[65%] md:max-w-[60%] shrink-0">
@@ -186,17 +191,18 @@ export default function Home() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Link
-              href="/animals"
-              className="flex items-center gap-1 bg-white border border-surface-variant/50 px-4 py-2 rounded-lg text-[16px] font-semibold text-on-surface-variant hover:bg-surface-container-low transition-colors"
-            >
-              전체보기
-            </Link>
+
             <Link
               href="/map"
               className="flex items-center gap-1 bg-white border border-surface-variant/50 px-4 py-2 rounded-lg text-[16px] font-semibold text-on-surface-variant hover:bg-surface-container-low transition-colors"
             >
               <span className="material-symbols-outlined text-[20px]">map</span>지도로 보기
+            </Link>
+            <Link
+              href="/animals"
+              className="flex items-center gap-1 bg-white border border-surface-variant/50 px-4 py-2 rounded-lg text-[16px] font-semibold text-on-surface-variant hover:bg-surface-container-low transition-colors"
+            >
+              전체보기
             </Link>
           </div>
         </div>
@@ -228,7 +234,7 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-              
+
               <div className="p-3">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-on-surface text-[18px] font-bold leading-normal truncate max-w-[120px]">

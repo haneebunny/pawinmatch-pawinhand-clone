@@ -9,6 +9,7 @@ export default function Header() {
   const isHomeActive = pathname === "/";
   const isDiagnoseActive = pathname.startsWith("/diagnose") || pathname.startsWith("/match");
   const isAnimalsActive = pathname.startsWith("/animals") || pathname.startsWith("/map");
+  const isCareActive = pathname.startsWith("/care");
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white h-[72px] flex items-center px-4 md:px-6 border-b border-surface-variant/30">
@@ -49,12 +50,16 @@ export default function Header() {
           >
             보호동물 보기
           </Link>
-          <a
-            className="text-gray-400 hover:text-black transition-colors text-[16px] leading-relaxed py-1"
-            href="#"
+          <Link
+            href="/care"
+            className={`${
+              isCareActive
+                ? "text-black font-bold"
+                : "text-gray-400 hover:text-black"
+            } transition-colors text-[16px] leading-relaxed py-1`}
           >
             입양 후 케어
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

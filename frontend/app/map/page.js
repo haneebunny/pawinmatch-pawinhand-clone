@@ -172,7 +172,7 @@ export default function MapPage() {
   useEffect(() => {
     const fetchMap = async () => {
       try {
-        const res = await fetch("/api/map-svg");
+        const res = await fetch("/data/Map_of_South_Korea.svg");
         if (res.ok) {
           let text = await res.text();
           // Remove hardcoded width/height to make it scale correctly in Tailwind container

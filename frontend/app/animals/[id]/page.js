@@ -165,7 +165,7 @@ function AnimalDetail() {
 
   // Retrieve matching details if available
   const isNameless = !animal.name || animal.name.trim() === "" || animal.name.includes("이름 짓는 중") || animal.name.includes("지어주세요") || animal.name.includes("없음");
-  
+
   const [matchScore, setMatchScore] = useState(null);
   const [recommendReason, setRecommendReason] = useState(
     isNameless
@@ -214,9 +214,8 @@ function AnimalDetail() {
         {[...Array(totalBars)].map((_, i) => (
           <div
             key={i}
-            className={`h-2.5 w-8 rounded-sm ${
-              i < value ? "bg-[#FF7A50]" : "bg-[#F5F0EB]"
-            }`}
+            className={`h-2.5 w-8 rounded-sm ${i < value ? "bg-[#FF7A50]" : "bg-[#F5F0EB]"
+              }`}
           />
         ))}
       </div>
@@ -228,7 +227,7 @@ function AnimalDetail() {
   return (
     <div className="min-h-screen pb-[120px] bg-brand-ivory">
       <main className="max-w-[1024px] mx-auto px-4 md:px-6 py-8 flex flex-col gap-6">
-        
+
         {/* 1. Header Row (Shelter Name & Status) */}
         <section className="flex justify-between items-center bg-white border border-brand-border px-6 py-4 rounded-2xl shadow-sm">
           <div className="flex items-center gap-2">
@@ -243,7 +242,7 @@ function AnimalDetail() {
 
         {/* 2. Top Two-Column Grid (Left: 1:1 Carousel, Right: Core Cards & CTA) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          
+
           {/* Left Column: 1:1 Square Carousel */}
           <section className="flex flex-col gap-3">
             <div className="aspect-square w-full rounded-2xl overflow-hidden shadow-sm border border-brand-border relative bg-zinc-50 group">
@@ -252,7 +251,7 @@ function AnimalDetail() {
                 src={photos[photoIndex]}
                 alt={`${animal.name || animal.breeds} - ${photoIndex + 1}`}
               />
-              
+
               {/* Carousel Navigation */}
               {photos.length > 1 && (
                 <>
@@ -284,9 +283,8 @@ function AnimalDetail() {
                   <button
                     key={idx}
                     onClick={() => setPhotoIndex(idx)}
-                    className={`w-[70px] h-[70px] rounded-lg overflow-hidden border-2 shrink-0 transition-all ${
-                      idx === photoIndex ? "border-[#FF7A50] scale-95" : "border-transparent opacity-75 hover:opacity-100"
-                    }`}
+                    className={`w-[70px] h-[70px] rounded-lg overflow-hidden border-2 shrink-0 transition-all ${idx === photoIndex ? "border-[#FF7A50] scale-95" : "border-transparent opacity-75 hover:opacity-100"
+                      }`}
                   >
                     <img src={img} alt="thumbnail" className="w-full h-full object-cover" />
                   </button>
@@ -328,7 +326,7 @@ function AnimalDetail() {
                 <p className="text-caption text-zinc-500 leading-normal">
                   아직 이름이 없는 친구예요. 예쁜 이름을 직접 추천하거나, 다른 추천된 마음에 드는 이름 후보에 투표해 주세요! (5표 이상 획득 시 공식 이름으로 지정됩니다)
                 </p>
-                
+
                 {/* 후보군 목록 */}
                 <div className="flex flex-col gap-2.5 max-h-[160px] overflow-y-auto pr-1">
                   {votesInfo.candidates.map((c, idx) => (
@@ -344,11 +342,10 @@ function AnimalDetail() {
                         <button
                           onClick={() => handleVote(c.name)}
                           disabled={hasVoted[c.name]}
-                          className={`h-7 px-3 text-[12px] font-bold rounded-lg flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer ${
-                            hasVoted[c.name] 
-                              ? "bg-zinc-200 text-zinc-400"
-                              : "bg-[#FFF1EC] text-[#FF7A50] hover:bg-[#FFE2D6]"
-                          }`}
+                          className={`h-7 px-3 text-[12px] font-bold rounded-lg flex items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer ${hasVoted[c.name]
+                            ? "bg-zinc-200 text-zinc-400"
+                            : "bg-[#FFF1EC] text-[#FF7A50] hover:bg-[#FFE2D6]"
+                            }`}
                         >
                           👍 투표
                         </button>
@@ -431,7 +428,7 @@ function AnimalDetail() {
 
         {/* 3. Bottom Grid: Full Width details */}
         <section className="flex flex-col gap-4">
-          
+
           {/* AI Recommendation Box (Wider & high readability space for long text) */}
           {showRecommend && (
             <section
@@ -458,7 +455,7 @@ function AnimalDetail() {
               </div>
             </section>
           )}
-          
+
           {/* Health Card */}
           <div className="bg-white border border-brand-border p-6 rounded-2xl shadow-sm">
             <div className="flex items-center gap-2 mb-3 text-secondary">
@@ -469,19 +466,19 @@ function AnimalDetail() {
               현재 건강 상태는 5단계 중 {animal.health_state}단계로 매우 안정적이며 양호합니다. 기본 전염병 진단 키트 검사를 마쳤고 모두 음성 판정을 받았습니다. {animal.neutered === "완료" || animal.neutered === "예" || animal.neutered === true ? "중성화 수술이 완료되어 추가적인 수술 절차가 필요 없습니다." : "중성화 수술이 예정되어 있거나 미완료된 상태입니다."} 예방 접종 기록 카드와 상세한 진단 결과지는 센터 방문 및 서류 작성 시 함께 전달해 드립니다.
             </p>
           </div>
-          
+
           {/* Personality Card (Personality Description + Visual Scores + Emoji Tags Integrated) */}
           <div className="bg-white border border-brand-border p-6 rounded-2xl shadow-sm">
             <div className="flex items-center gap-2 mb-3 text-primary">
               <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: "'FILL' 1" }}>sentiment_satisfied</span>
               <h3 className="text-[18px] font-semibold text-on-surface font-semibold">성향 정보</h3>
             </div>
-            
+
             {/* Personality comment text */}
             <p className="text-body font-body text-zinc-700 leading-relaxed mb-4" style={{ whiteSpace: "pre-wrap" }}>
               {animal.personality_comment}
             </p>
-            
+
             {/* Separator line */}
             <div className="border-t border-[#F0E5DD] pt-4 my-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-4">
@@ -514,14 +511,14 @@ function AnimalDetail() {
                       key={idx}
                       className="inline-flex items-center gap-1 px-3 py-1.5 bg-brand-ivory border border-[#F0E5DD] rounded-full text-caption text-zinc-700 shadow-sm font-semibold"
                     >
-                      😊 {cleanTag}
+                      {cleanTag}
                     </span>
                   );
                 })}
               </div>
             )}
           </div>
-          
+
           {/* Adoption Procedures & Support */}
           <div className="bg-white border border-brand-border p-6 rounded-2xl shadow-sm relative">
             <div className="flex justify-between items-center mb-5">
@@ -532,7 +529,7 @@ function AnimalDetail() {
                 </span>
               )}
             </div>
-            
+
             {/* Step Timeline */}
             <div className="flex flex-col gap-4 mb-5">
               <div className="flex items-start gap-4">
@@ -566,8 +563,8 @@ function AnimalDetail() {
 
             {/* Support Info Box */}
             <div className="bg-[#FFFDFB] border border-[#FFE2D6] p-4 rounded-xl text-caption text-[#FF7A50] font-semibold" style={{ whiteSpace: "pre-wrap" }}>
-              🎁 지원 정보: {animal.adoption_support && animal.adoption_support_detail 
-                ? animal.adoption_support_detail 
+              🎁 지원 정보: {animal.adoption_support && animal.adoption_support_detail
+                ? animal.adoption_support_detail
                 : "기초 건강검진비 지원 및 내장형 인식칩 삽입 비용 전액 지원"}
             </div>
           </div>
@@ -656,23 +653,7 @@ function AnimalDetail() {
 
       </main>
 
-      {/* Bottom Fixed CTA Footer */}
-      <footer className="fixed bottom-0 left-0 w-full bg-white border-t border-brand-border z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-        <div className="max-w-[768px] mx-auto px-6 py-4 flex gap-3">
-          <Link
-            href="/shelter-questionnaire"
-            className="flex-1 h-[52px] border-2 border-brand-primary text-brand-primary rounded-xl font-button-lg hover:bg-brand-primary-light transition-colors active:scale-[0.98] flex items-center justify-center font-bold"
-          >
-            보호소 질문지 복사하기
-          </Link>
-          <Link
-            href="/shelter-questionnaire"
-            className="flex-1 h-[52px] bg-brand-primary text-white rounded-xl font-button-lg shadow-lg hover:opacity-90 transition-opacity active:scale-[0.98] flex items-center justify-center font-bold"
-          >
-            입양 문의 준비하기 (질문지)
-          </Link>
-        </div>
-      </footer>
+
     </div>
   );
 }
