@@ -304,7 +304,7 @@ function AnimalDetail() {
             </div>
             
             {/* Personality comment text */}
-            <p className="text-body font-body text-zinc-700 leading-relaxed mb-4">
+            <p className="text-body font-body text-zinc-700 leading-relaxed mb-4" style={{ whiteSpace: "pre-wrap" }}>
               {animal.personality_comment}
             </p>
             
@@ -391,7 +391,7 @@ function AnimalDetail() {
             </div>
 
             {/* Support Info Box */}
-            <div className="bg-[#FFFDFB] border border-[#FFE2D6] p-4 rounded-xl text-caption text-[#FF7A50] font-semibold">
+            <div className="bg-[#FFFDFB] border border-[#FFE2D6] p-4 rounded-xl text-caption text-[#FF7A50] font-semibold" style={{ whiteSpace: "pre-wrap" }}>
               🎁 지원 정보: {animal.adoption_support && animal.adoption_support_detail 
                 ? animal.adoption_support_detail 
                 : "기초 건강검진비 지원 및 내장형 인식칩 삽입 비용 전액 지원"}
