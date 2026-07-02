@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { shelters } from "../data/shelters";
 
 export default function AnimalCard({ animal }) {
+  const shelter = shelters.find(s => s.shelter_id === animal.shelter_id) || shelters[0];
+  const shelterRegion = shelter.address ? shelter.address.split(" ").slice(0, 2).join(" ") : "보호소";
   // Helper to format age cleanly
   const formatAge = (ageStr) => {
     if (!ageStr) return "미상";
@@ -73,9 +76,9 @@ export default function AnimalCard({ animal }) {
             {animal.breeds} • {formatAge(animal.animal_age)}
           </p>
         </div>
-        <div className="pt-2 border-t border-surface-variant/20">
-          <p className="font-caption text-[11px] text-on-surface-variant truncate">
-            {(animal.notice_no && animal.notice_no.split("-")[0]) || "보호"}보호소
+        <div className="pt-2 border-t border-surface-variant/20 flex items-center justify-between">
+          <p className="font-caption text-[11px] text-on-surface-variant truncate max-w-[125px]">
+            📍 {shelterRegion}
           </p>
           <p className="font-caption text-[11px] text-primary-container font-bold">
             {formatDate(animal.notice_start)}~{formatDate(animal.notice_end)}

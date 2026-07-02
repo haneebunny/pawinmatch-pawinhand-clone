@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { animals } from "../../data/animals";
+import { shelters } from "../../data/shelters";
 
 function formatAge(age) {
   if (typeof age === "number") {
@@ -260,13 +261,8 @@ export default function MatchResultsPage() {
                     <span className="material-symbols-outlined text-[16px] text-gray-400">location_on</span>
                     <span className="text-[13px] leading-normal text-gray-500">
                       {(() => {
-                        const city = animal.city || "";
-                        const loc = animal.found_location || "";
-                        const hasProvince = ["서울", "경기", "인천", "강원", "충청", "충남", "충북", "전라", "전남", "전북", "경상", "경남", "경북", "제주", "부산", "대구", "울산", "광주", "대전", "세종"].some(prov => loc.includes(prov));
-                        if (city && !loc.startsWith(city) && !hasProvince) {
-                          return `${city} ${loc}`;
-                        }
-                        return loc;
+                        const shelter = shelters.find(s => s.shelter_id === animal.shelter_id) || shelters[0];
+                        return shelter.address ? shelter.address.split(" ").slice(0, 2).join(" ") : "보호소";
                       })()}
                     </span>
                   </div>
