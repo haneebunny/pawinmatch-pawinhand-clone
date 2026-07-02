@@ -216,14 +216,14 @@ export default function Home() {
                   alt={animal.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute top-sm right-sm bg-black/25 backdrop-blur-md px-sm py-[2px] rounded-full flex items-center gap-1">
+                <div className="absolute top-2 right-2 bg-black/35 backdrop-blur-md px-2.5 py-1 rounded-lg flex flex-col items-center justify-center gap-0.5 min-w-[32px]">
                   <span
-                    className="material-symbols-outlined text-[13px] text-white"
+                    className="material-symbols-outlined text-[15px] text-[#FF7A50]"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
-                    favorite
+                    notifications
                   </span>
-                  <span className="font-caption text-[11px] font-bold text-white">
+                  <span className="text-white text-[10px] font-bold leading-none">
                     {animal.bell_count || 0}
                   </span>
                 </div>
