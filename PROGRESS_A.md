@@ -40,6 +40,11 @@
 ### 🏁 5단계: 백엔드 메인 통합 완료 (11:37)
 - [x] **라우터 등록**: [main.py](file:///d:/sesac_pjt/pawinhand-clone/backend/main.py)의 상단 import를 통합하고, `animals` 및 `questions` 라우터를 탑재하여 API 엔드포인트를 전역 활성화 완료했습니다.
 
+### 🏁 6단계: 로컬 API 통신 및 예외 유효성 검증 완료 (11:45)
+- [x] **API 연동 테스트**: 로컬 uvicorn 서버 상에서 `GET /api/animals?city=경상남도` 호출 시 필터링된 유기동물 데이터가 정상 반환됨을 확인했습니다.
+- [x] **질문지 API 검증**: `POST /api/questions` 호출 시 개(dog)에 매핑되는 사전 질문 리스트가 정확한 스펙으로 응답되는지 검증했습니다.
+- [x] **비정상 입력 검증**: 축종에 `'rabbit'` 등의 오염된 데이터를 보냈을 때 `400 Bad Request` 에러와 함께 사전 차단 메커니즘이 올바르게 동작하는 것을 확인했습니다.
+
 ---
 
 ## 📋 현재 개발 타임라인 및 마일스톤 현황
@@ -52,5 +57,6 @@
 | **추가** | 프론트 선호 지역 체크박스 UI & schemas 연동 | `diagnose/page.js`, `schemas.py` | **완료 (11:31)** |
 | **3단계** | 유기동물 조회 API 구현 (`GET /api/animals`) | `backend/app/routers/animals.py` | **완료 (11:31)** |
 | **4단계** | 질문지 조회 API 구현 (`POST /api/questions`) | `backend/app/routers/questions.py` | **완료 (11:36)** |
-| **5단계** | 백엔드 메인 통합 및 로컬 스웨거 검증 | `backend/main.py` | **완료 (11:37)** |
-| **6단계** | Railway 배포 및 프론트 연동 테스트 | 배포 서버 | 대기 중 |
+| **5단계** | 백엔드 메인 통합 완료 | `backend/main.py` | **완료 (11:37)** |
+| **6단계** | 로컬 API 통신 및 예외 유효성 검증 | 로컬 서버 | **완료 (11:45)** |
+| **7단계** | Railway 배포 및 프론트 연동 테스트 | 배포 서버 | 대기 중 |
