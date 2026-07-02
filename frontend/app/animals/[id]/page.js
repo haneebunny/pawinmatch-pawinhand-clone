@@ -28,6 +28,19 @@ function formatSex(sex) {
   return "알 수 없음";
 }
 
+function formatNameWithSubjectJosa(name) {
+  if (!name) return "";
+  const lastChar = name.charCodeAt(name.length - 1);
+  if (lastChar >= 0xac00 && lastChar <= 0xd7a3) {
+    const hasBatchim = (lastChar - 0xac00) % 28 !== 0;
+    if (name.endsWith("이")) {
+      return `${name}는`;
+    }
+    return hasBatchim ? `${name}이는` : `${name}는`;
+  }
+  return `${name}는`;
+}
+
 function AnimalDetail() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -61,14 +74,18 @@ function AnimalDetail() {
   let recommendReason = "활동성과 성격 면에서 보호자님의 주거환경 및 산책 스케줄과 가장 조화로운 궁합을 보입니다.";
 
   if (typeof window !== "undefined") {
-    const savedMatches = localStorage.getItem("pawinhand_match_results");
-    if (savedMatches) {
-      const matches = JSON.parse(savedMatches);
-      const matchDetail = matches.find((m) => m.animal_id === id || m.id === id);
-      if (matchDetail) {
-        matchScore = matchDetail.match_score;
-        recommendReason = matchDetail.recommend_reason;
+    try {
+      const savedMatches = localStorage.getItem("pawinhand_match_results");
+      if (savedMatches) {
+        const matches = JSON.parse(savedMatches);
+        const matchDetail = matches.find((m) => m.animal_id === id || m.id === id);
+        if (matchDetail) {
+          matchScore = matchDetail.match_score;
+          recommendReason = matchDetail.recommend_reason;
+        }
       }
+    } catch (e) {
+      console.warn("Failed to load match results from localStorage", e);
     }
   }
 
@@ -262,7 +279,7 @@ function AnimalDetail() {
               <div className="flex-1">
                 <h4 className="text-body font-bold text-on-primary-container mb-2 text-[16px]">왜 이 아이를 추천했나요?</h4>
                 <p className="text-[15px] font-body text-zinc-800 leading-relaxed">
-                  {animal.name}이는 {recommendReason}
+                  {formatNameWithSubjectJosa(animal.name)} {recommendReason}
                 </p>
               </div>
             </section>
