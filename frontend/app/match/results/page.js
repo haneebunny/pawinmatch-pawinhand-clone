@@ -232,24 +232,22 @@ export default function MatchResultsPage() {
         </header>
 
         {/* Card List */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           {matchedList.map((animal) => (
             <Link
               key={animal.id}
               href={`/animals/${animal.id}?recommend=true`}
-              className="bg-white border border-border-line rounded-xl p-5 flex gap-5 relative cursor-pointer group shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] hover:-translate-y-[2px] transition-all duration-300"
+              className="bg-white border border-border-line rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 relative cursor-pointer group shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:-translate-y-[2px] transition-all duration-300 overflow-hidden"
             >
-              {/* Animal Photo & Match Score */}
-              <div className="flex flex-col items-center gap-2 flex-shrink-0 self-center">
-                <div className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-lg overflow-hidden bg-surface-container-low border border-border-line shadow-inner">
-                  <img
-                    src={animal.photos && animal.photos.length > 0 ? animal.photos[0] : (animal.photo || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=400")}
-                    alt={animal.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                {/* Match Score Badge under Photo */}
-                <div className="bg-[#FFF1EC] text-[#FF7A50] font-bold text-[12px] px-2.5 py-0.5 rounded-full border border-[#FFE2D6]">
+              {/* Animal Photo & Match Score (Absolute badge overlay on top-left of image) */}
+              <div className="relative w-full sm:w-[130px] h-[180px] sm:h-[130px] rounded-xl overflow-hidden bg-surface-container-low border border-border-line shrink-0 shadow-inner">
+                <img
+                  src={animal.photos && animal.photos.length > 0 ? animal.photos[0] : (animal.photo || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=400")}
+                  alt={animal.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                {/* Match Score Badge overlay */}
+                <div className="absolute top-2.5 left-2.5 bg-[#FF7A50] text-white font-extrabold text-[11px] sm:text-[12px] px-2.5 py-1 rounded-lg shadow-[0_2px_8px_rgba(255,122,80,0.4)] border border-[#FF7A50]/20 whitespace-nowrap shrink-0 z-10">
                   매칭 {animal.match_score}점
                 </div>
               </div>
@@ -257,9 +255,9 @@ export default function MatchResultsPage() {
               {/* Text Content */}
               <div className="flex flex-col justify-between flex-grow">
                 <div>
-                  <div className="flex items-center gap-1 text-on-surface-variant mb-1">
-                    <span className="material-symbols-outlined text-[16px] text-gray-400">location_on</span>
-                    <span className="text-[13px] leading-normal text-gray-500">
+                  <div className="flex items-center gap-1 text-on-surface-variant mb-1.5">
+                    <span className="material-symbols-outlined text-[16px] text-zinc-400">location_on</span>
+                    <span className="text-[13px] leading-normal text-zinc-400 font-medium">
                       {(() => {
                         const shelter = shelters.find(s => s.shelter_id === animal.shelter_id) || shelters[0];
                         return shelter.address ? shelter.address.split(" ").slice(0, 2).join(" ") : "보호소";
@@ -267,18 +265,18 @@ export default function MatchResultsPage() {
                     </span>
                   </div>
                   
-                  {/* Title & Breed & Age (Align baseline) */}
-                  <h3 className="text-[18px] font-bold tracking-tight text-on-surface flex items-baseline gap-1.5 mt-0.5">
-                    <span className="font-extrabold">{animal.name && animal.name.trim() !== "" ? animal.name : "이름 짓는 중!"}</span>
-                    <span className="text-[13px] text-zinc-500 font-medium">[{animal.breeds}]</span>
-                    <span className="text-[13px] text-zinc-400 font-normal">• {formatAge(animal.animal_age)}</span>
+                  {/* Title & Breed & Age (Wrap safety for mobile) */}
+                  <h3 className="text-[18px] font-bold tracking-tight text-on-surface flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5 leading-tight">
+                    <span className="font-extrabold text-[18px] text-zinc-800">{animal.name && animal.name.trim() !== "" ? animal.name : "이름 짓는 중!"}</span>
+                    <span className="text-[13.5px] text-zinc-500 font-bold">[{animal.breeds}]</span>
+                    <span className="text-[13px] text-zinc-400 font-normal">· {formatAge(animal.animal_age)}</span>
                   </h3>
-
+ 
                   {/* Animal Personality Tags */}
                   {animal.tags && animal.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2">
+                    <div className="flex flex-wrap gap-1.5 mt-2.5">
                       {animal.tags.map((tag, tIdx) => (
-                        <span key={tIdx} className="bg-[#F5F0EB] text-zinc-600 text-[11px] px-2 py-0.5 rounded-md font-medium">
+                        <span key={tIdx} className="bg-[#FAF6F2] border border-[#F0E5DD]/60 text-zinc-600 text-[11px] px-2.5 py-1 rounded-md font-semibold shadow-sm">
                           {tag}
                         </span>
                       ))}
@@ -286,22 +284,22 @@ export default function MatchResultsPage() {
                   )}
                 </div>
 
-                <div className="mt-3">
-                  <p className="text-[13px] leading-normal text-on-surface-variant leading-relaxed flex items-start gap-1 text-zinc-600">
+                <div className="mt-3.5 bg-[#FFFDFB] border border-[#FFE2D6]/40 p-3 rounded-xl">
+                  <p className="text-[13px] leading-relaxed text-zinc-600 flex items-start gap-1.5">
                     <span
-                      className="material-symbols-outlined text-[16px] text-[#FF7A50] mt-[1px] shrink-0"
+                      className="material-symbols-outlined text-[18px] text-[#FF7A50] mt-[1px] shrink-0"
                       style={{ fontVariationSettings: "'FILL' 1" }}
                     >
                       recommend
                     </span>
-                    <span><HighlightText text={animal.recommend_reason} /></span>
+                    <span className="font-medium"><HighlightText text={animal.recommend_reason} /></span>
                   </p>
                 </div>
                 
-                <div className="mt-3 flex justify-end">
-                  <span className="text-primary-container font-medium text-caption flex items-center gap-1">
+                <div className="mt-3.5 flex justify-end">
+                  <span className="text-[#FF7A50] font-bold text-[13.5px] flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                     자세히 보기 
-                    <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                    <span className="material-symbols-outlined text-[16px] font-bold">arrow_forward</span>
                   </span>
                 </div>
               </div>

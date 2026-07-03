@@ -410,22 +410,31 @@ function AnimalsList() {
               <span className="material-symbols-outlined text-[18px]">chevron_left</span>
             </button>
 
-            {[...Array(totalPages)].map((_, idx) => {
-              const pageNum = idx + 1;
-              const isActive = pageNum === currentPage;
-              return (
-                <button
-                  key={pageNum}
-                  onClick={() => handlePageChange(pageNum)}
-                  className={`w-9 h-9 rounded-lg border text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center ${isActive
-                    ? "bg-[#FF7A50] text-white border-transparent shadow-sm"
-                    : "bg-white border-[#F0E5DD] text-zinc-600 hover:bg-zinc-50"
-                    }`}
-                >
-                  {pageNum}
-                </button>
-              );
-            })}
+            {(() => {
+              const PAGE_BLOCK_SIZE = 5;
+              const currentBlock = Math.floor((currentPage - 1) / PAGE_BLOCK_SIZE);
+              const startPage = currentBlock * PAGE_BLOCK_SIZE + 1;
+              const endPage = Math.min(startPage + PAGE_BLOCK_SIZE - 1, totalPages);
+              const pages = [];
+              for (let i = startPage; i <= endPage; i++) {
+                pages.push(i);
+              }
+              return pages.map((pageNum) => {
+                const isActive = pageNum === currentPage;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => handlePageChange(pageNum)}
+                    className={`w-9 h-9 rounded-lg border text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center ${isActive
+                      ? "bg-[#FF7A50] text-white border-transparent shadow-sm"
+                      : "bg-white border-[#F0E5DD] text-zinc-600 hover:bg-zinc-50"
+                      }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              });
+            })()}
 
             <button
               onClick={() => handlePageChange(currentPage + 1)}

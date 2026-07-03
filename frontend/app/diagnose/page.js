@@ -37,8 +37,9 @@ const KEYWORD_OPTIONS = [
 
 export default function DiagnosePage() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState(1); // Step 1: Environment, Step 2: Prefs, Step 3: Result
-  
+
   // Step 1 Form State
   const [housing, setHousing] = useState("");
   const [outHours, setOutHours] = useState("");
@@ -57,8 +58,9 @@ export default function DiagnosePage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
-  // 로컬스토리지 복원 로직 추가
+  // 로컬스토리지 복원 로직 및 mounted 활성화
   useEffect(() => {
+    setMounted(true);
     try {
       const savedInput = localStorage.getItem("pawinhand_survey_input");
       if (savedInput) {
@@ -148,7 +150,7 @@ export default function DiagnosePage() {
       }
     } catch (error) {
       console.warn("FastAPI Server not available. Simulating evaluation locally.", error);
-      
+
       // Local Evaluation Simulation Algorithm
       setTimeout(() => {
         let grade = "입양 가능";
@@ -208,6 +210,8 @@ export default function DiagnosePage() {
     }
   };
 
+  if (!mounted) return null;
+
   return (
     <div className="max-w-[1024px] mx-auto px-4 md:px-6 py-8">
       {/* STEP 1: 생활환경 입력 */}
@@ -224,7 +228,7 @@ export default function DiagnosePage() {
               나와 잘 맞는 아이를 찾기 위해 생활환경을 알려주세요.
             </p>
           </div>
-          
+
           <div className="flex items-center gap-2 mb-12">
             <div className="text-[#FF7A50] font-bold text-body">1 / 2</div>
             <div className="flex-grow h-[4px] bg-[#F5F0EB] rounded-full overflow-hidden">
@@ -246,11 +250,10 @@ export default function DiagnosePage() {
                   <button
                     key={opt}
                     onClick={() => setHousing(opt)}
-                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                      housing === opt
-                        ? "bg-[#FF7A50] text-white"
-                        : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
-                    }`}
+                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${housing === opt
+                      ? "bg-[#FF7A50] text-white"
+                      : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
+                      }`}
                   >
                     {opt}
                   </button>
@@ -266,11 +269,10 @@ export default function DiagnosePage() {
                   <button
                     key={opt}
                     onClick={() => setOutHours(opt)}
-                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                      outHours === opt
-                        ? "bg-[#FF7A50] text-white"
-                        : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
-                    }`}
+                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${outHours === opt
+                      ? "bg-[#FF7A50] text-white"
+                      : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
+                      }`}
                   >
                     {opt}
                   </button>
@@ -286,11 +288,10 @@ export default function DiagnosePage() {
                   <button
                     key={opt}
                     onClick={() => setWalkTime(opt)}
-                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                      walkTime === opt
-                        ? "bg-[#FF7A50] text-white"
-                        : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
-                    }`}
+                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${walkTime === opt
+                      ? "bg-[#FF7A50] text-white"
+                      : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
+                      }`}
                   >
                     {opt}
                   </button>
@@ -306,11 +307,10 @@ export default function DiagnosePage() {
                   <button
                     key={opt}
                     onClick={() => setPetExperience(opt)}
-                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                      petExperience === opt
-                        ? "bg-[#FF7A50] text-white"
-                        : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
-                    }`}
+                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${petExperience === opt
+                      ? "bg-[#FF7A50] text-white"
+                      : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
+                      }`}
                   >
                     {opt}
                   </button>
@@ -326,11 +326,10 @@ export default function DiagnosePage() {
                   <button
                     key={opt}
                     onClick={() => setBudget(opt)}
-                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                      budget === opt
-                        ? "bg-[#FF7A50] text-white"
-                        : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
-                    }`}
+                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${budget === opt
+                      ? "bg-[#FF7A50] text-white"
+                      : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
+                      }`}
                   >
                     {opt}
                   </button>
@@ -346,11 +345,10 @@ export default function DiagnosePage() {
                   <button
                     key={opt}
                     onClick={() => setChildPlan(opt)}
-                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                      childPlan === opt
-                        ? "bg-[#FF7A50] text-white"
-                        : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
-                    }`}
+                    className={`h-[36px] px-4 rounded-full font-medium text-caption transition-colors cursor-pointer whitespace-nowrap shrink-0 ${childPlan === opt
+                      ? "bg-[#FF7A50] text-white"
+                      : "bg-[#F5F0EB] text-on-surface-variant hover:bg-zinc-200"
+                      }`}
                   >
                     {opt}
                   </button>
@@ -368,9 +366,8 @@ export default function DiagnosePage() {
             <button
               onClick={handleStep1Submit}
               disabled={!isStep1Complete}
-              className={`w-full h-[52px] rounded-xl font-button-lg shadow-md transition-all active:scale-[0.98] cursor-pointer ${
-                isStep1Complete ? "bg-[#FF7A50] text-white hover:opacity-90" : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+              className={`w-full h-[52px] rounded-xl font-button-lg shadow-md transition-all active:scale-[0.98] cursor-pointer ${isStep1Complete ? "bg-[#FF7A50] text-white hover:opacity-90" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
             >
               선호도 입력하기
             </button>
@@ -408,9 +405,8 @@ export default function DiagnosePage() {
                   <button
                     key={pref}
                     onClick={() => setActivityPref(pref)}
-                    className={`w-full p-4 bg-white border rounded-2xl text-left flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-primary-container group transition-all cursor-pointer ${
-                      isActive ? "border-primary-container bg-primary-container/5 ring-1 ring-primary-container" : "border-outline-variant"
-                    }`}
+                    className={`w-full p-4 bg-white border rounded-2xl text-left flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-primary-container group transition-all cursor-pointer ${isActive ? "border-primary-container bg-primary-container/5 ring-1 ring-primary-container" : "border-outline-variant"
+                      }`}
                   >
                     <span className={`text-[16px] leading-relaxed group-hover:text-primary-container transition-colors ${isActive ? "text-primary-container font-semibold" : "text-on-surface"}`}>
                       {pref}
@@ -434,9 +430,8 @@ export default function DiagnosePage() {
                   <button
                     key={pref}
                     onClick={() => setSociabilityPref(pref)}
-                    className={`w-full p-4 bg-white border rounded-2xl text-left flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-primary-container group transition-all cursor-pointer ${
-                      isActive ? "border-primary-container bg-primary-container/5 ring-1 ring-primary-container" : "border-outline-variant"
-                    }`}
+                    className={`w-full p-4 bg-white border rounded-2xl text-left flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-primary-container group transition-all cursor-pointer ${isActive ? "border-primary-container bg-primary-container/5 ring-1 ring-primary-container" : "border-outline-variant"
+                      }`}
                   >
                     <span className={`text-[16px] leading-relaxed group-hover:text-primary-container transition-colors ${isActive ? "text-primary-container font-semibold" : "text-on-surface"}`}>
                       {pref}
@@ -460,11 +455,10 @@ export default function DiagnosePage() {
                   <button
                     key={kw}
                     onClick={() => toggleKeyword(kw)}
-                    className={`px-4 py-2 rounded-full font-body text-caption border transition-all cursor-pointer ${
-                      isActive
-                        ? "bg-primary-container text-white border-transparent font-medium"
-                        : "bg-[#F5F0EB] text-on-surface-variant border-transparent hover:border-primary-container"
-                    }`}
+                    className={`px-4 py-2 rounded-full font-body text-caption border transition-all cursor-pointer ${isActive
+                      ? "bg-primary-container text-white border-transparent font-medium"
+                      : "bg-[#F5F0EB] text-on-surface-variant border-transparent hover:border-primary-container"
+                      }`}
                   >
                     {kw}
                   </button>
@@ -483,11 +477,10 @@ export default function DiagnosePage() {
                   <button
                     key={city}
                     onClick={() => toggleCity(city)}
-                    className={`px-4 py-2 rounded-full font-body text-caption border transition-all cursor-pointer ${
-                      isActive
-                        ? "bg-primary-container text-white border-transparent font-medium"
-                        : "bg-[#F5F0EB] text-on-surface-variant border-transparent hover:border-primary-container"
-                    }`}
+                    className={`px-4 py-2 rounded-full font-body text-caption border transition-all cursor-pointer ${isActive
+                      ? "bg-primary-container text-white border-transparent font-medium"
+                      : "bg-[#F5F0EB] text-on-surface-variant border-transparent hover:border-primary-container"
+                      }`}
                   >
                     {city}
                   </button>
@@ -512,9 +505,8 @@ export default function DiagnosePage() {
               <button
                 onClick={handleStep2Submit}
                 disabled={!isStep2Complete}
-                className={`flex-1 h-[52px] rounded-xl font-button-lg shadow-md transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center ${
-                  isStep2Complete ? "bg-primary-container text-white hover:opacity-90" : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
+                className={`flex-1 h-[52px] rounded-xl font-button-lg shadow-md transition-all active:scale-[0.98] cursor-pointer flex items-center justify-center ${isStep2Complete ? "bg-primary-container text-white hover:opacity-90" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
               >
                 진단 완료하기
               </button>
@@ -539,13 +531,12 @@ export default function DiagnosePage() {
               {/* Result Status Badge */}
               <div className="mb-6">
                 <span
-                  className={`inline-flex items-center h-[48px] px-6 text-white rounded-full text-[20px] font-bold shadow-lg ${
-                    result.grade === "입양 가능"
-                      ? "bg-secondary"
-                      : result.grade === "조건부 가능"
+                  className={`inline-flex items-center h-[48px] px-6 text-white rounded-full text-[20px] font-bold shadow-lg ${result.grade === "입양 가능"
+                    ? "bg-secondary"
+                    : result.grade === "조건부 가능"
                       ? "bg-warning-accent"
                       : "bg-[#DC2626]"
-                  }`}
+                    }`}
                 >
                   <span className="material-symbols-outlined mr-2" style={{ fontVariationSettings: "'FILL' 1" }}>
                     {result.grade === "입양 가능" ? "check_circle" : "info"}
@@ -625,7 +616,7 @@ export default function DiagnosePage() {
               </div>
 
               {/* Actions */}
-              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-[500px]">
+              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-[500px] mt-4">
                 <button
                   onClick={() => {
                     localStorage.removeItem("pawinhand_survey_input");
@@ -643,16 +634,18 @@ export default function DiagnosePage() {
                     setResult(null);
                     setStep(1);
                   }}
-                  className="flex-1 h-[52px] border-2 border-[#FF7A50] text-[#FF7A50] rounded-xl font-button-lg hover:bg-[#FFF1EC] transition-all cursor-pointer active:scale-95 flex items-center justify-center"
+                  style={{ borderRadius: "12px" }}
+                  className="flex-1 p-3 h-[52px] border border-[#FF7A50]/60 text-[#FF7A50] bg-white text-[15px] font-bold hover:bg-[#FFF1EC]/30 transition-all cursor-pointer active:scale-95 flex items-center justify-center shadow-sm !rounded-xl"
                 >
                   다시 진단하기
                 </button>
                 <Link
                   href="/match/results"
-                  className="flex-[2] h-[52px] bg-[#FF7A50] hover:opacity-90 transition-all duration-300 active:scale-95 text-white text-[16px] font-semibold rounded-[12px] shadow-lg flex items-center justify-center group"
+                  style={{ borderRadius: "12px" }}
+                  className="flex-[2] p-3 h-[52px] bg-[#FF7A50] hover:bg-[#e08420] text-white text-[15px] md:text-[16px] font-bold shadow-md shadow-[#FF7A50]/25 flex items-center justify-center group transition-all active:scale-[0.98] !rounded-xl"
                 >
                   나와 맞는 아이 보기
-                  <span className="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform">
+                  <span className="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform font-bold">
                     arrow_forward
                   </span>
                 </Link>

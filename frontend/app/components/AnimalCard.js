@@ -15,10 +15,11 @@ export default function AnimalCard({ animal }) {
     return `${cleanAge} 추정`;
   };
 
-  // Helper to format dates using dot notation
+  // Helper to format dates using dot notation and shortening years for mobile compatibility
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
-    return dateStr.replace(/-/g, ".");
+    const clean = dateStr.replace(/-/g, ".");
+    return clean.length >= 8 && clean.startsWith("20") ? clean.slice(2) : clean;
   };
 
   const isNameless = !animal.name ||
@@ -88,12 +89,12 @@ export default function AnimalCard({ animal }) {
             {animal.breeds} • {formatAge(animal.animal_age)}
           </p>
         </div>
-        <div className="pt-2 border-t border-surface-variant/20 flex items-center justify-between">
-          <p className="font-caption text-[11px] text-on-surface-variant truncate max-w-[125px]">
+        <div className="pt-2 border-t border-surface-variant/20 flex flex-col gap-1 items-start">
+          <p className="font-caption text-[11px] text-on-surface-variant truncate w-full">
             📍 {shelterRegion}
           </p>
-          <p className="font-caption text-[11px] text-primary-container font-bold">
-            {formatDate(animal.notice_start)}~{formatDate(animal.notice_end)}
+          <p className="font-caption text-[10.5px] text-[#FF7A50] font-bold whitespace-nowrap">
+            ⏱️ {formatDate(animal.notice_start)} ~ {formatDate(animal.notice_end)}
           </p>
         </div>
       </div>

@@ -41,28 +41,29 @@ export default function Home() {
 
       {/* 2. AI Diagnostic Entry Card */}
       <section className="max-w-[1024px] mx-auto px-4 md:px-6 my-8">
-        <div className="bg-white p-8 rounded-2xl border border-surface-variant/30 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-6">
-            <div className="w-16 h-16 bg-primary-container/10 rounded-2xl flex items-center justify-center shrink-0">
+        <div className="bg-white p-6 md:p-8 rounded-2xl border border-brand-border/85 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-5">
+          <div className="flex items-start md:items-center gap-4 md:gap-6">
+            <div className="w-12 h-12 md:w-16 md:h-16 bg-[#FFF1EC] rounded-2xl flex items-center justify-center shrink-0 border border-[#FFE2D6]/50">
               <span
-                className="material-symbols-outlined text-primary-container text-[32px]"
+                className="material-symbols-outlined text-[#FF7A50] text-[24px] md:text-[32px]"
                 style={{ fontVariationSettings: "'FILL' 1" }}
               >
                 auto_awesome
               </span>
             </div>
             <div>
-              <h3 className="text-[22px] font-bold tracking-tight leading-snug mb-1">AI 입양진단</h3>
-              <p className="text-[16px] leading-relaxed text-on-surface-variant">
+              <h3 className="text-[18px] md:text-[22px] font-bold tracking-tight leading-snug mb-1 text-on-surface">AI 입양진단</h3>
+              <p className="text-[13px] md:text-[16px] leading-relaxed text-on-surface-variant">
                 생활환경을 입력하면 나와 맞는 보호동물을 찾는 데 도움을 받을 수 있어요.
               </p>
             </div>
           </div>
           <Link
             href="/diagnose"
-            className="bg-primary-container text-white px-8 h-[52px] rounded-xl text-[16px] font-semibold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center whitespace-nowrap"
+            className="w-full md:w-auto bg-[#FF7A50] hover:bg-[#e08420] text-white px-8 h-[52px] rounded-xl text-[15px] md:text-[16px] font-bold hover:scale-[1.01] active:scale-[0.98] transition-all flex items-center justify-center whitespace-nowrap gap-2 shadow-md shadow-[#FF7A50]/20"
           >
             진단 시작하기
+            <span className="material-symbols-outlined text-[18px] font-bold">arrow_forward</span>
           </Link>
         </div>
       </section>

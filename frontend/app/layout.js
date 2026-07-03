@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" className="light">
+    <html lang="ko" className="light" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
         <Header />
 
         {/* Main content wrapper with margin top for the fixed header */}
-        <div className="flex-grow pt-[72px]">
+        <div className="flex-grow pt-[56px] md:pt-[72px]">
           {children}
         </div>
 
@@ -49,8 +49,8 @@ export default function RootLayout({ children }) {
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="24" height="24" rx="6.5" fill="url(#ig-grad)"/>
-                        <rect x="5.5" y="5.5" width="13" height="13" rx="3.5" stroke="white" stroke-width="1.8"/>
-                        <circle cx="12" cy="12" r="2.8" stroke="white" stroke-width="1.8"/>
+                        <rect x="5.5" y="5.5" width="13" height="13" rx="3.5" stroke="white" strokeWidth="1.8"/>
+                        <circle cx="12" cy="12" r="2.8" stroke="white" strokeWidth="1.8"/>
                         <circle cx="16.7" cy="7.3" r="0.9" fill="white"/>
                         <defs>
                           <radialGradient id="ig-grad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(3.6) rotate(52.7) scale(28.8)">
