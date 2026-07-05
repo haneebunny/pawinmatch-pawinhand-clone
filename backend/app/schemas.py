@@ -23,6 +23,7 @@ class SurveyInput(BaseModel):
     sociability_pref: str = Field(..., description="독립적인 편이 좋아요 / 적당히 붙어있는 게 좋아요 / 항상 곁에 있고 싶어요")
     keywords: List[str] = Field(default_factory=list, description='성향 키워드(다중)')
     preferred_cities: List[str] = Field(default_factory=list, description="선호 지역 (시/도) 리스트 (중복 가능)")
+    exclude_ids: Optional[List[str]] = Field(default_factory=list, description="추천에서 제외할 동물 ID 목록")
 
 
 # ========== 진단 응답 (POST /api/diagnose) ==========

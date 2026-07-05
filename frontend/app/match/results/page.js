@@ -77,13 +77,16 @@ export default function MatchResultsPage() {
       setLoading(true);
     }
 
+    // Collect currently recommended animal IDs to exclude them from the next recommendation
+    const currentIds = !isRegionRelaxed ? [] : matchedList.map((a) => a.id);
+
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://pawinhand-clone-production-9194.up.railway.app";
 
     const fetchMatches = async () => {
       try {
         const requestBody = isRegionRelaxed
-          ? { ...survey, preferred_cities: ["전체"] }
-          : survey;
+          ? { ...survey, preferred_cities: ["전체"], exclude_ids: currentIds }
+          : { ...survey, exclude_ids: [] };
 
         const response = await fetch(`${API_BASE}/api/match`, {
           method: "POST",
@@ -120,7 +123,10 @@ export default function MatchResultsPage() {
         
         // Fallback: Local match calculation logic (runs with 1s delay to feel natural)
         setTimeout(() => {
-          const scoredAnimals = animals.map((animal) => {
+          // Filter out already recommended animals
+          const availableAnimals = animals.filter((a) => !currentIds.includes(a.id));
+
+          const scoredAnimals = availableAnimals.map((animal) => {
             let score = 7; // Base score
             let reasons = [];
 

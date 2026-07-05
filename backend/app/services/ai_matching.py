@@ -55,8 +55,15 @@ def _candidate_brief(animals: List[dict]) -> str:
 
 
 def _llm_match(survey: SurveyInput) -> MatchResponse:
-    animals = rag.load_animals()
+    raw_animals = rag.load_animals()
+    exclude_ids = survey.exclude_ids or []
+    
+    # Exclude already recommended animals to prevent duplication
+    animals = [a for a in raw_animals if a.get("id") not in exclude_ids]
+    
     preferred_cities = survey.preferred_cities or []
+    is_all_region = not preferred_cities or "전체" in preferred_cities or "전국" in preferred_cities
+    display_cities = "(지역 제한 없음)" if is_all_region else ", ".join(preferred_cities)
     
     # [최적화] 107마리를 모두 LLM에 던지면 토큰이 너무 비대해져서 15초 이상 지연됩니다.
     # 로컬 간단 점수 매김을 통해 가장 어울리는 상위 15마리만 1차로 엄선하여 LLM 심사에 부칩니다. (응답 1.5초대 달성)
@@ -71,7 +78,7 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
         soc = a.get("sociability", 3)
 
         # 선호 지역 가점
-        if a.get("city") in preferred_cities:
+        if not is_all_region and a.get("city") in preferred_cities:
             score += 5.0
 
         score -= abs(act - t_act) * 1.2
@@ -92,6 +99,9 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
 
     llm = ChatOpenAI(model=config.OPENAI_MODEL, api_key=config.OPENAI_API_KEY, temperature=0.3)
     structured = llm.with_structured_output(MatchResponse)
+    
+    matching_instruction = "사용자의 선호 지역과 매칭되는 동물을 최우선적으로 골라주세요." if not is_all_region else "사용자가 지정한 선호 지역 조건이 없으므로(지역 무관), 전국 보호소에 있는 아이들 중에서 오직 성향과 라이프스타일 궁합이 최고인 아이들을 최우선적으로 골라주세요. 추천 평에 사용자가 특정 지역을 선호한다는 등의 억지 설명은 절대 적지 마세요."
+    
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", SYSTEM_PROMPT),
@@ -101,7 +111,7 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
                 "/ 예산 {budget} / 자녀 {child_plan}\n"
                 "활동성 선호 {activity_pref} / 친화도 선호 {sociability_pref} / 키워드 {keywords} / 선호 지역 {preferred_cities}\n\n"
                 "[후보 동물]\n{candidates}\n\n"
-                "가장 잘 맞는 3~5마리를 JSON(results[])으로 주세요. 사용자의 선호 지역과 매칭되는 동물을 최우선적으로 골려주세요.",
+                f"가장 잘 맞는 3~5마리를 JSON(results[])으로 주세요. {matching_instruction}",
             ),
         ]
     )
@@ -117,12 +127,12 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
             "activity_pref": survey.activity_pref,
             "sociability_pref": survey.sociability_pref,
             "keywords": ", ".join(survey.keywords) if survey.keywords else "(없음)",
-            "preferred_cities": ", ".join(preferred_cities) if preferred_cities else "(없음)",
+            "preferred_cities": display_cities,
             "candidates": _candidate_brief(candidates_to_send),
         }
     )
     # 존재하지 않는 id는 제거(환각 방지)
-    valid_ids = {a.get("id") for a in animals}
+    valid_ids = {a.get("id") for a in raw_animals}
     result.results = [r for r in result.results if r.animal_id in valid_ids][:5]
     if not result.results:
         raise ValueError("LLM이 유효한 매칭을 내지 못함 → 폴백")
@@ -131,16 +141,25 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
 
 def _fallback_match(survey: SurveyInput) -> MatchResponse:
     """LLM 없이도 항상 3~5마리를 내는 로컬 점수 규칙."""
-    animals = rag.load_animals()
+    raw_animals = rag.load_animals()
+    exclude_ids = survey.exclude_ids or []
+    animals = [a for a in raw_animals if a.get("id") not in exclude_ids]
+    
     t_act = _ACTIVITY_TARGET.get(survey.activity_pref, 3)
     t_soc = _SOC_TARGET.get(survey.sociability_pref, 3)
     kw = set(survey.keywords or [])
     preferred_cities = survey.preferred_cities or []
+    
+    is_all_region = not preferred_cities or "전체" in preferred_cities or "전국" in preferred_cities
 
     # 선호 지역 조건 충족 리스트 필터링
-    filtered_animals = [a for a in animals if a.get("city") in preferred_cities]
-    use_strict_filter = len(filtered_animals) >= 4
-    candidates = filtered_animals if use_strict_filter else animals
+    if not is_all_region:
+        filtered_animals = [a for a in animals if a.get("city") in preferred_cities]
+        use_strict_filter = len(filtered_animals) >= 4
+        candidates = filtered_animals if use_strict_filter else animals
+    else:
+        use_strict_filter = False
+        candidates = animals
 
     scored = []
     for a in candidates:
@@ -149,8 +168,8 @@ def _fallback_match(survey: SurveyInput) -> MatchResponse:
         soc = a.get("sociability", 3)
 
         # 선호 지역 가점 시스템 (필터링 완화 상황에서 선호지역 동물이 우선 랭킹을 먹게 유도)
-        is_preferred_city = a.get("city") in preferred_cities
-        if not use_strict_filter and is_preferred_city:
+        is_preferred_city = not is_all_region and a.get("city") in preferred_cities
+        if not is_all_region and not use_strict_filter and is_preferred_city:
             score += 5.0
 
         score -= abs(act - t_act) * 1.2      # 활동성 선호 차이
