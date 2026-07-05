@@ -82,8 +82,28 @@ def load_animals() -> List[dict]:
 def save_animals(animals_list: List[dict]) -> bool:
     """변경된 동물 정보를 animals.json에 쓰고 캐시를 비웁니다."""
     try:
+        # 1. 백엔드 원본 데이터 갱신 (data/animals.json)
         with open(config.ANIMALS_FILE, "w", encoding="utf-8") as f:
             json.dump(animals_list, f, ensure_ascii=False, indent=2)
+            
+        # 2. 프론트엔드 정적 animals.js 모듈 실시간 동기화 (Next.js 핫리로드 및 리렌더링 감지용)
+        frontend_js_path = config.BASE_DIR.parent / "frontend" / "app" / "data" / "animals.js"
+        try:
+            with open(frontend_js_path, "w", encoding="utf-8") as js_f:
+                js_f.write("export const animals = ")
+                json.dump(animals_list, js_f, ensure_ascii=False, indent=2)
+                js_f.write(";\n")
+        except Exception as fe_js_e:
+            print(f"[rag] frontend animals.js 동기화 실패: {fe_js_e}")
+
+        # 3. 프론트엔드 정적 animals.json 실시간 동기화 (JSON 임포트 폴백 감지용)
+        frontend_json_path = config.BASE_DIR.parent / "frontend" / "app" / "data" / "animals.json"
+        try:
+            with open(frontend_json_path, "w", encoding="utf-8") as json_f:
+                json.dump(animals_list, json_f, ensure_ascii=False, indent=2)
+        except Exception as fe_json_e:
+            print(f"[rag] frontend animals.json 동기화 실패: {fe_json_e}")
+
         load_animals.cache_clear()  # 캐시 무효화
         return True
     except Exception as e:
