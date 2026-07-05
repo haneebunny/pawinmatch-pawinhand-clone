@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { animals } from "../../data/animals";
 import { shelters } from "../../data/shelters";
 import { MatchCardSkeleton } from "../../components/Skeleton";
@@ -42,10 +43,14 @@ const HighlightText = ({ text }) => {
 };
 
 export default function MatchResultsPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const isRelaxedParam = searchParams.get("relaxed") === "true";
+
   const [matchedList, setMatchedList] = useState([]);
   const [surveyInput, setSurveyInput] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isRegionRelaxed, setIsRegionRelaxed] = useState(false); // 전국 매칭 상태
+  const [isRegionRelaxed, setIsRegionRelaxed] = useState(isRelaxedParam); // 전국 매칭 상태
 
   useEffect(() => {
     // Read survey responses from localStorage
@@ -304,7 +309,7 @@ export default function MatchResultsPage() {
           {matchedList.map((animal) => (
             <Link
               key={animal.id}
-              href={`/animals/${animal.id}?recommend=true`}
+              href={`/animals/${animal.id}?recommend=true${isRegionRelaxed ? "&relaxed=true" : ""}`}
               className="bg-white border border-border-line rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 relative cursor-pointer group shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:-translate-y-[2px] transition-all duration-300 overflow-hidden"
             >
               {/* Animal Photo & Match Score (Badge positioned below the photo) */}
@@ -381,7 +386,12 @@ export default function MatchResultsPage() {
         {!isRegionRelaxed && (
           <div className="mt-8 flex justify-center">
             <button
-              onClick={() => setIsRegionRelaxed(true)}
+              onClick={() => {
+                setIsRegionRelaxed(true);
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("relaxed", "true");
+                router.push(`/match/results?${params.toString()}`, { scroll: false });
+              }}
               className="bg-white border border-[#FFE2D6] hover:bg-[#FFFDFB] text-[#FF7A50] font-bold text-[14.5px] px-6 py-3.5 rounded-xl shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95 hover:scale-[1.01] transition-all"
             >
               <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 0" }}>explore</span>
