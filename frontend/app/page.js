@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import AnimalCard from "./components/AnimalCard";
 import { animals } from "./data/animals";
@@ -17,8 +18,29 @@ function formatAge(age) {
 }
 
 export default function Home() {
+  const [animalsList, setAnimalsList] = useState(animals);
+
+  // Fetch live animals data from backend API to reflect updated votes/names
+  useEffect(() => {
+    const fetchLiveAnimals = async () => {
+      try {
+        const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+        const res = await fetch(`${apiBase}/api/animals`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setAnimalsList(data);
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to fetch live animals for main page, using static local fallback", e);
+      }
+    };
+    fetchLiveAnimals();
+  }, []);
+
   // Display only first 8 animals sorted by closest notice_end (urgent closure first)
-  const recommendedAnimals = [...animals]
+  const recommendedAnimals = [...animalsList]
     .sort((a, b) => {
       const dateA = a.notice_end ? new Date(a.notice_end) : new Date("9999-12-31");
       const dateB = b.notice_end ? new Date(b.notice_end) : new Date("9999-12-31");

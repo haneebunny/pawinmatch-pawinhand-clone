@@ -50,6 +50,9 @@ def map_shelter_id(city, address):
     elif "강원" in city_str or "강원특별자치도" in city_str or "춘천" in city_str or "강릉" in city_str or "삼척" in city_str or "원주" in city_str:
         # 춘천시 유기동물 보호센터
         return "shelter-12"
+    elif "제주" in city_str or "제주특별자치도" in city_str:
+        # 제주특별자치도 동물보호센터
+        return "shelter-13"
     else:
         # 매칭되지 않을 경우 기본값 서울보호소
         return "shelter-1"
@@ -278,14 +281,39 @@ def crawl():
         
         animals_db.append(animal_record)
 
-    # 수집 완료 후 지정 경로(backend/data/)에 파일 쓰기 실행
-    animals_path = os.path.join(DATA_DIR, "animals.json")
-    
-    with open(animals_path, "w", encoding="utf-8") as f:
+    # 수집 완료 후 다중 경로 저장 (백엔드, 루트 데이터, 프론트엔드 JSON/JS 동시 최신화)
+    # 1. backend/data/animals.json 저장
+    os.makedirs(DATA_DIR, exist_ok=True)
+    backend_path = os.path.join(DATA_DIR, "animals.json")
+    with open(backend_path, "w", encoding="utf-8") as f:
         json.dump(animals_db, f, ensure_ascii=False, indent=2)
-        
-    print("성공적으로 데이터가 수집 및 저장되었습니다!")
-    print(f"- 동물 파일 경로: {animals_path} (총 {len(animals_db)}마리)")
+    print(f"- 백엔드 JSON 저장 완료: {backend_path}")
+
+    # 2. root data/animals.json 저장
+    root_data_dir = os.path.join(os.path.dirname(os.path.dirname(DATA_DIR)), "data")
+    os.makedirs(root_data_dir, exist_ok=True)
+    root_json_path = os.path.join(root_data_dir, "animals.json")
+    with open(root_json_path, "w", encoding="utf-8") as f:
+        json.dump(animals_db, f, ensure_ascii=False, indent=2)
+    print(f"- 루트 JSON 저장 완료: {root_json_path}")
+
+    # 3. frontend/app/data/animals.json 저장
+    frontend_data_dir = os.path.join(os.path.dirname(os.path.dirname(DATA_DIR)), "frontend", "app", "data")
+    os.makedirs(frontend_data_dir, exist_ok=True)
+    frontend_json_path = os.path.join(frontend_data_dir, "animals.json")
+    with open(frontend_json_path, "w", encoding="utf-8") as f:
+        json.dump(animals_db, f, ensure_ascii=False, indent=2)
+    print(f"- 프론트엔드 JSON 저장 완료: {frontend_json_path}")
+
+    # 4. frontend/app/data/animals.js (JS 모듈 형식) 저장
+    frontend_js_path = os.path.join(frontend_data_dir, "animals.js")
+    with open(frontend_js_path, "w", encoding="utf-8") as f:
+        f.write("export const animals = ")
+        json.dump(animals_db, f, ensure_ascii=False, indent=2)
+        f.write(";\n")
+    print(f"- 프론트엔드 JS 모듈 저장 완료: {frontend_js_path}")
+
+    print(f"성공적으로 데이터가 수집 및 4개 경로에 일체 저장되었습니다! (총 {len(animals_db)}마리)")
 
 if __name__ == "__main__":
     crawl()
