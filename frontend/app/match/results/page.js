@@ -45,6 +45,7 @@ export default function MatchResultsPage() {
   const [matchedList, setMatchedList] = useState([]);
   const [surveyInput, setSurveyInput] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isRegionRelaxed, setIsRegionRelaxed] = useState(false); // 전국 매칭 상태
 
   useEffect(() => {
     // Read survey responses from localStorage
@@ -57,29 +58,37 @@ export default function MatchResultsPage() {
     const survey = JSON.parse(savedSurvey);
     setSurveyInput(survey);
 
-    // Check if there is already a cached match result
-    const savedMatches = localStorage.getItem("pawinhand_match_results");
-    if (savedMatches) {
-      try {
-        const parsed = JSON.parse(savedMatches);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setMatchedList(parsed);
-          setLoading(false);
-          return;
+    // Only use cached results on initial mount without region relaxation
+    if (!isRegionRelaxed) {
+      const savedMatches = localStorage.getItem("pawinhand_match_results");
+      if (savedMatches) {
+        try {
+          const parsed = JSON.parse(savedMatches);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setMatchedList(parsed);
+            setLoading(false);
+            return;
+          }
+        } catch (e) {
+          console.warn("Failed to parse cached match results", e);
         }
-      } catch (e) {
-        console.warn("Failed to parse cached match results", e);
       }
+    } else {
+      setLoading(true);
     }
 
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://pawinhand-clone-production-9194.up.railway.app";
 
     const fetchMatches = async () => {
       try {
+        const requestBody = isRegionRelaxed
+          ? { ...survey, preferred_cities: ["전체"] }
+          : survey;
+
         const response = await fetch(`${API_BASE}/api/match`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(survey),
+          body: JSON.stringify(requestBody),
         });
 
         if (response.ok) {
@@ -99,7 +108,9 @@ export default function MatchResultsPage() {
           }).filter(Boolean);
 
           setMatchedList(matched);
-          localStorage.setItem("pawinhand_match_results", JSON.stringify(matched));
+          if (!isRegionRelaxed) {
+            localStorage.setItem("pawinhand_match_results", JSON.stringify(matched));
+          }
           setLoading(false);
         } else {
           throw new Error("API response not ok");
@@ -171,6 +182,22 @@ export default function MatchResultsPage() {
               reasons.push(`당신이 선호하는 '${matchingKeywords.join(", ")}' 성향을 완벽히 가지고 있어요`);
             }
 
+            // 5. Region matching (only when NOT region relaxed)
+            if (!isRegionRelaxed && survey.preferred_cities && survey.preferred_cities.length > 0 && !survey.preferred_cities.includes("전체")) {
+              const animalCity = animal.city || "";
+              const noticeNo = animal.notice_no || "";
+              const noticePrefix = noticeNo.split("-")[0] || "";
+              
+              const isMatched = survey.preferred_cities.some(prefCity => 
+                animalCity.includes(prefCity) || noticePrefix.includes(prefCity)
+              );
+              if (isMatched) {
+                score += 3;
+              } else {
+                score -= 2.5; // Filter non-matching regions out of top matches
+              }
+            }
+
             // Final clamping of scores
             let finalScore = Math.round(score);
             if (finalScore > 10) finalScore = 10;
@@ -191,14 +218,16 @@ export default function MatchResultsPage() {
           const topMatches = sortedMatches.slice(0, 4);
           
           setMatchedList(topMatches);
-          localStorage.setItem("pawinhand_match_results", JSON.stringify(topMatches));
+          if (!isRegionRelaxed) {
+            localStorage.setItem("pawinhand_match_results", JSON.stringify(topMatches));
+          }
           setLoading(false);
         }, 1000);
       }
     };
 
     fetchMatches();
-  }, []);
+  }, [isRegionRelaxed]);
 
   if (!surveyInput) {
     return (
@@ -242,6 +271,14 @@ export default function MatchResultsPage() {
           <p className="text-[13px] leading-normal text-on-surface-variant mt-1">생활환경과 선호도를 바탕으로 추천한 결과예요.</p>
         </header>
 
+        {/* Relaxed Region Notification Banner */}
+        {isRegionRelaxed && (
+          <div className="mb-6 bg-[#FFF5F0] border border-[#FFD9C7] rounded-2xl p-4 text-[#FF7A50] font-bold text-[14px] flex items-center gap-2 shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+            <span className="material-symbols-outlined text-[20px] text-[#FF7A50]" style={{ fontVariationSettings: "'FILL' 1" }}>info</span>
+            <span>지역 필터를 전국으로 완화하여 나에게 가장 잘 맞는 궁합의 아이들을 매칭했습니다!</span>
+          </div>
+        )}
+
         {/* Card List */}
         <div className="flex flex-col gap-5">
           {matchedList.map((animal) => (
@@ -250,16 +287,18 @@ export default function MatchResultsPage() {
               href={`/animals/${animal.id}?recommend=true`}
               className="bg-white border border-border-line rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 relative cursor-pointer group shadow-[0_4px_12px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] hover:-translate-y-[2px] transition-all duration-300 overflow-hidden"
             >
-              {/* Animal Photo & Match Score (Absolute badge overlay on top-left of image) */}
-              <div className="relative w-full sm:w-[130px] h-[180px] sm:h-[130px] rounded-xl overflow-hidden bg-surface-container-low border border-border-line shrink-0 shadow-inner">
-                <img
-                  src={animal.photos && animal.photos.length > 0 ? animal.photos[0] : (animal.photo || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=400")}
-                  alt={animal.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                {/* Match Score Badge overlay */}
-                <div className="absolute top-2.5 left-2.5 bg-[#FF7A50] text-white font-extrabold text-[11px] sm:text-[12px] px-2.5 py-1 rounded-lg shadow-[0_2px_8px_rgba(255,122,80,0.4)] border border-[#FF7A50]/20 whitespace-nowrap shrink-0 z-10">
-                  매칭 {animal.match_score}점
+              {/* Animal Photo & Match Score (Badge positioned below the photo) */}
+              <div className="flex flex-col items-center gap-2.5 shrink-0 w-full sm:w-[130px]">
+                <div className="relative w-full sm:w-[130px] h-[180px] sm:h-[130px] rounded-xl overflow-hidden bg-surface-container-low border border-border-line shadow-inner">
+                  <img
+                    src={animal.photos && animal.photos.length > 0 ? animal.photos[0] : (animal.photo || "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=400")}
+                    alt={animal.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                {/* Match Score Badge below photo */}
+                <div className="bg-[#FFF1EC] text-[#FF7A50] font-extrabold text-[11.5px] px-3 py-1 rounded-full border border-[#FFE2D6] shadow-sm whitespace-nowrap shrink-0">
+                  매칭 점수 {animal.match_score}점
                 </div>
               </div>
 
@@ -317,6 +356,19 @@ export default function MatchResultsPage() {
             </Link>
           ))}
         </div>
+
+        {/* Relax Region Action Button */}
+        {!isRegionRelaxed && (
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => setIsRegionRelaxed(true)}
+              className="bg-white border border-[#FFE2D6] hover:bg-[#FFFDFB] text-[#FF7A50] font-bold text-[14.5px] px-6 py-3.5 rounded-xl shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95 hover:scale-[1.01] transition-all"
+            >
+              <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 0" }}>explore</span>
+              다른 지역의 잘 맞는 아이도 볼래요
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
