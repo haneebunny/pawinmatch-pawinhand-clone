@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { animals } from "../../data/animals";
@@ -42,7 +42,7 @@ const HighlightText = ({ text }) => {
   );
 };
 
-export default function MatchResultsPage() {
+function MatchResultsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const isRelaxedParam = searchParams.get("relaxed") === "true";
@@ -401,5 +401,17 @@ export default function MatchResultsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function MatchResultsPage() {
+  return (
+    <Suspense fallback={
+      <div className="bg-brand-ivory min-h-screen pt-4 pb-8 flex items-center justify-center">
+        <div className="text-[#FF7A50] font-bold">매칭 결과를 분석하고 있습니다...</div>
+      </div>
+    }>
+      <MatchResultsContent />
+    </Suspense>
   );
 }
