@@ -30,6 +30,34 @@ _ACTIVITY_TARGET = {"조용하고 차분한 아이": 2, "적당히 활발한 아
 _SOC_TARGET = {"독립적인 편이 좋아요": 2, "적당히 붙어있는 게 좋아요": 3, "항상 곁에 있고 싶어요": 5}
 _SMALL_HOUSING = {"원룸·오피스텔", "아파트", "빌라·다세대"}
 
+def _is_city_match(animal_city: str, preferred_cities: list) -> bool:
+    if not animal_city or not preferred_cities:
+        return False
+    for pref in preferred_cities:
+        pref = pref.strip()
+        if pref == animal_city:
+            return True
+        # 경상도 -> 경상남도, 경상북도, 경남, 경북 등 유연한 매칭
+        if pref == "경상도" and ("경상" in animal_city or "경남" in animal_city or "경북" in animal_city):
+            return True
+        if pref == "전라도" and ("전라" in animal_city or "전남" in animal_city or "전북" in animal_city):
+            return True
+        if pref == "충청도" and ("충청" in animal_city or "충남" in animal_city or "충북" in animal_city):
+            return True
+        if pref == "강원도" and ("강원" in animal_city):
+            return True
+        if pref == "제주도" and ("제주" in animal_city):
+            return True
+        if pref == "인천광역시" and ("인천" in animal_city):
+            return True
+        if pref == "서울특별시" and ("서울" in animal_city):
+            return True
+        if pref == "경기도" and ("경기" in animal_city):
+            return True
+        if pref in animal_city or animal_city in pref:
+            return True
+    return False
+
 SYSTEM_PROMPT = (
     "당신은 유기동물 매칭 추천가입니다. 사용자의 생활환경(주거 housing, 외출 out_hours, 산책 walk_time, 경험 pet_experience, 예산 budget, 자녀 child_plan, 선호 지역 preferred_cities)과 "
     "사용자가 바라는 성향(활동성 선호 activity_pref, 친화도 선호 sociability_pref, 키워드 keywords) 총 10가지 조건을 아주 꼼꼼하게 전부 종합하여, 각 동물의 특성(활동성, 사회성, 공격성, 건강상태 등 1~5 척도)과 비교 분석하세요.\n"
@@ -79,7 +107,7 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
         soc = a.get("sociability", 3)
 
         # 선호 지역 가점
-        if not is_all_region and a.get("city") in preferred_cities:
+        if not is_all_region and _is_city_match(a.get("city"), preferred_cities):
             score += 5.0
 
         score -= abs(act - t_act) * 1.2
@@ -155,7 +183,7 @@ def _fallback_match(survey: SurveyInput) -> MatchResponse:
 
     # 선호 지역 조건 충족 리스트 필터링
     if not is_all_region:
-        filtered_animals = [a for a in animals if a.get("city") in preferred_cities]
+        filtered_animals = [a for a in animals if _is_city_match(a.get("city"), preferred_cities)]
         use_strict_filter = len(filtered_animals) >= 4
         candidates = filtered_animals if use_strict_filter else animals
     else:
@@ -169,7 +197,7 @@ def _fallback_match(survey: SurveyInput) -> MatchResponse:
         soc = a.get("sociability", 3)
 
         # 선호 지역 가점 시스템 (필터링 완화 상황에서 선호지역 동물이 우선 랭킹을 먹게 유도)
-        is_preferred_city = not is_all_region and a.get("city") in preferred_cities
+        is_preferred_city = not is_all_region and _is_city_match(a.get("city"), preferred_cities)
         if not is_all_region and not use_strict_filter and is_preferred_city:
             score += 5.0
 
