@@ -12,6 +12,7 @@ ai_diagnose.py — [개발자 B] 적합도 진단 LangChain 서비스.
 from typing import List
 
 from .. import config, rag
+from ..logger import logger, log_event
 from ..schemas import DiagnoseResponse, MonthlyCost, SurveyInput
 
 # LangChain은 설치·키가 있을 때만 사용. 없으면 로컬 규칙으로 폴백.
@@ -136,10 +137,44 @@ def _fallback_diagnose(survey: SurveyInput) -> DiagnoseResponse:
 
 def run_diagnose(survey: SurveyInput) -> DiagnoseResponse:
     """진단 실행 진입점. LLM 우선, 실패/불가 시 로컬 규칙으로 안전하게 폴백."""
+    request_details = {
+        "housing": survey.housing,
+        "out_hours": survey.out_hours,
+        "walk_time": survey.walk_time,
+        "pet_experience": survey.pet_experience,
+        "budget": survey.budget,
+        "child_plan": survey.child_plan,
+        "activity_pref": survey.activity_pref,
+        "sociability_pref": survey.sociability_pref,
+        "keywords": survey.keywords
+    }
+    log_event("Diagnosis_Request", request_details)
+
+    result = None
+    is_llm = False
+
     if LLM_ENABLED:
         for attempt in range(2):  # 최초 1회 + 재시도 1회
             try:
-                return _llm_diagnose(survey)
+                result = _llm_diagnose(survey)
+                is_llm = True
+                break
             except Exception as e:
-                print(f"[ai_diagnose] LLM 실패(attempt {attempt+1}): {e!r}")
-    return _fallback_diagnose(survey)
+                logger.warning(f"[ai_diagnose] LLM 실패(attempt {attempt+1}): {e!r}")
+
+    if result is None:
+        result = _fallback_diagnose(survey)
+
+    response_details = {
+        "grade": result.grade,
+        "good_points_count": len(result.good_points),
+        "check_points_count": len(result.check_points),
+        "monthly_cost": {
+            "min": result.monthly_cost.min,
+            "max": result.monthly_cost.max,
+            "gov_support": result.monthly_cost.gov_support
+        },
+        "method": "LLM" if is_llm else "Fallback"
+    }
+    log_event("Diagnosis_Success", response_details)
+    return result

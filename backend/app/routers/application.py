@@ -1,9 +1,36 @@
 import json
 import urllib.request
 import os
+import logging
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List
+from app.logger import logger, log_event
+
+def mask_name(name: str) -> str:
+    if not name:
+        return ""
+    name = name.strip()
+    if len(name) <= 1:
+        return "*"
+    elif len(name) == 2:
+        return name[0] + "*"
+    else:
+        return name[0] + "*" * (len(name) - 2) + name[-1]
+
+def mask_phone(phone: str) -> str:
+    if not phone:
+        return ""
+    phone = phone.strip()
+    clean = phone.replace("-", "")
+    if len(clean) >= 10:
+        masked = clean[:3] + "****" + clean[7:]
+        if "-" in phone:
+            parts = phone.split("-")
+            if len(parts) == 3:
+                return f"{parts[0]}-****-{parts[2]}"
+        return f"{masked[:3]}-{masked[3:7]}-{masked[7:]}"
+    return phone[:3] + "****" + phone[7:] if len(phone) > 7 else "***-****"
 
 router = APIRouter(prefix="/api", tags=["application"])
 
@@ -21,14 +48,31 @@ class ApplicationInput(BaseModel):
 
 @router.post("/submit-application")
 def submit_application(data: ApplicationInput):
-    # Console logging for trace
-    print(f"[Application Submitted] Name: {data.name}, Phone: {data.phone}, Animal: {data.animal_name} ({data.animal_id})")
+    # Mask PII for logger safety
+    m_name = mask_name(data.name)
+    m_phone = mask_phone(data.phone)
+    
+    log_event("Application_Submitted", {
+        "name": m_name,
+        "phone": m_phone,
+        "animal_id": data.animal_id,
+        "animal_name": data.animal_name,
+        "shelter_name": data.shelter_name,
+        "match_score": data.match_score,
+        "has_questions": bool(data.questions),
+        "has_message": bool(data.message),
+        "checked_items_count": len(data.checked_items) if data.checked_items else 0
+    })
 
     # Retrieve Webhook URL from environment variables
     slack_webhook_url = os.getenv("SLACK_WEBHOOK_URL")
     
     if not slack_webhook_url:
-        print("[Slack Notification] SLACK_WEBHOOK_URL is not set. Simulating local submission.")
+        logger.info("[Slack Notification] SLACK_WEBHOOK_URL is not set. Simulating local submission.")
+        log_event("Application_Slack_Success", {
+            "animal_id": data.animal_id,
+            "mode": "local_simulation"
+        })
         return {"status": "success", "message": "제출 완료 (로컬 데모 제출)"}
 
     # Build Slack Message Payload in Markdown Blocks
@@ -121,11 +165,19 @@ def submit_application(data: ApplicationInput):
         with urllib.request.urlopen(req) as res:
             response_code = res.getcode()
             if response_code == 200 or response_code == 204:
+                log_event("Application_Slack_Success", {
+                    "animal_id": data.animal_id,
+                    "mode": "slack_webhook"
+                })
                 return {"status": "success", "message": "신청서가 성공적으로 제출되었으며 Slack 알림이 전송되었습니다."}
             else:
                 raise HTTPException(status_code=500, detail="Slack Webhook returned error code")
     except Exception as e:
-        print(f"[Slack Notification Error] Failed to send message: {e}")
+        logger.error(f"[Slack Notification Error] Failed to send message: {e}")
+        log_event("Application_Slack_Failure", {
+            "animal_id": data.animal_id,
+            "error": str(e)
+        }, level=logging.ERROR)
         raise HTTPException(
             status_code=500,
             detail=f"Slack 전송 도중 에러가 발생했습니다: {str(e)}"

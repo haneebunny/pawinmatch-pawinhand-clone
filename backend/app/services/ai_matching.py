@@ -12,6 +12,7 @@ ai_matching.py — [개발자 B] 매칭 추천 LangChain 서비스.
 from typing import List
 
 from .. import config, rag
+from ..logger import logger, log_event
 from ..schemas import MatchResponse, MatchResult, SurveyInput
 
 try:
@@ -219,10 +220,41 @@ def _fallback_match(survey: SurveyInput) -> MatchResponse:
 
 def run_match(survey: SurveyInput) -> MatchResponse:
     """매칭 실행 진입점. LLM 우선, 실패/불가 시 로컬 점수 규칙으로 폴백."""
+    request_details = {
+        "housing": survey.housing,
+        "out_hours": survey.out_hours,
+        "walk_time": survey.walk_time,
+        "pet_experience": survey.pet_experience,
+        "budget": survey.budget,
+        "child_plan": survey.child_plan,
+        "activity_pref": survey.activity_pref,
+        "sociability_pref": survey.sociability_pref,
+        "keywords": survey.keywords,
+        "preferred_cities": survey.preferred_cities,
+        "exclude_ids_count": len(survey.exclude_ids) if survey.exclude_ids else 0
+    }
+    log_event("Matching_Request", request_details)
+
+    result = None
+    is_llm = False
+
     if LLM_ENABLED:
         for attempt in range(2):
             try:
-                return _llm_match(survey)
+                result = _llm_match(survey)
+                is_llm = True
+                break
             except Exception as e:
-                print(f"[ai_matching] LLM 실패(attempt {attempt+1}): {e!r}")
-    return _fallback_match(survey)
+                logger.warning(f"[ai_matching] LLM 실패(attempt {attempt+1}): {e!r}")
+
+    if result is None:
+        result = _fallback_match(survey)
+
+    response_details = {
+        "recommended_count": len(result.results),
+        "animal_ids": [r.animal_id for r in result.results],
+        "match_scores": [r.match_score for r in result.results],
+        "method": "LLM" if is_llm else "Fallback"
+    }
+    log_event("Matching_Success", response_details)
+    return result

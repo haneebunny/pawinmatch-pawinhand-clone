@@ -10,6 +10,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.schemas import VotesResponse, CandidateSchema, VoteInput
 from app.rag import load_animals, save_animals, load_votes, save_votes
+from app.logger import log_event
 
 router = APIRouter(
     prefix="/api/animals",
@@ -119,6 +120,11 @@ def get_name_votes(animal_id: str):
                 a["name"] = confirmed_name
                 break
         save_animals(animals)
+        log_event("Name_Confirmed", {
+            "animal_id": animal_id,
+            "confirmed_name": confirmed_name,
+            "sync_source": "get_votes"
+        })
 
     # 6. CandidateSchema Pydantic 형태로 매핑
     candidates = [
@@ -175,6 +181,14 @@ def submit_name_vote(animal_id: str, payload: VoteInput):
     votes_data[animal_id] = candidates_list
     save_votes(votes_data)
 
+    # 투표 추가 이벤트 로깅
+    current_votes = next((c["votes"] for c in candidates_list if c["name"] == vote_name), 1)
+    log_event("Vote_Added", {
+        "animal_id": animal_id,
+        "name": vote_name,
+        "votes_count": current_votes
+    })
+
     # 5표 이상 획득 여부 체크
     confirmed_name = None
     sorted_candidates = sorted(candidates_list, key=lambda x: x["votes"], reverse=True)
@@ -190,6 +204,11 @@ def submit_name_vote(animal_id: str, payload: VoteInput):
                 a["name"] = confirmed_name
                 break
         save_animals(animals)
+        log_event("Name_Confirmed", {
+            "animal_id": animal_id,
+            "confirmed_name": confirmed_name,
+            "sync_source": "submit_vote"
+        })
 
     candidates = [
         CandidateSchema(name=c["name"], votes=c["votes"])
