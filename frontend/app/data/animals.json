@@ -32,7 +32,7 @@
     "notice_start": "2026-07-05",
     "notice_end": "2026-07-05",
     "found_location": "서울시립동물복지지원센터(마포)",
-    "shelter_id": "shelter-4",
+    "shelter_id": "shelter-1",
     "adoption_support": false,
     "adoption_support_detail": "",
     "city": "서울특별시",
@@ -104,7 +104,7 @@
     "adoption_support": true,
     "adoption_support_detail": "🤲 상주시동물보호센터 입양비 지원사업 안내\n\n☑️ 지원항목 및 비용\n - 입양 지원금 25만원 (병원비, 미용비, 보험료 등만 해당)\n - 중성화 수술 (입양 시 문의)\n - 추가 집종 및 필요 처치 (입양 시 문의)\n - 내장칩 등록비 지원 ",
     "city": "경상북도",
-    "bell_count": 11,
+    "bell_count": 12,
     "comments": []
   },
   {
@@ -240,84 +240,6 @@
     "adoption_support_detail": "🤲 밀양시동물보호센터 입양비 지원사업 안내\n\n1️⃣ 지원대상\n - 밀양시 동물보호센터 유기동물 입양자\n - 유기, 유실 동물을 반려의 목적으로 입양하려는 자로서\n  동물 등록(내장형)을 완료한 자\n - 동물사랑배움터(apms.epis.or.kr)의 '입양 예정자 교육'을\n  이수한 자\n \n2️⃣ 지원내용\n - 마리 당 최대 25만원 이내(1인당 평생 최대 3마리 입양 가능)\n  동물 입양 시 소요되는 비용(질병진단비, 치료비, 예방접종, \n  중성화 등)\n\n3️⃣ 사업기간\n - 2026년 예산이 소진될 때까지\n\n※ 서류 제출 후 지급까지 약 1개월 소요됩니다.\n\n+\n\n🤲 밀양시동물보호센터 입양비 지원사업 경남 도민 추가 지원\n\n1️⃣ 지원대상\n - 경남에 주민등록 주소가 있는 자\n - 밀양시 동물보호센터 유기동물 입양자 중 경남 도민\n - 유기, 유실 동물을 반려의 목적으로 입양하려는 자로서\n  동물 등록(내장형)을 완료한 자\n - 동물사랑배움터(apms.epis.or.kr)의 '입양 예정자 교육'을\n  이수한 자\n \n2️⃣ 지원내용\n - 마리 당 10만원(1인당 평생 최대 3마리 입양 가능)\n  동물 입양 시 소요되는 비용(질병진단비, 치료비, 예방접종, \n  중성화 등)\n\n3️⃣ 사업기간\n - 2026년 예산이 소진될 때까지\n\n※ 서류 제출 후 지급까지 약 1개월 소요됩니다.",
     "city": "경상남도",
     "bell_count": 34,
-    "comments": []
-  },
-  {
-    "id": "서울-시립1-2026-00060-P",
-    "name": "뮤드",
-    "photos": [
-      "http://d12l2mexpetzlh.cloudfront.net/images/shelter/abandoned/pasm_1783151041202.jpg",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783203667536.jpg",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783151041787.jpg",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783164231429.jpg",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783164232006.jpg"
-    ],
-    "species": "고양이",
-    "breeds": "코리안숏헤어",
-    "animal_age": "2026(60일미만)(년생)",
-    "animal_sex": "수컷",
-    "animal_weight": 0.73,
-    "size": "소형",
-    "neutered": "아니오",
-    "health_state": 5,
-    "activity": 5,
-    "aggression": 5,
-    "sociability": 5,
-    "personality_comment": "<입양신청서 접수중>\n[성격] \n• 사람 친화력 : 최상, 현재 낯가림 없이 모든 사람들을 좋아합니다.\n• 타 동물 친화력 : 상, 환경 적응력이 좋은 편이나, 처음보는 강아지 친구들은 낯설 이도, 경계도 조금 하고 있습니다!  \n• 에너지 레벨 : 상, 장난기 많은 남자아이처럼 에너지도 텐션도 높은 편입니다. \n• 좋아하는 것 : 기어오르기, 고양이 친구들과 레슬링하기, 예쁨 받기, 간식, 장난감\n• 싫어하는 것 : 외로움(쭙쭙이 하면서 잠드는 편), 갑자기 바뀌는 환경\n​\n[이상적인 가정]\n고양이를 키워본 경험이 있는 가정\n집사로서 고양이를 모셔본 적 있는 가정\n고양이 공부를 하며 키우실 수 있는 가정\n아기 고양이인 뮤드 혼자 있는 시간이 적은 가정",
-    "tags": [
-      "🥰 사람좋아함",
-      "😘 애교많음",
-      "🐱 고양이와잘지냄",
-      "👀 호기심많음"
-    ],
-    "notice_no": "서울-시립1-2026-00060-P",
-    "notice_start": "2026-07-03",
-    "notice_end": "2026-07-03",
-    "found_location": "서울시립동물복지지원센터(마포)",
-    "shelter_id": "shelter-1",
-    "adoption_support": false,
-    "adoption_support_detail": "",
-    "city": "서울특별시",
-    "bell_count": 10,
-    "comments": []
-  },
-  {
-    "id": "서울-시립1-2026-00059-P",
-    "name": "모션",
-    "photos": [
-      "http://d12l2mexpetzlh.cloudfront.net/images/shelter/abandoned/pasm_1783150747037.jpg",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783150748113.jpg",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783150748156.jpg",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783150748193.jpg",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783150748227.jpg"
-    ],
-    "species": "고양이",
-    "breeds": "코리안숏헤어",
-    "animal_age": "2026(60일미만)(년생)",
-    "animal_sex": "암컷",
-    "animal_weight": 0.67,
-    "size": "소형",
-    "neutered": "아니오",
-    "health_state": 5,
-    "activity": 5,
-    "aggression": 5,
-    "sociability": 5,
-    "personality_comment": "<입양신청서 접수중>\n[성격]\n• 사람 친화력 : 최상, 낯가림 없이 사람들을 좋아하는 모션이입니다.  \n• 타 동물 친화력 : 상, 이유 시기에 강아지 언니의 보살핌을 받아 친화력이 좋았으나, 현재 발랄한 강아지들은 무서워합니다.\n• 에너지 레벨 : 상, 명랑하게 잘 놀고 있습니다. \n• 좋아하는 것 : 사람, 고양이 친구들과 레슬링, 예쁨 받기, 안겨있기, 장난감, \n• 싫어하는 것 : 혼자 있는 것.\n\n\n[이상적인 가정] \n고양이를 키워본 경험이 있는 가정\n모션이와 함께 지낼 수 있는 시간이 많은 가정\n외동을 선호하나, 둘째나 막내로도 잘 적응할 수 있을 듯합니다.\n고양이 공부를 하며, 외롭지 않게 함께 있어 주실 수 있는 시간적인 여유가 있는 가정",
-    "tags": [
-      "🥰 사람좋아함",
-      "😘 애교많음",
-      "🐱 고양이와잘지냄",
-      "👀 호기심많음"
-    ],
-    "notice_no": "서울-시립1-2026-00059-P",
-    "notice_start": "2026-07-03",
-    "notice_end": "2026-07-03",
-    "found_location": "서울시립동물복지지원센터(마포)",
-    "shelter_id": "shelter-1",
-    "adoption_support": false,
-    "adoption_support_detail": "",
-    "city": "서울특별시",
-    "bell_count": 6,
     "comments": []
   },
   {
@@ -1172,7 +1094,7 @@
     "adoption_support": true,
     "adoption_support_detail": "🤲 제주동물보호센터 입양비 지원사업 안내\n\n1️⃣ 지원대상\n - 동물보호센터의 보호 동물을 입양하는 자\n\n2️⃣ 지원항목\n - 질병, 진단, 치료, 예방 접종, 중성화 수술, 미용 등\n\n3️⃣ 지원비용\n - 동물 병원 진료 비용의 최대 25만원까지 지원 (펫보험 가입 시 보험비로 지원 가능)\n\n4️⃣ 신청기한\n - 입양 일로부터 6개월 (예산 소진 시 종료)",
     "city": "제주특별자치도",
-    "bell_count": 49,
+    "bell_count": 50,
     "comments": [
       {
         "user_id": "만보누나",
@@ -1320,6 +1242,46 @@
         "user_id": "회색거북",
         "content": "아이고 똥꼬발랄이 이런거구나 너무 귀엽다~ 나머지 한쪽귀는 언제 서려나",
         "update_time": "2026-07-04 00:12:32"
+      }
+    ]
+  },
+  {
+    "id": "제주-제주-2026-01476",
+    "name": "없음. 지어주세요!",
+    "photos": [
+      "https://www.animal.go.kr/files/shelter/2026/06/202606230906763.jpg",
+      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783319119240.jpg",
+      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783319119171.jpg",
+      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783319119277.jpg",
+      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783319119317.jpg"
+    ],
+    "species": "개",
+    "breeds": "믹스견",
+    "animal_age": "2026(60일미만)(년생)",
+    "animal_sex": "암컷",
+    "animal_weight": 1.4,
+    "size": "소형",
+    "neutered": "아니오",
+    "health_state": 4,
+    "activity": 3,
+    "aggression": 4,
+    "sociability": 4,
+    "personality_comment": "\n털복숭이 얼굴에 까망콩 세알이 박히든 귀엽고 이쁜 백구멍뭉이에요.\n사료는 적극적으로 잘 먹는편\n뛰어놀거나 많이 움직이는 편은 아니에요. 얌전한편..\n사람 손길 많이 좋아하고 다른 강아지들과도 사이 좋아요.\n아장아장  많이 귀여운 이 꼬마 천사의 평생 가족이되어주세요!\n\n1.4kg (7/6 기준)",
+    "tags": [],
+    "notice_no": "제주-제주-2026-01476",
+    "notice_start": "2026-06-23",
+    "notice_end": "2026-07-03",
+    "found_location": "서귀포시 대정읍 상모리 2757-4",
+    "shelter_id": "shelter-13",
+    "adoption_support": true,
+    "adoption_support_detail": "🤲 제주동물보호센터 입양비 지원사업 안내\n\n1️⃣ 지원대상\n - 동물보호센터의 보호 동물을 입양하는 자\n\n2️⃣ 지원항목\n - 질병, 진단, 치료, 예방 접종, 중성화 수술, 미용 등\n\n3️⃣ 지원비용\n - 동물 병원 진료 비용의 최대 25만원까지 지원 (펫보험 가입 시 보험비로 지원 가능)\n\n4️⃣ 신청기한\n - 입양 일로부터 6개월 (예산 소진 시 종료)",
+    "city": "제주특별자치도",
+    "bell_count": 7,
+    "comments": [
+      {
+        "user_id": "둥글뭉글",
+        "content": "너네 형제인가 보다~얼른 입양가자~♥️",
+        "update_time": "2026-06-24 21:53:32"
       }
     ]
   },
@@ -2035,7 +1997,7 @@
     "adoption_support": true,
     "adoption_support_detail": "🤲 삼척시동물보호센터 입양비 지원사업 안내\n\n1️⃣ 지원대상\n  - 삼척시동물보호센터에서 입양 및 동물 등록을 완료한 입양자\n\n2️⃣ 지원내용\n  - 질병진단비, 치료비, 예방접종, 중성화수술비, 내장형동물등록비, 미용비, 보험가입비 등\n\n3️⃣ 지원비용\n  - 250,000원 이내 1마리당 최대 15만원 보조\n    (보조 60%, 자부담 40%)\n\n4️⃣ 신청기간\n  - 입양일 기준 1년 이내",
     "city": "강원특별자치도",
-    "bell_count": 8,
+    "bell_count": 9,
     "comments": []
   },
   {
@@ -2185,7 +2147,7 @@
     "notice_start": "2026-06-16",
     "notice_end": "2026-06-16",
     "found_location": "노원구 관내",
-    "shelter_id": "shelter-4",
+    "shelter_id": "shelter-1",
     "adoption_support": true,
     "adoption_support_detail": "1️⃣ 2026 유기동물 입양비 지원 (1마리당 최대 15만원) (*현재 종료)\n2️⃣ 입양 후 전문 훈련사 방문 교육 (총 2회)\n3️⃣ 반려견 동물등록",
     "city": "서울특별시",
@@ -2779,7 +2741,7 @@
     "adoption_support": true,
     "adoption_support_detail": "🤲 강릉시동물보호센터 입양비 지원사업 안내\n\n1️⃣ 지원항목\n - 질병, 진단, 치료, 예방 접종, 중성화 수술, 내장형 동물 등록, 미용, 펫보험 가입비\n\n2️⃣ 지원비용\n - 1마리 당 250,000원 한도 (지원 60%, 자부담 40%)\n - 최대 지원 금액 150,000원",
     "city": "강원특별자치도",
-    "bell_count": 15,
+    "bell_count": 16,
     "comments": [
       {
         "user_id": "좋은반려인-희망자",
@@ -2793,7 +2755,7 @@
     "name": "없음. 지어주세요!",
     "photos": [
       "https://www.animal.go.kr/files/shelter/2026/05/202606021606690.png",
-      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1781074383488.jpeg",
+      "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1783316960107.png",
       "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1781076578938.jpeg",
       "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1781074383345.jpeg",
       "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1781074383446.jpeg"
@@ -2940,7 +2902,7 @@
   },
   {
     "id": "경기-남양주-2026-00140",
-    "name": "호두(9393)💕",
+    "name": "호두💕",
     "photos": [
       "https://www.animal.go.kr/files/shelter/2026/04/202604221804442.png",
       "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1780206877664.jpg",
@@ -2953,7 +2915,7 @@
     "animal_age": "2026(60일미만)(년생)",
     "animal_sex": "수컷",
     "animal_weight": 2.0,
-    "size": "소형",
+    "size": "중형",
     "neutered": "아니오",
     "health_state": 5,
     "activity": 4,
@@ -3181,7 +3143,7 @@
     "adoption_support": true,
     "adoption_support_detail": "🤲 강릉시동물보호센터 입양비 지원사업 안내\n\n1️⃣ 지원항목\n - 질병, 진단, 치료, 예방 접종, 중성화 수술, 내장형 동물 등록, 미용, 펫보험 가입비\n\n2️⃣ 지원비용\n - 1마리 당 250,000원 한도 (지원 60%, 자부담 40%)\n - 최대 지원 금액 150,000원",
     "city": "강원특별자치도",
-    "bell_count": 65,
+    "bell_count": 67,
     "comments": [
       {
         "user_id": "뀨뀨규",
@@ -3463,7 +3425,7 @@
     "notice_start": "2026-05-13",
     "notice_end": "2026-05-13",
     "found_location": "서울시 동대문구",
-    "shelter_id": "shelter-1",
+    "shelter_id": "shelter-4",
     "adoption_support": false,
     "adoption_support_detail": "",
     "city": "서울특별시",
@@ -3705,7 +3667,7 @@
   },
   {
     "id": "경기-남양주-2026-00139",
-    "name": "루카",
+    "name": "루카💕",
     "photos": [
       "https://www.animal.go.kr/files/shelter/2026/04/202604221804990.png",
       "https://d12l2mexpetzlh.cloudfront.net/images/shelter/more/more_1778915888422.jpg",
@@ -3718,7 +3680,7 @@
     "animal_age": "2026(60일미만)(년생)",
     "animal_sex": "수컷",
     "animal_weight": 1.7,
-    "size": "소형",
+    "size": "중형",
     "neutered": "아니오",
     "health_state": 4,
     "activity": 4,
@@ -4116,7 +4078,7 @@
     "adoption_support": true,
     "adoption_support_detail": "🤲 제주동물보호센터 입양비 지원사업 안내\n\n1️⃣ 지원대상\n - 동물보호센터의 보호 동물을 입양하는 자\n\n2️⃣ 지원항목\n - 질병, 진단, 치료, 예방 접종, 중성화 수술, 미용 등\n\n3️⃣ 지원비용\n - 동물 병원 진료 비용의 최대 25만원까지 지원 (펫보험 가입 시 보험비로 지원 가능)\n\n4️⃣ 신청기한\n - 입양 일로부터 6개월 (예산 소진 시 종료)",
     "city": "제주특별자치도",
-    "bell_count": 123,
+    "bell_count": 124,
     "comments": [
       {
         "user_id": "닥스훈트네",
@@ -4523,7 +4485,7 @@
     "adoption_support": true,
     "adoption_support_detail": "○ 입양 지원 항목\n- 치료비, 예방접종, 중성화수술비, 미용비, 보험가입비\n\n○ 입양 지원 비용\n- 지출총액이 1개체 당 250,000원 이상일 경우 150,000원 지원\n- 지출총액이 1개체 당 250,000원 미만일 경우 총 금액의 60%까지 지원\n\n○ 입양 신청기한\n- 입양 후 1년 이내 신청 (예산 소진 시 종료)\n\n* 내장 칩(마이크로칩)  동물등록 후 입양\n",
     "city": "강원특별자치도",
-    "bell_count": 97,
+    "bell_count": 98,
     "comments": [
       {
         "user_id": "땅콩좋아하는땅콩이",

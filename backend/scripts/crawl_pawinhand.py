@@ -88,8 +88,19 @@ def clean_weight(weight_str):
             pass
     return 0.0
 
-def determine_size(weight):
-    """몸무게 값을 바탕으로 소형/중형/대형 견종 분류를 산출합니다."""
+def determine_size(weight, comment=""):
+    """몸무게 값을 바탕으로 소형/중형/대형 견종 분류를 산출합니다.
+    단, 아기 강아지인 경우 본문에 언급된 성견 예상 몸무게를 파싱하여 반영합니다."""
+    comment_clean = str(comment).replace(" ", "")
+    if "성견" in comment_clean or "예상" in comment_clean:
+        import re
+        # '10키로', '12킬로', '15kg' 등 숫자와 함께 몸무게 표기 추출
+        weights = [float(x) for x in re.findall(r"([0-9.]+)(?:키로|킬로|kg)", comment_clean.lower())]
+        if weights:
+            max_est_weight = max(weights)
+            if max_est_weight > weight:
+                weight = max_est_weight
+
     if weight <= 7.0:
         return "소형"
     elif weight <= 15.0:
@@ -204,7 +215,8 @@ def crawl():
         # 몸무게 추출 및 정밀 크기 등급 판정
         raw_weight = item.get("animal_weight") or detail_raw.get("weight")
         weight_num = clean_weight(raw_weight)
-        size_class = determine_size(weight_num)
+        comment = item.get("personality_comment") or detail_raw.get("personality_comment") or ""
+        size_class = determine_size(weight_num, comment)
         
         # 성별 문자 필드 매핑
         raw_sex = item.get("animal_sex") or detail_raw.get("sex")
