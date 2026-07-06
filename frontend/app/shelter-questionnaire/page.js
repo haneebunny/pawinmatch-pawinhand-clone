@@ -70,7 +70,22 @@ export default function ShelterQuestionnairePage() {
     let surveyInput = null;
 
     if (typeof window !== "undefined") {
-      const savedMatches = localStorage.getItem("pawinhand_match_results");
+      let savedMatches = null;
+      try {
+        const savedMatchesRelaxed = localStorage.getItem("pawinhand_match_results_relaxed");
+        if (savedMatchesRelaxed) {
+          const parsed = JSON.parse(savedMatchesRelaxed);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            savedMatches = savedMatchesRelaxed;
+          }
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+      if (!savedMatches) {
+        savedMatches = localStorage.getItem("pawinhand_match_results");
+      }
+
       const savedSurvey = localStorage.getItem("pawinhand_survey_input");
       if (savedSurvey) {
         try {
@@ -118,7 +133,20 @@ export default function ShelterQuestionnairePage() {
 
       if (typeof window !== "undefined") {
         localLastAnimalId = localStorage.getItem("pawinhand_last_viewed_animal_id");
-        localSavedMatches = localStorage.getItem("pawinhand_match_results");
+        try {
+          const savedMatchesRelaxed = localStorage.getItem("pawinhand_match_results_relaxed");
+          if (savedMatchesRelaxed) {
+            const parsed = JSON.parse(savedMatchesRelaxed);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              localSavedMatches = savedMatchesRelaxed;
+            }
+          }
+        } catch (e) {
+          console.warn(e);
+        }
+        if (!localSavedMatches) {
+          localSavedMatches = localStorage.getItem("pawinhand_match_results");
+        }
       }
 
       if (localLastAnimalId) {
@@ -236,7 +264,22 @@ export default function ShelterQuestionnairePage() {
       let localRecommendReason = null;
       if (typeof window !== "undefined") {
         try {
-          const savedMatches = localStorage.getItem("pawinhand_match_results");
+          let savedMatches = null;
+          try {
+            const savedMatchesRelaxed = localStorage.getItem("pawinhand_match_results_relaxed");
+            if (savedMatchesRelaxed) {
+              const parsed = JSON.parse(savedMatchesRelaxed);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                savedMatches = savedMatchesRelaxed;
+              }
+            }
+          } catch (e) {
+            console.warn(e);
+          }
+          if (!savedMatches) {
+            savedMatches = localStorage.getItem("pawinhand_match_results");
+          }
+
           if (savedMatches && currentAnimal) {
             const matches = JSON.parse(savedMatches);
             const matchDetail = matches.find((m) => m.animal_id === currentAnimal.id || m.id === currentAnimal.id);

@@ -130,6 +130,7 @@ export default function DiagnosePage() {
     // Store user inputs for the matching page
     localStorage.setItem("pawinhand_survey_input", JSON.stringify(requestBody));
     localStorage.removeItem("pawinhand_match_results");
+    localStorage.removeItem("pawinhand_match_results_relaxed");
 
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://pawinhand-clone-production-9194.up.railway.app";
 
@@ -621,6 +622,7 @@ export default function DiagnosePage() {
                   onClick={() => {
                     localStorage.removeItem("pawinhand_survey_input");
                     localStorage.removeItem("pawinhand_match_results");
+                    localStorage.removeItem("pawinhand_match_results_relaxed");
                     setHousing("");
                     setOutHours("");
                     setWalkTime("");

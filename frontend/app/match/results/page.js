@@ -63,27 +63,42 @@ function MatchResultsContent() {
     const survey = JSON.parse(savedSurvey);
     setSurveyInput(survey);
 
-    // Only use cached results on initial mount without region relaxation
-    if (!isRegionRelaxed) {
-      const savedMatches = localStorage.getItem("pawinhand_match_results");
-      if (savedMatches) {
-        try {
-          const parsed = JSON.parse(savedMatches);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            setMatchedList(parsed);
-            setLoading(false);
-            return;
-          }
-        } catch (e) {
-          console.warn("Failed to parse cached match results", e);
+    // Check cache according to the current region relaxation state
+    const cacheKey = isRegionRelaxed ? "pawinhand_match_results_relaxed" : "pawinhand_match_results";
+    const savedMatches = localStorage.getItem(cacheKey);
+    if (savedMatches) {
+      try {
+        const parsed = JSON.parse(savedMatches);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMatchedList(parsed);
+          setLoading(false);
+          return;
         }
+      } catch (e) {
+        console.warn("Failed to parse cached match results", e);
       }
-    } else {
-      setLoading(true);
     }
 
+    setLoading(true);
+
     // Collect currently recommended animal IDs to exclude them from the next recommendation
-    const currentIds = !isRegionRelaxed ? [] : matchedList.map((a) => a.id);
+    let currentIds = [];
+    if (isRegionRelaxed) {
+      const localMatches = localStorage.getItem("pawinhand_match_results");
+      if (localMatches) {
+        try {
+          const parsedLocal = JSON.parse(localMatches);
+          if (Array.isArray(parsedLocal)) {
+            currentIds = parsedLocal.map((a) => a.id);
+          }
+        } catch (e) {
+          console.warn("Failed to parse local matches for exclusion", e);
+        }
+      }
+      if (currentIds.length === 0 && matchedList.length > 0) {
+        currentIds = matchedList.map((a) => a.id);
+      }
+    }
 
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://pawinhand-clone-production-9194.up.railway.app";
 
@@ -130,9 +145,7 @@ function MatchResultsContent() {
           }).filter(Boolean);
 
           setMatchedList(matched);
-          if (!isRegionRelaxed) {
-            localStorage.setItem("pawinhand_match_results", JSON.stringify(matched));
-          }
+          localStorage.setItem(cacheKey, JSON.stringify(matched));
           setLoading(false);
         } else {
           throw new Error("API response not ok");
@@ -243,9 +256,7 @@ function MatchResultsContent() {
           const topMatches = sortedMatches.slice(0, 4);
           
           setMatchedList(topMatches);
-          if (!isRegionRelaxed) {
-            localStorage.setItem("pawinhand_match_results", JSON.stringify(topMatches));
-          }
+          localStorage.setItem(cacheKey, JSON.stringify(topMatches));
           setLoading(false);
         }, 1000);
       }
