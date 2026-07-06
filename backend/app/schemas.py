@@ -24,6 +24,7 @@ class SurveyInput(BaseModel):
     keywords: List[str] = Field(default_factory=list, description='성향 키워드(다중)')
     preferred_cities: List[str] = Field(default_factory=list, description="선호 지역 (시/도) 리스트 (중복 가능)")
     exclude_ids: Optional[List[str]] = Field(default_factory=list, description="추천에서 제외할 동물 ID 목록")
+    is_relaxed: Optional[bool] = Field(False, description="지역 완화(다른 지역 보기) 여부")
 
 
 # ========== 진단 응답 (POST /api/diagnose) ==========

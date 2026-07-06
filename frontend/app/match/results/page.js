@@ -104,23 +104,10 @@ function MatchResultsContent() {
 
     const fetchMatches = async () => {
       try {
-        const CITY_OPTIONS = ["서울특별시", "경기도", "인천광역시", "강원도", "충청도", "전라도", "경상도", "제주도", "기타"];
-        let targetCities = survey.preferred_cities || [];
-        if (isRegionRelaxed) {
-          // 원래 골랐던 지역이 아닌 '다른 지역'의 아이들을 매칭하기 위해 반대 지역 목록을 설정합니다.
-          const originalPref = survey.preferred_cities || [];
-          const hasSpecificPref = originalPref.length > 0 && !originalPref.includes("전체") && !originalPref.includes("전국");
-          if (hasSpecificPref) {
-            targetCities = CITY_OPTIONS.filter(city => !originalPref.includes(city));
-          } else {
-            targetCities = ["전체"];
-          }
-        }
-
         const requestBody = {
           ...survey,
-          preferred_cities: targetCities,
-          exclude_ids: currentIds
+          exclude_ids: currentIds,
+          is_relaxed: isRegionRelaxed
         };
 
         const response = await fetch(`${API_BASE}/api/match`, {

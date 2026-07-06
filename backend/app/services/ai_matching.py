@@ -91,7 +91,15 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
     animals = [a for a in raw_animals if a.get("id") not in exclude_ids]
     
     preferred_cities = survey.preferred_cities or []
-    is_all_region = not preferred_cities or "전체" in preferred_cities or "전국" in preferred_cities
+    is_relaxed = getattr(survey, "is_relaxed", False)
+
+    # 지역 완화(is_relaxed=True)인 경우, 사용자가 선호하는 원래 지역의 동물을 전면 제외 처리합니다.
+    if is_relaxed and preferred_cities:
+        animals = [a for a in animals if not _is_city_match(a.get("city"), preferred_cities)]
+        is_all_region = True
+    else:
+        is_all_region = not preferred_cities or "전체" in preferred_cities or "전국" in preferred_cities
+        
     display_cities = "(지역 제한 없음)" if is_all_region else ", ".join(preferred_cities)
     
     # [최적화] 107마리를 모두 LLM에 던지면 토큰이 너무 비대해져서 15초 이상 지연됩니다.
@@ -106,7 +114,7 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
         act = a.get("activity", 3)
         soc = a.get("sociability", 3)
 
-        # 선호 지역 가점
+        # 선호 지역 가점 (지역 완화 상태가 아닐 때만 적용)
         if not is_all_region and _is_city_match(a.get("city"), preferred_cities):
             score += 5.0
 
@@ -129,7 +137,14 @@ def _llm_match(survey: SurveyInput) -> MatchResponse:
     llm = ChatOpenAI(model=config.OPENAI_MODEL, api_key=config.OPENAI_API_KEY, temperature=0.3)
     structured = llm.with_structured_output(MatchResponse)
     
-    matching_instruction = "사용자의 선호 지역과 매칭되는 동물을 최우선적으로 골라주세요." if not is_all_region else "사용자가 지정한 선호 지역 조건이 없으므로(지역 무관), 전국 보호소에 있는 아이들 중에서 오직 성향과 라이프스타일 궁합이 최고인 아이들을 최우선적으로 골라주세요. 추천 평에 사용자가 특정 지역을 선호한다는 등의 억지 설명은 절대 적지 마세요."
+    if is_relaxed:
+        matching_instruction = (
+            "이 매칭은 사용자가 사전에 선택했던 원래의 선호 지역들을 필터에서 제외한 '다른 지역'에 있는 아이들 중에서 매칭하는 화면입니다. "
+            "따라서 추천평(recommend_reason)에 '선호 지역에 적합합니다', '선호 지역이라서' 등의 선호 지역 연관 설명을 절대로 쓰지 마십시오. "
+            "대신 '선호하시는 지역은 아니지만...'과 같이 표현하거나, 아예 지역에 대한 언급은 배제하고 오직 행동 성향과 라이프스타일 궁합에만 초점을 맞춰서 2~3문장 분량으로 추천평을 적으세요."
+        )
+    else:
+        matching_instruction = "사용자의 선호 지역과 매칭되는 동물을 최우선적으로 골라주세요." if not is_all_region else "사용자가 지정한 선호 지역 조건이 없으므로(지역 무관), 전국 보호소에 있는 아이들 중에서 오직 성향과 라이프스타일 궁합이 최고인 아이들을 최우선적으로 골라주세요. 추천 평에 사용자가 특정 지역을 선호한다는 등의 억지 설명은 절대 적지 마세요."
     
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -178,8 +193,14 @@ def _fallback_match(survey: SurveyInput) -> MatchResponse:
     t_soc = _SOC_TARGET.get(survey.sociability_pref, 3)
     kw = set(survey.keywords or [])
     preferred_cities = survey.preferred_cities or []
+    is_relaxed = getattr(survey, "is_relaxed", False)
     
-    is_all_region = not preferred_cities or "전체" in preferred_cities or "전국" in preferred_cities
+    # 지역 완화(is_relaxed=True)인 경우, 사용자가 선호하는 원래 지역의 동물을 전면 제외 처리합니다.
+    if is_relaxed and preferred_cities:
+        animals = [a for a in animals if not _is_city_match(a.get("city"), preferred_cities)]
+        is_all_region = True
+    else:
+        is_all_region = not preferred_cities or "전체" in preferred_cities or "전국" in preferred_cities
 
     # 선호 지역 조건 충족 리스트 필터링
     if not is_all_region:
